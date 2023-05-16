@@ -3,11 +3,14 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use App\Repositories\BaseRepository;
+use App\Repositories\Contracts\UserRepositoryContract;
 
-class UserRepository {
-    public $user_model;
-    public function __construct(User $user_model){
-        $this->user_model = $user_model;
+class UserRepository extends BaseRepository implements UserRepositoryContract
+{
+    protected $model;
+    public function __construct(User $model)
+    {
+        $this->model = $model;
     }
-
 }

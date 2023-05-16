@@ -1,7 +1,7 @@
 <?php
-namespace App\Repositories\Contracts;
+namespace App\Services\Contracts;
 
-interface BaseContract{
+interface UserServiceContract {
     public function loadAll();
     public function store($data);
     public function showProfile($id);
