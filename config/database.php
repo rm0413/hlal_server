@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION_HINSEI', 'hinsei'),
 
     /*
     |--------------------------------------------------------------------------
@@ -63,19 +63,54 @@ return [
             ]) : [],
         ],
 
-        'pgsql' => [
+        'hinsei' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'host' => env('DB_HOST_HINSEI', '127.0.0.1'),
+            'port' => env('DB_PORT_HINSEI', '5432'),
+            'database' => env('DB_DATABASE_HINSEI', 'forge'),
+            'username' => env('DB_USERNAME_HINSEI', 'forge'),
+            'password' => env('DB_PASSWORD_HINSEI', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
             'schema' => 'public',
             'sslmode' => 'prefer',
+        ],
+
+        'portal_database' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_PORTAL', '127.0.0.1'),
+            'port' => env('DB_PORT_PORTAL', '5432'),
+            'database' => env('DB_DATABASE_PORTAL', 'forge'),
+            'username' => env('DB_USERNAME_PORTAL', 'forge'),
+            'password' => env('DB_PASSWORD_PORTAL', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'schema' => 'public',
+            'sslmode' => 'prefer',
+        ],
+
+        'hris' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST_HRIS', '127.0.0.1'),
+            'port' => env('DB_PORT_HRIS', '3306'),
+            'database' => env('DB_DATABASE_HRIS', 'forge'),
+            'username' => env('DB_USERNAME_HRIS', 'forge'),
+            'password' => env('DB_PASSWORD_HRIS', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
         ],
 
         'sqlsrv' => [

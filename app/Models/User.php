@@ -18,9 +18,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'employee_id',
+        'role_access',
+    ];
+    protected $guarded = [
+        'id',
     ];
 
     /**
@@ -29,7 +31,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
         'remember_token',
     ];
 
@@ -41,4 +42,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // public function section_data(){
+    //     return $this->belongsTo(Section::class, "section_id", "id");
+    // }
+    protected $primaryKey = "employee_id";
+    protected $keyType = "string";
+    public $incrementing = false;
+
+    public function fdtp_portal_user(){
+        return $this->hasOne(FdtpPortalUser::class, "emp_id", "employee_id");
+    }
+    public function hris_masterlist(){
+        return $this->hasOne(HrisMasterlist::class, "emp_pms_id", "employee_id");
+    }
 }
