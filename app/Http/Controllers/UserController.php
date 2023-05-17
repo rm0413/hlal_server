@@ -25,7 +25,7 @@ class UserController extends Controller
     {
         $result = $this->successResponse("Loaded Successfully");
         try {
-            $result["data"] = $this->user_service->loadAll();
+            $result["data"] = $this->user_service->loadUserProfile();
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

@@ -16,6 +16,10 @@ abstract class BaseRepository implements BaseContract
     {
         return $this->model->get();
     }
+    public function loadUserProfile()
+    {
+        return $this->model->with('hris_masterlist')->get();
+    }
     public function store($data)
     {
         return $this->model->create($data);
