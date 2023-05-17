@@ -34,6 +34,7 @@ class UserService implements UserServiceContract
                 'emp_system_status' => $users->hris_masterlist['emp_system_status'],
                 'position' => $users->hris_masterlist['position'],
                 'section_code' => $users->hris_masterlist['section_code'],
+                'emp_email' => $users->fdtp_portal_user['email'],
             ];
         }
         return $datastorage;
@@ -44,7 +45,25 @@ class UserService implements UserServiceContract
     }
     public function showProfile($id)
     {
-        return $this->user_repository_contract->showProfile($id);
+        $result = $this->user_repository_contract->showProfile($id);
+        $datastorage = [];
+        // foreach($result as $users){
+            $datastorage = [
+                'id' => $result['id'],
+                'employee_id' => $result['employee_id'],
+                'role_access' => $result['role_access'],
+                'first_name' => $result->hris_masterlist['emp_first_name'],
+                'last_name' => $result->hris_masterlist['emp_last_name'],
+                'middle_name' => $result->hris_masterlist['emp_middle_name'],
+                'photo' => $result->hris_masterlist['emp_photo'],
+                'employee_status' => $result->hris_masterlist['emp_system_status'],
+                'position' => $result->hris_masterlist['position'],
+                "section" =>  $result["hris_masterlist"]["section"],
+                'section_code' => $result->hris_masterlist['section_code'],
+                'email' => $result->fdtp_portal_user['email'],
+            ];
+        // }
+        return $datastorage;
     }
     public function update($id, $data){
         return $this->user_repository_contract->update($id, $data);

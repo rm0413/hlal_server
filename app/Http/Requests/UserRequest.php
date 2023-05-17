@@ -28,7 +28,7 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'employee_id'    => 'required||unique:users,employee_id,null,id',
+            'employee_id'    => $this->method() === "POST" ? "required|unique:users,employee_id,NULL,id,deleted_at,NULL" : "",
             'role_access'    => 'required',
         ];
     }
