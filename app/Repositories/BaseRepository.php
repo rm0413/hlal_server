@@ -36,4 +36,8 @@ abstract class BaseRepository implements BaseContract
     {
         return $this->model->where('id', $id)->delete();
     }
+    public function loadUnits()
+    {
+        return $this->model->with('hris_masterlist', 'fdtp_portal_user')->get();
+    }
 }
