@@ -5,7 +5,8 @@ namespace App\Services;
 use App\Services\Contracts\UnitServiceContract;
 use App\Repositories\Contracts\UnitRepositoryContract;
 
-class UnitService implements UnitServiceContract{
+class UnitService implements UnitServiceContract
+{
 
     protected $unit_repository_contract;
 
@@ -14,10 +15,11 @@ class UnitService implements UnitServiceContract{
         $this->unit_repository_contract = $unit_repository_contract;
     }
 
-    public function loadUnits(){
+    public function loadUnits()
+    {
         $result = $this->unit_repository_contract->loadUnits();
         $datastorage = [];
-        foreach($result as $unit_data){
+        foreach ($result as $unit_data) {
             $datastorage[] = [
                 'unit_id' => $unit_data['id'],
                 'unit_name' => $unit_data['unit_name'],
@@ -29,9 +31,17 @@ class UnitService implements UnitServiceContract{
             ];
         }
         return $datastorage;
-
     }
-    public function store($data){
+    public function store($data)
+    {
         return $this->unit_repository_contract->store($data);
+    }
+    public function delete($id)
+    {
+        return $this->unit_repository_contract->delete($id);
+    }
+    public function update($id, $data)
+    {
+        return $this->unit_repository_contract->update($id, $data);
     }
 }

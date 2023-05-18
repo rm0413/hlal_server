@@ -7,6 +7,8 @@ use App\Repositories\Contracts\UserRepositoryContract;
 use App\Repositories\UserRepository;
 use App\Repositories\Contracts\UnitRepositoryContract;
 use App\Repositories\UnitRepository;
+use App\Repositories\AgreementListRepository;
+use App\Repositories\Contracts\AgreementListRepositoryContract;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             UnitRepositoryContract::class,
             UnitRepository::class
+        );
+        $this->app->bind(
+            AgreementListRepositoryContract::class,
+            AgreementListRepository::class
         );
     }
 

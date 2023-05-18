@@ -68,6 +68,9 @@ class UserService implements UserServiceContract
     public function update($id, $data){
         return $this->user_repository_contract->update($id, $data);
     }
+    public function updateUserPortal($id, $data){
+        return $this->user_repository_contract->updateUserPortal($id, $data);
+    }
     public function delete($id)
     {
         return $this->user_repository_contract->delete($id);

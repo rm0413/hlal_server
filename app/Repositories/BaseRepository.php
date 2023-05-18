@@ -30,6 +30,10 @@ abstract class BaseRepository implements BaseContract
     }
     public function update($id, $data)
     {
+        return $this->model->where('id', $id)->update($data);
+    }
+    public function updateUserPortal($id, $data)
+    {
         return $this->model->where('employee_id', $id)->update($data);
     }
     public function delete($id)

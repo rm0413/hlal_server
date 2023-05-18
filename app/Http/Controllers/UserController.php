@@ -13,7 +13,8 @@ class UserController extends Controller
     use ResponseTrait;
     protected $user_service;
 
-    public function __construct(UserService $user_service){
+    public function __construct(UserService $user_service)
+    {
         $this->user_service = $user_service;
     }
     /**
@@ -41,17 +42,17 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-       $result = $this->successResponse("Stored Successfully");
-       try{
-        $data = [
-            'employee_id' => $request->employee_id,
-            'role_access' => $request->role_access
-        ];
-        $this->user_service->store($data);
-       }catch(\Exception $e){
-        $result = $this->errorResponse($e);
-       }
-       return $result;
+        $result = $this->successResponse("Stored Successfully");
+        try {
+            $data = [
+                'employee_id' => $request->employee_id,
+                'role_access' => $request->role_access
+            ];
+            $this->user_service->store($data);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
 
     /**
@@ -63,9 +64,9 @@ class UserController extends Controller
     public function show($id)
     {
         $result = $this->successResponse('Loaded Successfully');
-        try{
+        try {
             $result['data'] = $this->user_service->showProfile($id);
-        }catch(ErrorException $e){
+        } catch (ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -80,15 +81,15 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $result=$this->successResponse('Updated Successfully!');
+        $result = $this->successResponse('Updated Successfully!');
         try {
-            $data=[
-                'employee_id'=>$request->employee_id,
-                'role_access'=>$request->role_access,
+            $data = [
+                'employee_id' => $request->employee_id,
+                'role_access' => $request->role_access,
             ];
-            $this->user_service->update($id, $data);
+            $this->user_service->updateUserPortal($id, $data);
         } catch (\Exception $e) {
-            $result=$this->errorResponse($e);
+            $result = $this->errorResponse($e);
         }
         return $result;
     }
@@ -102,12 +103,11 @@ class UserController extends Controller
     public function destroy($id)
     {
         $result = $this->successResponse('Deleted Successfully!');
-        try{
+        try {
             $this->user_service->delete($id);
-        }
-        catch (\Exception $e){
+        } catch (\Exception $e) {
 
-            $result=$this->errorResponse($e);
+            $result = $this->errorResponse($e);
         }
         return $result;
     }

@@ -29,16 +29,16 @@ class UnitRequest extends FormRequest
     {
         return [
             'unit_name' => 'required|unique:units,unit_name,NULL,id',
-            // 'unit_status' => 'required',
-            // 'unit_created_by' => 'required',
+            'unit_status' => 'required',
+            'unit_created_by' => 'required',
         ];
     }
     public function messages(){
         return [
             "unit_name.required" => "Unit name is required.",
             "unit_name.unique" => "Unit Name is already registered.",
-            // "unit_status" => "Unit status is required.",
-            // "unit_created_by" => "Unit created by is required."
+            "unit_status.required" => "Unit status is required.",
+            "unit_created_by.required" => "Unit created by is required."
         ];
     }
     public function failedValidation(Validator $validator){
