@@ -33,7 +33,7 @@ class AgreementList extends Model
     }
     public function units()
     {
-        return $this->belongsTo(Unit::class, 'unit_id', 'id');
+        return $this->hasOne(Unit::class, 'id', 'unit_id');
     }
     public function inspection_data(){
         return $this->hasOne(InspectionData::class, 'agreement_request_id', 'id');

@@ -10,5 +10,6 @@ interface BaseContract{
     public function updateUserPortal($id, $data);
     public function delete($id);
     public function loadUnits();
+    public function loadAgreementListRequest();
 
 }

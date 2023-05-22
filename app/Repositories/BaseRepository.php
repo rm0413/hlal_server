@@ -44,4 +44,8 @@ abstract class BaseRepository implements BaseContract
     {
         return $this->model->with('hris_masterlist', 'fdtp_portal_user')->get();
     }
+    public function loadAgreementListRequest()
+    {
+        return $this->model->with('units')->get();
+    }
 }

@@ -16,4 +16,8 @@ class AgreementListService implements AgreementListServiceContract
     {
         return $this->agreement_list_contract->store($data);
     }
+    public function loadAgreementListRequest()
+    {
+        return $this->agreement_list_contract->loadAgreementListRequest();
+    }
 }
