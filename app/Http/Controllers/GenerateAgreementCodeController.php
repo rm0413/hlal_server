@@ -59,13 +59,16 @@ class GenerateAgreementCodeController extends Controller
             $data = [
                 'code' => $generated_code
             ];
-           $code_id = $this->generate_agreement_code_service->store($data);
-           $agreement_list_code_data = [
-            'agreement_request_id' => $request['agreement_request_id'],
-            'code_id' => $code_id['id']
+            $code_id = $this->generate_agreement_code_service->store($data);
+            foreach($request->agreement_request_id as $agreement_id){
 
-           ];
+            $agreement_list_code_data = [
+                'agreement_request_id' => $agreement_id,
+                'code_id' => $code_id['id']
+
+            ];
             $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
+        }
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

@@ -48,4 +48,8 @@ abstract class BaseRepository implements BaseContract
     {
         return $this->model->with('units')->get();
     }
+    public function loadGenaratedAgreementCode()
+    {
+        return $this->model->with('agreement_list', 'generate_code')->get();
+    }
 }

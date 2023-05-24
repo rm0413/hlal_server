@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Services;
+
 use App\Repositories\Contracts\AgreementListCodeRepositoryContract;
 use App\Services\Contracts\AgreementListCodeServiceContract;
 
-class AgreementListCodeService implements AgreementListCodeServiceContract {
+class AgreementListCodeService implements AgreementListCodeServiceContract
+{
 
     protected $agreement_list_code_contract;
     public function __construct(AgreementListCodeRepositoryContract $agreement_list_code_contract)
@@ -14,5 +17,8 @@ class AgreementListCodeService implements AgreementListCodeServiceContract {
     {
         return $this->agreement_list_code_contract->store($data);
     }
+    public function loadGenaratedAgreementCode()
+    {
+        return $this->agreement_list_code_contract->loadGenaratedAgreementCode();
+    }
 }
-

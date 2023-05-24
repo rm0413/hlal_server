@@ -22,7 +22,13 @@ class AgreementListCodeController extends Controller
      */
     public function index()
     {
-        //
+        $result = $this->successResponse("Loaded Successfully");
+        try {
+            $result['data'] = $this->agreement_list_code_service->loadGenaratedAgreementCode();
+        } catch (\ErrorException $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
 
     /**

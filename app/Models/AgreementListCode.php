@@ -21,6 +21,9 @@ class AgreementListCode extends Model
     protected $keyType = 'string';
 
     public function agreement_list(){
-        return $this->hasMany(AgreementList::class , 'agreement_request_id' , 'id');
+        return $this->hasMany(AgreementList::class, 'id' , 'agreement_request_id');
+    }
+    public function generate_code(){
+        return $this->hasOne(GenerateAgreementCode::class, 'id' , 'agreement_request_id');
     }
 }

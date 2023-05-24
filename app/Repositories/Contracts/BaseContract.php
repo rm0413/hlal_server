@@ -11,5 +11,6 @@ interface BaseContract{
     public function delete($id);
     public function loadUnits();
     public function loadAgreementListRequest();
+    public function loadGenaratedAgreementCode();
 
 }
