@@ -22,6 +22,7 @@ class AgreementListService implements AgreementListServiceContract
         $datastorage = [];
         foreach ($result as $agreement_data) {
             $datastorage[] = [
+                "agreement_id" => $agreement_data["id"],
                 'trial_number' => $agreement_data['trial_number'],
                 'request_date' => $agreement_data['request_date'],
                 'additional_request_qty_date' => $agreement_data['additional_request_qty_date'],
