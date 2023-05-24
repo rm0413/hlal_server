@@ -11,6 +11,8 @@ use App\Repositories\AgreementListRepository;
 use App\Repositories\AgreementListCodeRepository;
 use App\Repositories\Contracts\AgreementListRepositoryContract;
 use App\Repositories\Contracts\AgreementListCodeRepositoryContract;
+use App\Repositories\Contracts\GenerateAgreementCodeRepositoryContract;
+use App\Repositories\GenerateAgreementCodeRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -36,6 +38,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             AgreementListCodeRepositoryContract::class,
             AgreementListCodeRepository::class
+        );
+        $this->app->bind(
+            GenerateAgreementCodeRepositoryContract::class,
+            GenerateAgreementCodeRepository::class
         );
     }
 
