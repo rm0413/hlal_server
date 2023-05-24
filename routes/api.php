@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgreementListCodeController;
 use App\Http\Controllers\AgreementListController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Http\Request;
@@ -24,3 +25,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('/user',UserController::class);
 Route::apiResource('/unit',UnitController::class);
 Route::apiResource('/agreement-list',AgreementListController::class);
+Route::apiResource('/agreement-list-code',AgreementListCodeController::class);
