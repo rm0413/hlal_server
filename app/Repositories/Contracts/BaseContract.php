@@ -13,5 +13,6 @@ interface BaseContract{
     public function loadAgreementListRequest();
     public function loadGenaratedAgreementCode();
     public function loadWithCodeRequest();
+    public function loadWithNoCodeRequest();
 
 }

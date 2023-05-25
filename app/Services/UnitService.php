@@ -30,6 +30,7 @@ class UnitService implements UnitServiceContract
                 'emp_email' => $unit_data->fdtp_portal_user['email'],
             ];
         }
+        rsort($datastorage);
         return $datastorage;
     }
     public function store($data)

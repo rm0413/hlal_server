@@ -17,6 +17,40 @@ class AgreementListService implements AgreementListServiceContract
     {
         return $this->agreement_list_contract->store($data);
     }
+    public function loadWithNoCodeRequest()
+    {
+        $result =  $this->agreement_list_contract->loadWithNoCodeRequest();
+        $datastorage = [];
+        foreach($result as $data_with_code){
+            $datastorage[] = [
+                "agreement_id_pk" => $data_with_code["id"],
+                'trial_number' => $data_with_code['trial_number'],
+                'request_date' => Carbon::parse( $data_with_code['request_date'])->format('Y/m/d'),
+                'additional_request_qty_date' =>  Carbon::parse($data_with_code['additional_request_qty_date'])->format('Y/m/d'),
+                'tri_number' => $data_with_code['tri_number'],
+                'tri_quantity' => $data_with_code['tri_quantity'],
+                'request_person' => $data_with_code['request_person'],
+                'superior_approval' => $data_with_code['superior_approval'],
+                'supplier_name' => $data_with_code['supplier_name'],
+                'part_number' => $data_with_code['part_number'],
+                'sub_part_number' => $data_with_code['sub_part_number'],
+                'revision' => $data_with_code['revision'],
+                'coordinates' => $data_with_code['coordinates'],
+                'dimension' => $data_with_code['dimension'],
+                'actual_value' => $data_with_code['actual_value'],
+                'critical_parts' => $data_with_code['critical_parts'],
+                'critical_dimension' => $data_with_code['critical_dimension'],
+                'request_type' => $data_with_code['request_type'],
+                'request_value' => $data_with_code['request_value'],
+                'request_quantity' => $data_with_code['request_quantity'],
+                'unit_id' => $data_with_code['unit_id'],
+                'requestor_employee_id' => $data_with_code['requestor_employee_id'],
+                'requestor_full_name' => "{$data_with_code->hris_masterlist['emp_first_name']} {$data_with_code->hris_masterlist['emp_last_name']}",
+            ];
+        }
+        rsort($datastorage);
+        return $datastorage;
+    }
     public function loadWithCodeRequest()
     {
         $result = $this->agreement_list_contract->loadWithCodeRequest();
@@ -53,6 +87,7 @@ class AgreementListService implements AgreementListServiceContract
                 'code' => $data_with_code->agreement_list_code->generate_code['code'],
             ];
         }
+        rsort($datastorage);
         return $datastorage;
     }
     public function loadAgreementListRequest()
@@ -89,6 +124,7 @@ class AgreementListService implements AgreementListServiceContract
                 'requestor_full_name' => "{$agreement_data->hris_masterlist['emp_first_name']} {$agreement_data->hris_masterlist['emp_last_name']}",
             ];
         }
+        rsort($datastorage);
         return $datastorage;
     }
 }

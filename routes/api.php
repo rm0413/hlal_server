@@ -30,3 +30,4 @@ Route::apiResource('/agreement-list-code',AgreementListCodeController::class);
 Route::apiResource('/generate-agreement-code',GenerateAgreementCodeController::class);
 
 Route::get('/load-with-code-request',[AgreementListController::class, 'loadWithCodeRequest']);
+Route::get('/load-with-no-code-request',[AgreementListController::class, 'loadWithNoCodeRequest']);

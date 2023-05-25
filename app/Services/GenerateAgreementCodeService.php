@@ -18,6 +18,8 @@ class GenerateAgreementCodeService implements GenerateAgreementCodeServiceContra
     }
     public function loadAll()
     {
-        return $this->generate_agreement_code->loadAll();
+      $result = $this->generate_agreement_code->loadAll();
+      rsort($result);
+      return $result;
     }
 }

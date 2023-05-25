@@ -37,6 +37,7 @@ class UserService implements UserServiceContract
                 'emp_email' => $users->fdtp_portal_user['email'],
             ];
         }
+
         return $datastorage;
     }
     public function store($data)
@@ -63,6 +64,7 @@ class UserService implements UserServiceContract
                 'email' => $result->fdtp_portal_user['email'],
             ];
         // }
+        rsort($datastorage);
         return $datastorage;
     }
     public function update($id, $data){
