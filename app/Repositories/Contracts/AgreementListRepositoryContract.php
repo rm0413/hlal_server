@@ -5,6 +5,7 @@ interface AgreementListRepositoryContract {
 public function store($data);
 public function loadAgreementListRequest();
 public function loadWithCodeRequest();
+public function loadWithNoCodeRequest();
 }
 
 
