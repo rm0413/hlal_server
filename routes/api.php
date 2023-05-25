@@ -28,3 +28,5 @@ Route::apiResource('/unit',UnitController::class);
 Route::apiResource('/agreement-list',AgreementListController::class);
 Route::apiResource('/agreement-list-code',AgreementListCodeController::class);
 Route::apiResource('/generate-agreement-code',GenerateAgreementCodeController::class);
+
+Route::get('/load-with-code-request',[AgreementListController::class, 'loadWithCodeRequest']);

@@ -23,13 +23,13 @@ class AgreementListController extends Controller
      */
     public function index()
     {
-     $result = $this->successResponse("Loaded Successfully");
-     try{
-            $result['data']= $this->agreement_list_service->loadAgreementListRequest();
-     }catch(\Exception $e){
-        $result = $this->errorResponse($e);
-     }
-     return $result;
+        $result = $this->successResponse("Loaded Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadAgreementListRequest();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
 
     /**
@@ -41,7 +41,7 @@ class AgreementListController extends Controller
     public function store(AgreementListRequest $request)
     {
         $result = $this->successResponse("Request Added Successfully.");
-        try{
+        try {
             $data = [
                 "trial_number" => $request["trial_number"],
                 "request_date" => $request["request_date"],
@@ -65,7 +65,7 @@ class AgreementListController extends Controller
                 "unit_id" => $request["unit_id"],
                 "requestor_employee_id" => $request["requestor_employee_id"]
             ];
-             $this->agreement_list_service->store($data);
+            $this->agreement_list_service->store($data);
             // $inspection_data = [
             //     'agreement_request_id' => $result_agreement_request["id"],
             //     'cpk_data' => "-",
@@ -90,7 +90,7 @@ class AgreementListController extends Controller
             //     $mail->Body    = view('inspection_email', compact('agreement_data'))->render();
             //     $mail->send();
             // }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -105,6 +105,16 @@ class AgreementListController extends Controller
     public function show($id)
     {
         //
+    }
+    public function loadWithCodeRequest()
+    {
+        $result = $this->successResponse("Load Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadWithCodeRequest();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
 
     /**

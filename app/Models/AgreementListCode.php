@@ -24,6 +24,6 @@ class AgreementListCode extends Model
         return $this->hasMany(AgreementList::class, 'id' , 'agreement_request_id');
     }
     public function generate_code(){
-        return $this->hasOne(GenerateAgreementCode::class, 'id' , 'agreement_request_id');
+        return $this->hasOne(GenerateAgreementCode::class, 'id' , 'code_id');
     }
 }

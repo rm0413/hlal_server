@@ -25,18 +25,24 @@ class AgreementList extends Model
     protected $keyType = 'string';
 
 
-    public function fdtp_portal_user(){
+    public function fdtp_portal_user()
+    {
         return $this->hasOne(FdtpPortalUser::class, "emp_id", "employee_id");
     }
-    public function hris_masterlist(){
+    public function hris_masterlist()
+    {
         return $this->hasOne(HrisMasterlist::class, "emp_pms_id", "requestor_employee_id");
     }
     public function units()
     {
         return $this->hasOne(Unit::class, 'id', 'unit_id');
     }
-    public function inspection_data(){
+    public function inspection_data()
+    {
         return $this->hasOne(InspectionData::class, 'agreement_request_id', 'id');
     }
-
+    public function agreement_list_code()
+    {
+        return $this->hasOne(AgreementListCode::class, 'agreement_request_id', 'id');
+    }
 }

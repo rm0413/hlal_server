@@ -52,4 +52,11 @@ abstract class BaseRepository implements BaseContract
     {
         return $this->model->with('agreement_list', 'generate_code')->get();
     }
+    public function loadWithCodeRequest()
+    {
+        return $this->model->with('agreement_list_code.generate_code','hris_masterlist')
+        ->whereHas('agreement_list_code', function ($q) {
+        })
+            ->get();
+    }
 }
