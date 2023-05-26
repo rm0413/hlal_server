@@ -21,11 +21,11 @@ class AgreementListService implements AgreementListServiceContract
     {
         $result =  $this->agreement_list_contract->loadWithNoCodeRequest();
         $datastorage = [];
-        foreach($result as $data_with_code){
+        foreach ($result as $data_with_code) {
             $datastorage[] = [
                 "agreement_id_pk" => $data_with_code["id"],
                 'trial_number' => $data_with_code['trial_number'],
-                'request_date' => Carbon::parse( $data_with_code['request_date'])->format('Y/m/d'),
+                'request_date' => Carbon::parse($data_with_code['request_date'])->format('Y/m/d'),
                 'additional_request_qty_date' =>  Carbon::parse($data_with_code['additional_request_qty_date'])->format('Y/m/d'),
                 'tri_number' => $data_with_code['tri_number'],
                 'tri_quantity' => $data_with_code['tri_quantity'],
@@ -55,11 +55,11 @@ class AgreementListService implements AgreementListServiceContract
     {
         $result = $this->agreement_list_contract->loadWithCodeRequest();
         $datastorage = [];
-        foreach($result as $data_with_code){
+        foreach ($result as $data_with_code) {
             $datastorage[] = [
                 "agreement_id_pk" => $data_with_code["id"],
                 'trial_number' => $data_with_code['trial_number'],
-                'request_date' => Carbon::parse( $data_with_code['request_date'])->toDateString(),
+                'request_date' => Carbon::parse($data_with_code['request_date'])->toDateString(),
                 'additional_request_qty_date' =>  Carbon::parse($data_with_code['additional_request_qty_date'])->toDateString(),
                 'tri_number' => $data_with_code['tri_number'],
                 'tri_quantity' => $data_with_code['tri_quantity'],
@@ -126,5 +126,9 @@ class AgreementListService implements AgreementListServiceContract
         }
         rsort($datastorage);
         return $datastorage;
+    }
+    public function update($id, $data)
+    {
+        return $this->agreement_list_contract->update($id, $data);
     }
 }
