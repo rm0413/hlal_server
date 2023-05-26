@@ -12,7 +12,9 @@ use App\Repositories\AgreementListCodeRepository;
 use App\Repositories\Contracts\AgreementListRepositoryContract;
 use App\Repositories\Contracts\AgreementListCodeRepositoryContract;
 use App\Repositories\Contracts\GenerateAgreementCodeRepositoryContract;
+use App\Repositories\Contracts\InspectionDataRepositoryContract;
 use App\Repositories\GenerateAgreementCodeRepository;
+use App\Repositories\InspectionDataRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -42,6 +44,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             GenerateAgreementCodeRepositoryContract::class,
             GenerateAgreementCodeRepository::class
+        );
+        $this->app->bind(
+            InspectionDataRepositoryContract::class,
+            InspectionDataRepository::class
         );
     }
 
