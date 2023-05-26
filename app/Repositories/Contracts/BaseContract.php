@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Repositories\Contracts;
 
-interface BaseContract{
+interface BaseContract
+{
     public function loadAll();
     public function loadUserProfile();
     public function store($data);
@@ -14,5 +16,5 @@ interface BaseContract{
     public function loadGenaratedAgreementCode();
     public function loadWithCodeRequest();
     public function loadWithNoCodeRequest();
-
+    public function show($id, $where, $with);
 }

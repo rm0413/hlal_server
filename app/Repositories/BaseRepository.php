@@ -54,16 +54,20 @@ abstract class BaseRepository implements BaseContract
     }
     public function loadWithCodeRequest()
     {
-        return $this->model->with('agreement_list_code.generate_code','hris_masterlist')
-        ->whereHas('agreement_list_code', function ($q) {
-        })
+        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist')
+            ->whereHas('agreement_list_code', function ($q) {
+            })
             ->get();
     }
     public function loadWithNoCodeRequest()
     {
-        return $this->model->with('agreement_list_code.generate_code','hris_masterlist')
-        ->doesntHave('agreement_list_code')
+        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist')
+            ->doesntHave('agreement_list_code')
 
             ->get();
+    }
+    public function show($id, $where, $with)
+    {
+        return $this->model->with($with)->where($where)->get();
     }
 }

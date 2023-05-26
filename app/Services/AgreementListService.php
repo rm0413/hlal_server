@@ -59,8 +59,8 @@ class AgreementListService implements AgreementListServiceContract
             $datastorage[] = [
                 "agreement_id_pk" => $data_with_code["id"],
                 'trial_number' => $data_with_code['trial_number'],
-                'request_date' => Carbon::parse( $data_with_code['request_date'])->format('Y/m/d'),
-                'additional_request_qty_date' =>  Carbon::parse($data_with_code['additional_request_qty_date'])->format('Y/m/d'),
+                'request_date' => Carbon::parse( $data_with_code['request_date'])->format('m/d/Y'),
+                'additional_request_qty_date' =>  Carbon::parse($data_with_code['additional_request_qty_date'])->format('m/d/Y'),
                 'tri_number' => $data_with_code['tri_number'],
                 'tri_quantity' => $data_with_code['tri_quantity'],
                 'request_person' => $data_with_code['request_person'],
@@ -98,8 +98,8 @@ class AgreementListService implements AgreementListServiceContract
             $datastorage[] = [
                 "agreement_id" => $agreement_data["id"],
                 'trial_number' => $agreement_data['trial_number'],
-                'request_date' =>  Carbon::parse($agreement_data['request_date'])->format('Y/m/d'),
-                'additional_request_qty_date' =>  Carbon::parse($agreement_data['additional_request_qty_date'])->format('Y/m/d'),
+                'request_date' =>  Carbon::parse($agreement_data['request_date'])->format('m/d/Y'),
+                'additional_request_qty_date' =>  Carbon::parse($agreement_data['additional_request_qty_date'])->format('m/d/Y'),
                 'tri_number' => $agreement_data['tri_number'],
                 'tri_quantity' => $agreement_data['tri_quantity'],
                 'request_person' => $agreement_data['request_person'],

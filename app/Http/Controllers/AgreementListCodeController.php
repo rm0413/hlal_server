@@ -12,7 +12,8 @@ class AgreementListCodeController extends Controller
 {
     use ResponseTrait;
     protected $agreement_list_code_service;
-    public function __construct(AgreementListCodeService $agreement_list_code_service){
+    public function __construct(AgreementListCodeService $agreement_list_code_service)
+    {
         $this->agreement_list_code_service = $agreement_list_code_service;
     }
     /**
@@ -39,18 +40,18 @@ class AgreementListCodeController extends Controller
      */
     public function store(AgreementListCodeRequest $request)
     {
-     $result = $this->successResponse('Stored Successfully');
-     try{
-        $data = [
-            'code_id' => $request['code_id'],
-            'agreement_request_id' => $request['agreement_request_id']
-        ];
-        $result['data'] = $this->agreement_list_code_service->store($data);
-     }catch(\Exception $e){
-     $result = $this->errorResponse($e);
+        $result = $this->successResponse('Stored Successfully');
+        try {
+            $data = [
+                'code_id' => $request['code_id'],
+                'agreement_request_id' => $request['agreement_request_id']
+            ];
+            $result['data'] = $this->agreement_list_code_service->store($data);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
-    return $result;
-}
 
     /**
      * Display the specified resource.
@@ -60,7 +61,17 @@ class AgreementListCodeController extends Controller
      */
     public function show($id)
     {
-        //
+        $result = $this->successResponse("Load Successfully");
+        $where = [
+            ['id', '=', $id],
+        ];
+        $with = ['generate_code' , 'agreement_list'];
+        try {
+            $result['data'] = $this->agreement_list_code_service->show($id, $where, $with);
+        } catch (\ErrorException $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
 
     /**
