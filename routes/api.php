@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgreementListCodeController;
 use App\Http\Controllers\AgreementListController;
 use App\Http\Controllers\GenerateAgreementCodeController;
+use App\Http\Controllers\InspectionDataController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -28,6 +29,7 @@ Route::apiResource('/unit',UnitController::class);
 Route::apiResource('/agreement-list',AgreementListController::class);
 Route::apiResource('/agreement-list-code',AgreementListCodeController::class);
 Route::apiResource('/generate-agreement-code',GenerateAgreementCodeController::class);
+Route::apiResource('/inspection-data',InspectionDataController::class);
 
 Route::get('/load-with-code-request',[AgreementListController::class, 'loadWithCodeRequest']);
 Route::get('/load-with-no-code-request',[AgreementListController::class, 'loadWithNoCodeRequest']);
