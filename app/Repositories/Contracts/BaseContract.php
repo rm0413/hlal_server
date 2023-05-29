@@ -17,4 +17,5 @@ interface BaseContract
     public function loadWithCodeRequest();
     public function loadWithNoCodeRequest();
     public function show($id, $where, $with);
+    public function loadInspectionData();
 }
