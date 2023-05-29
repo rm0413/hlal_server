@@ -177,6 +177,12 @@ class AgreementListController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $result = $this->successResponse("Deleted Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->delete($id);
+        } catch (\ErrorException $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
 }

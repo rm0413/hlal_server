@@ -131,4 +131,8 @@ class AgreementListService implements AgreementListServiceContract
     {
         return $this->agreement_list_contract->update($id, $data);
     }
+    public function delete($id)
+    {
+        return $this->agreement_list_contract->delete($id);
+    }
 }
