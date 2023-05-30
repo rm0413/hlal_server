@@ -4,11 +4,13 @@ use App\Http\Controllers\AgreementListCodeController;
 use App\Http\Controllers\AgreementListController;
 use App\Http\Controllers\GenerateAgreementCodeController;
 use App\Http\Controllers\InspectionDataController;
+use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
+use App\Models\Attachement;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,11 +27,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::apiResource('/user',UserController::class);
+Route::apiResource('/user',UserController::class);
 Route::apiResource('/unit',UnitController::class);
 Route::apiResource('/agreement-list',AgreementListController::class);
 Route::apiResource('/agreement-list-code',AgreementListCodeController::class);
 Route::apiResource('/generate-agreement-code',GenerateAgreementCodeController::class);
 Route::apiResource('/inspection-data',InspectionDataController::class);
+Route::apiResource('/attachment',AttachmentController::class);
 
 Route::get('/load-with-code-request',[AgreementListController::class, 'loadWithCodeRequest']);
 Route::get('/load-with-code-inspection',[AgreementListController::class, 'loadCodeWithInspectionData']);

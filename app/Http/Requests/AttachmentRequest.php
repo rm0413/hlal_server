@@ -2,19 +2,16 @@
 
 namespace App\Http\Requests;
 
-
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-
-class GenerateAgreementCodeRequest extends FormRequest
+class AttachmentRequest extends FormRequest
 {
     use ResponseTrait;
     /**
      * Determine if the user is authorized to make this request.
-     *
      *
      * @return bool
      */
@@ -31,14 +28,14 @@ class GenerateAgreementCodeRequest extends FormRequest
     public function rules()
     {
         return [
-            'agreement_request_id' => 'required|unique:agreement_list_codes,agreement_request_id,NULL,id,deleted_at,NULL',
+            'file_path_attachment' => 'required'
         ];
     }
     public function messages()
     {
         return [
-            "agreement_request_id.required" => "Code is required.",
-            "agreement_request_id.unique" => "Already Exists.",
+            "file_path_attachment.required" => "Attachment is required.",
+            // "file_path_attachment.required" => "Pdf Only.",
         ];
     }
     public function failedValidation(Validator $validator)
