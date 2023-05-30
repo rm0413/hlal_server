@@ -136,6 +136,16 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+    public function loadPartNumberWithCode()
+    {
+        $result = $this->successResponse("Load Part Number Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadPartNumberWithCode();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
 
     /**
      * Update the specified resource in storage.

@@ -175,4 +175,17 @@ class AgreementListService implements AgreementListServiceContract
         rsort($datastorage);
         return $datastorage;
     }
+    public function loadPartNumberWithCode()
+    {
+        $result = $this->agreement_list_contract->loadWithCodeRequest();
+        $part_number = [];
+        foreach($result as $results){
+            $part_number[] = $results->part_number;
+        }
+        foreach(array_unique($part_number) as $load_part_number){
+            $datastorage[] = $load_part_number;
+        }
+        rsort($datastorage);
+        return $datastorage;
+    }
 }
