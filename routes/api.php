@@ -32,4 +32,5 @@ Route::apiResource('/generate-agreement-code',GenerateAgreementCodeController::c
 Route::apiResource('/inspection-data',InspectionDataController::class);
 
 Route::get('/load-with-code-request',[AgreementListController::class, 'loadWithCodeRequest']);
+Route::get('/load-with-code-inspection',[AgreementListController::class, 'loadCodeWithInspectionData']);
 Route::get('/load-with-no-code-request',[AgreementListController::class, 'loadWithNoCodeRequest']);

@@ -135,4 +135,44 @@ class AgreementListService implements AgreementListServiceContract
     {
         return $this->agreement_list_contract->delete($id);
     }
+    public function loadCodeWithInspectionData()
+    {
+        $result = $this->agreement_list_contract->loadCodeWithInspectionData();
+        $datastorage = [];
+        foreach ($result as $data_code_with_inspection) {
+            $datastorage[] = [
+                "agreement_id_pk" => $data_code_with_inspection["id"],
+                'trial_number' => $data_code_with_inspection['trial_number'],
+                'request_date' => Carbon::parse($data_code_with_inspection['request_date'])->toDateString(),
+                'additional_request_qty_date' =>  Carbon::parse($data_code_with_inspection['additional_request_qty_date'])->toDateString(),
+                'tri_number' => $data_code_with_inspection['tri_number'],
+                'tri_quantity' => $data_code_with_inspection['tri_quantity'],
+                'request_person' => $data_code_with_inspection['request_person'],
+                'superior_approval' => $data_code_with_inspection['superior_approval'],
+                'supplier_name' => $data_code_with_inspection['supplier_name'],
+                'part_number' => $data_code_with_inspection['part_number'],
+                'sub_part_number' => $data_code_with_inspection['sub_part_number'],
+                'revision' => $data_code_with_inspection['revision'],
+                'coordinates' => $data_code_with_inspection['coordinates'],
+                'dimension' => $data_code_with_inspection['dimension'],
+                'actual_value' => $data_code_with_inspection['actual_value'],
+                'critical_parts' => $data_code_with_inspection['critical_parts'],
+                'critical_dimension' => $data_code_with_inspection['critical_dimension'],
+                'request_type' => $data_code_with_inspection['request_type'],
+                'request_value' => $data_code_with_inspection['request_value'],
+                'request_quantity' => $data_code_with_inspection['request_quantity'],
+                'unit_id' => $data_code_with_inspection['unit_id'],
+                'requestor_employee_id' => $data_code_with_inspection['requestor_employee_id'],
+                'requestor_full_name' => "{$data_code_with_inspection->hris_masterlist['emp_first_name']} {$data_code_with_inspection->hris_masterlist['emp_last_name']}",
+                'agreement_list_code_id_pk' => $data_code_with_inspection->agreement_list_code['id'],
+                'agreement_request_id_fk' => $data_code_with_inspection->agreement_list_code['agreement_request_id'],
+                'code_id_fk' => $data_code_with_inspection->agreement_list_code['code_id'],
+                'generate_code_id_pk' => $data_code_with_inspection->agreement_list_code->generate_code['id'],
+                'code' => $data_code_with_inspection->agreement_list_code->generate_code['code'],
+                'cpk_data' => $data_code_with_inspection->inspection_data['cpk_data']
+            ];
+        }
+        rsort($datastorage);
+        return $datastorage;
+    }
 }

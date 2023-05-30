@@ -126,6 +126,16 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+    public function loadCodeWithInspectionData()
+    {
+        $result = $this->successResponse("Load Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadCodeWithInspectionData();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
 
     /**
      * Update the specified resource in storage.
