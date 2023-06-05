@@ -39,3 +39,4 @@ Route::get('/load-with-code-request',[AgreementListController::class, 'loadWithC
 Route::get('/load-with-code-inspection',[AgreementListController::class, 'loadCodeWithInspectionData']);
 Route::get('/load-with-no-code-request',[AgreementListController::class, 'loadWithNoCodeRequest']);
 Route::get('/load-part-number-with-code',[AgreementListController::class, 'loadPartNumberWithCode']);
+Route::get('/count-request',[AgreementListController::class, 'countRequest']);

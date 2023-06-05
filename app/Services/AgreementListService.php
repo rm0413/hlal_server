@@ -94,7 +94,19 @@ class AgreementListService implements AgreementListServiceContract
     {
         $result = $this->agreement_list_contract->loadAgreementListRequest();
         $datastorage = [];
+        // $datastorage_count = [];
+        // $data_count = [];
+        // $hinsei_count = 0;
+        // $lsa_count = 0;
+
         foreach ($result as $agreement_data) {
+            // $data_count = [$agreement_data['request_type']];
+            // foreach ($data_count as $count_data) {
+            //     if ($count_data === "Hinsei Request") {
+            //         $hinsei_count += 1;
+            //     } elseif ($count_data === "LSA Request") {
+            //         $lsa_count += 1;
+            //     }
             $datastorage[] = [
                 "agreement_id" => $agreement_data["id"],
                 'trial_number' => $agreement_data['trial_number'],
@@ -122,8 +134,15 @@ class AgreementListService implements AgreementListServiceContract
                 'unit_created_by' => $agreement_data->units['unit_created_by'],
                 'requestor_employee_id' => $agreement_data['requestor_employee_id'],
                 'requestor_full_name' => "{$agreement_data->hris_masterlist['emp_first_name']} {$agreement_data->hris_masterlist['emp_last_name']}",
+                // 'lsa_hinsei_count' => $datastorage_count,
             ];
         }
+        // $datastorage_count[] = [
+        //     'count_lsa' => $lsa_count,
+        //     'hinsei_count' => $hinsei_count
+        // ];
+        // }
+
         rsort($datastorage);
         return $datastorage;
     }
@@ -179,13 +198,35 @@ class AgreementListService implements AgreementListServiceContract
     {
         $result = $this->agreement_list_contract->loadWithCodeRequest();
         $part_number = [];
-        foreach($result as $results){
+        foreach ($result as $results) {
             $part_number[] = $results->part_number;
         }
-        foreach(array_unique($part_number) as $load_part_number){
+        foreach (array_unique($part_number) as $load_part_number) {
             $datastorage[] = $load_part_number;
         }
         rsort($datastorage);
         return $datastorage;
+    }
+    public function countRequest()
+    {
+        $result = $this->agreement_list_contract->loadAgreementListRequest();
+        $data_count = [];
+        $hinsei_count = 0;
+        $lsa_count = 0;
+        foreach ($result as $count) {
+            $data_count = [$count['request_type']];
+            foreach ($data_count as $count_data) {
+                if ($count_data === "Hinsei Request") {
+                    $hinsei_count += 1;
+                } elseif ($count_data === "LSA Request") {
+                    $lsa_count += 1;
+                }
+            }
+        }
+        $datastorage_count[] = [
+            'count_lsa' => $lsa_count,
+            'hinsei_count' => $hinsei_count
+        ];
+        return $datastorage_count;
     }
 }
