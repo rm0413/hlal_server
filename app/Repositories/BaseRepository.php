@@ -69,6 +69,10 @@ abstract class BaseRepository implements BaseContract
     public function show($id, $where, $with)
     {
         return $this->model->with($with)->where($where)->get();
+    } 
+     public function loadInspectionData()
+    {
+        return $this->model->with('agreement_list')->get();
     }
     public function loadCodeWithInspectionData()
     {

@@ -22,7 +22,13 @@ class InspectionDataController extends Controller
      */
     public function index()
     {
-        //
+        $result = $this->successResponse("Load Successfully");
+        try {
+            $result['data'] = $this->inspection_data_service->loadInspectionData();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
 
     /**
@@ -35,16 +41,16 @@ class InspectionDataController extends Controller
     {
         $result = $this->successResponse("Stored Successfully");
         try {
-            foreach($request->agreement_request_id as $agreement_req_id){
-            $data = [
-                'agreement_request_id' => $agreement_req_id,
-                'cpk_data' => $request->cpk_data,
-                'inspection_after_rework' => $request->inspection_after_rework,
-                'revised_date_igm' => $request->revised_date_igm,
-                'sent_date_igm' => $request->sent_date_igm
-            ];
-            $result['data'] = $this->inspection_data_service->store($data);
-        }
+            foreach ($request->agreement_request_id as $agreement_req_id) {
+                $data = [
+                    'agreement_request_id' => $agreement_req_id,
+                    'cpk_data' => $request->cpk_data,
+                    'inspection_after_rework' => $request->inspection_after_rework,
+                    'revised_date_igm' => $request->revised_date_igm,
+                    'sent_date_igm' => $request->sent_date_igm
+                ];
+                $result['data'] = $this->inspection_data_service->store($data);
+            }
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

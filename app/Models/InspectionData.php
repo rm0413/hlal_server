@@ -20,6 +20,6 @@ class InspectionData extends Model
     ];
     protected $guarded = ['id'];
     public function agreement_list(){
-        return $this->hasMany(AgreementList::class, 'agreement_request_id' , 'id');
+        return $this->hasMany(AgreementList::class, 'id' , 'agreement_request_id');
     }
 }
