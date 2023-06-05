@@ -6,6 +6,7 @@ use App\Http\Requests\AgreementListRequest;
 use App\Services\AgreementListService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
+use PHPMailer\PHPMailer\PHPMailer;
 
 
 class AgreementListController extends Controller
@@ -74,22 +75,22 @@ class AgreementListController extends Controller
             //     'sent_date_igm' => $agreement_request->sent_date_igm
             // ];
             // $this->inspection_service->storeInspectionData($inspection_data);
-            // if($agreement_request->critical_parts === 'yes'){
-            //     $mail = new PHPMailer();
-            //     $mail->isSMTP();
-            //     $mail->SMTPDebug  = 0;
-            //     $mail->SMTPAuth = false;
-            //     $mail->SMTPAutoTLS = false;
-            //     $mail->Port = 25;
-            //     $mail->Host = "203.127.104.86";
-            //     $mail->isHTML(true);
-            //     $mail->From = "fdtp.system@ph.fujitsu.com";
-            //     $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'Hinsei & LSA Agreenent List');
-            //     $mail->addAddress('reinamae.sorisantos@fujitsu.com');
-            //     $mail->Subject = 'Hinsei & LSA Agreement List | Critical Parts';
-            //     $mail->Body    = view('inspection_email', compact('agreement_data'))->render();
-            //     $mail->send();
-            // }
+            if($request->critical_parts === 'Yes'){
+                $mail = new PHPMailer();
+                $mail->isSMTP();
+                $mail->SMTPDebug  = 0;
+                $mail->SMTPAuth = false;
+                $mail->SMTPAutoTLS = false;
+                $mail->Port = 25;
+                $mail->Host = "203.127.104.86";
+                $mail->isHTML(true);
+                $mail->From = "fdtp.system@ph.fujitsu.com";
+                $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'Hinsei & LSA Agreenent List');
+                $mail->addAddress('reinamae.sorisantos@fujitsu.com');
+                $mail->Subject = 'Hinsei & LSA Agreement List | Critical Parts';
+                $mail->Body    = view('inspection_email', compact('data'))->render();
+                $mail->send();
+            }
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
@@ -131,6 +132,26 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadCodeWithInspectionData();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function loadPartNumberWithCode()
+    {
+        $result = $this->successResponse("Load Part Number Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadPartNumberWithCode();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function countRequest()
+    {
+        $result = $this->successResponse("Load Count Request Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->countRequest();
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

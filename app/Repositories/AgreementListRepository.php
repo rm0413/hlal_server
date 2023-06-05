@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\AgreementList;
 use App\Repositories\BaseRepository;
-use App\Repositories\contracts\AgreementListRepositoryContract;
+use App\Repositories\Contracts\AgreementListRepositoryContract;
 
 class AgreementListRepository extends BaseRepository implements AgreementListRepositoryContract
 {
