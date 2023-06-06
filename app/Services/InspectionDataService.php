@@ -56,8 +56,8 @@ class InspectionDataService implements InspectionDataServiceContract
     }
     return $datastorage;
     }
-    public function updateMultiple($id, $data)
+    public function update($id, $data)
     {
-        return $this->inspection_data_repository_contract->updateMultiple($id, $data);
+        return $this->inspection_data_repository_contract->update($id, $data);
     }
 }
