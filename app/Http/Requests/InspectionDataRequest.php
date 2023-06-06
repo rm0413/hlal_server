@@ -34,9 +34,9 @@ class InspectionDataRequest extends FormRequest
     }
     public function messages(){
         return [
-            "agreement_request_id.required" => "Unit name is required.",
-            "cpk_data.required" => "Unit status is required.",
-            "inspection_after_rework.required" => "Unit created by is required."
+            "agreement_request_id.required" => "Agreement List ID is required.",
+            "cpk_data.required" => "Cpk data is required.",
+            "inspection_after_rework.required" => "Inspection after rework is required."
         ];
     }
     public function failedValidation(Validator $validator){

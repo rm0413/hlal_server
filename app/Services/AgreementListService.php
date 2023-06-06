@@ -188,7 +188,11 @@ class AgreementListService implements AgreementListServiceContract
                 'code_id_fk' => $data_code_with_inspection->agreement_list_code['code_id'],
                 'generate_code_id_pk' => $data_code_with_inspection->agreement_list_code->generate_code['id'],
                 'code' => $data_code_with_inspection->agreement_list_code->generate_code['code'],
-                'cpk_data' => $data_code_with_inspection->inspection_data['cpk_data']
+                'inspection_id' => $data_code_with_inspection->inspection_data['id'],
+                'cpk_data' => $data_code_with_inspection->inspection_data['cpk_data'],
+                'inspection_after_rework' => $data_code_with_inspection->inspection_data['inspection_after_rework'],
+                'revised_date_igm' => $data_code_with_inspection->inspection_data['revised_date_igm'],
+                'sent_date_igm' => $data_code_with_inspection->inspection_data['sent_date_igm']
             ];
         }
         rsort($datastorage);
