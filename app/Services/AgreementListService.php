@@ -191,8 +191,8 @@ class AgreementListService implements AgreementListServiceContract
                 'inspection_id' => $data_code_with_inspection->inspection_data['id'],
                 'cpk_data' => $data_code_with_inspection->inspection_data['cpk_data'],
                 'inspection_after_rework' => $data_code_with_inspection->inspection_data['inspection_after_rework'],
-                'revised_date_igm' => $data_code_with_inspection->inspection_data['revised_date_igm'],
-                'sent_date_igm' => $data_code_with_inspection->inspection_data['sent_date_igm']
+                'revised_date_igm' => Carbon::parse($data_code_with_inspection->inspection_data['revised_date_igm'])->toDateString(),
+                'sent_date_igm' => Carbon::parse($data_code_with_inspection->inspection_data['sent_date_igm'])->toDateString(),
             ];
         }
         rsort($datastorage);

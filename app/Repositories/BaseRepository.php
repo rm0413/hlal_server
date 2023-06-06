@@ -32,6 +32,10 @@ abstract class BaseRepository implements BaseContract
     {
         return $this->model->where('id', $id)->update($data);
     }
+    public function updateMultiple($data, $id)
+    {
+        return $this->model->where('id', $id)->update($data);
+    }
     public function updateUserPortal($id, $data)
     {
         return $this->model->where('employee_id', $id)->update($data);

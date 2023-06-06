@@ -67,17 +67,20 @@ class InspectionDataController extends Controller
     {
         //
     }
-    public function update(InspectionDataRequest $request, $id)
+    public function update(Request $update_request)
     {
         $result = $this->successResponse("Inspection Data Updated Successfully.");
         try {
             $data = [
-                'cpk_data' => $request['cpk_data'],
-                'inspection_after_rework' => $request['inspection_after_rework'],
-                'revised_date_igm' => $request['revised_date_igm'],
-                'sent_date_igm' => $request['sent_date_igm']
+                'cpk_data' => $update_request->cpk_data,
+                'inspection_after_rework' => $update_request['inspection_after_rework'],
+                'revised_date_igm' => $update_request['revised_date_igm'],
+                'sent_date_igm' => $update_request['sent_date_igm']
             ];
-            $this->inspection_data_service->update($id, $data);
+            foreach($update_request->inspection_id as $id)
+            {
+                $this->inspection_data_service->updateMultiple($data, $id);
+            }
         } catch (\Exception $e) {
             //throw $e;
             $result = $this->errorResponse($e);
