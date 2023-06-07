@@ -96,6 +96,18 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+    public function download()
+    {
+        $result = $this->successResponse("Download Successfully");
+        try {
+            // $result['data'] = $this->agreement_list_service->loadWithCodeRequest();
+            $format = storage_path("format\HinseiLSA_format.xlsx");
+            return response()->download($format);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
 
     /**
      * Display the specified resource.
