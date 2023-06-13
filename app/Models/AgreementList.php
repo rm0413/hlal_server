@@ -45,4 +45,8 @@ class AgreementList extends Model
     {
         return $this->hasOne(AgreementListCode::class, 'agreement_request_id', 'id');
     }
+    public function designer_section_answer()
+    {
+        return $this->hasOne(DesignerSection::class, 'agreement_request_id', 'id');
+    }
 }

@@ -15,6 +15,8 @@ use App\Repositories\Contracts\AgreementListCodeRepositoryContract;
 use App\Repositories\Contracts\GenerateAgreementCodeRepositoryContract;
 use App\Repositories\Contracts\InspectionDataRepositoryContract;
 use App\Repositories\Contracts\AttachmentRepositoryContract;
+use App\Repositories\Contracts\DesignerSectionRepositoryContract;
+use App\Repositories\DesignerSectionRepository;
 use App\Repositories\GenerateAgreementCodeRepository;
 use App\Repositories\InspectionDataRepository;
 
@@ -54,6 +56,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             AttachmentRepositoryContract::class,
             AttachmentRepository::class
+        );
+        $this->app->bind(
+            DesignerSectionRepositoryContract::class,
+            DesignerSectionRepository::class
         );
     }
 

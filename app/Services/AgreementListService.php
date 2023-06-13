@@ -198,6 +198,67 @@ class AgreementListService implements AgreementListServiceContract
         rsort($datastorage);
         return $datastorage;
     }
+    public function loadCodeWithDesignerSection()
+    {
+        $result = $this->agreement_list_contract->loadCodeWithDesignerSection();
+        $datastorage = [];
+        foreach ($result as $data_code_designer) {
+            $datastorage[] = [
+                "agreement_id_pk" => $data_code_designer["id"],
+                'trial_number' => $data_code_designer['trial_number'],
+                'request_date' => Carbon::parse($data_code_designer['request_date'])->toDateString(),
+                'additional_request_qty_date' =>  Carbon::parse($data_code_designer['additional_request_qty_date'])->toDateString(),
+                'tri_number' => $data_code_designer['tri_number'],
+                'tri_quantity' => $data_code_designer['tri_quantity'],
+                'request_person' => $data_code_designer['request_person'],
+                'superior_approval' => $data_code_designer['superior_approval'],
+                'supplier_name' => $data_code_designer['supplier_name'],
+                'part_number' => $data_code_designer['part_number'],
+                'sub_part_number' => $data_code_designer['sub_part_number'],
+                'revision' => $data_code_designer['revision'],
+                'coordinates' => $data_code_designer['coordinates'],
+                'dimension' => $data_code_designer['dimension'],
+                'actual_value' => $data_code_designer['actual_value'],
+                'critical_parts' => $data_code_designer['critical_parts'],
+                'critical_dimension' => $data_code_designer['critical_dimension'],
+                'request_type' => $data_code_designer['request_type'],
+                'request_value' => $data_code_designer['request_value'],
+                'request_quantity' => $data_code_designer['request_quantity'],
+                'unit_id' => $data_code_designer['unit_id'],
+                'requestor_employee_id' => $data_code_designer['requestor_employee_id'],
+                'requestor_full_name' => "{$data_code_designer->hris_masterlist['emp_first_name']} {$data_code_designer->hris_masterlist['emp_last_name']}",
+                'agreement_list_code_id_pk' => $data_code_designer->agreement_list_code['id'],
+                'agreement_request_id_fk' => $data_code_designer->agreement_list_code['agreement_request_id'],
+                'code_id_fk' => $data_code_designer->agreement_list_code['code_id'],
+                'generate_code_id_pk' => $data_code_designer->agreement_list_code->generate_code['id'],
+                'code' => $data_code_designer->agreement_list_code->generate_code['code'],
+                'inspection_id' => $data_code_designer->inspection_data['id'],
+                'cpk_data' => $data_code_designer->inspection_data['cpk_data'],
+                'inspection_after_rework' => $data_code_designer->inspection_data['inspection_after_rework'],
+                'revised_date_igm' => Carbon::parse($data_code_designer->inspection_data['revised_date_igm'])->toDateString(),
+                'sent_date_igm' => Carbon::parse($data_code_designer->inspection_data['sent_date_igm'])->toDateString(),
+                'designer_section_id' => $data_code_designer->designer_section_answer['id'],
+                'designer_answer' => $data_code_designer->designer_section_answer['designer_answer'],
+                'answer_date' => Carbon::parse($data_code_designer->designer_section_answer['answer_date'])->toDateString(),
+                'request_result' => $data_code_designer->designer_section_answer['request_result'],
+            ];
+        }
+        rsort($datastorage);
+        return $datastorage;
+    }
+    public function loadPartNumberWithCritical()
+    {
+        $result = $this->agreement_list_contract->loadCodeWithInspectionData();
+        $part_number = [];
+        foreach ($result as $results) {
+            $part_number[] = $results->part_number;
+        }
+        foreach (array_unique($part_number) as $load_part_number) {
+            $datastorage[] = $load_part_number;
+        }
+        rsort($datastorage);
+        return $datastorage;
+    }
     public function loadPartNumberWithCode()
     {
         $result = $this->agreement_list_contract->loadWithCodeRequest();

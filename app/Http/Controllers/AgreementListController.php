@@ -96,18 +96,18 @@ class AgreementListController extends Controller
         }
         return $result;
     }
-    public function download()
+    public function downloadFormat()
     {
         $result = $this->successResponse("Download Successfully");
         try {
-            // $result['data'] = $this->agreement_list_service->loadWithCodeRequest();
-            $format = storage_path("format\HinseiLSA_format.xlsx");
-            return response()->download($format);
+            $format = storage_path("formatStorage\Excel_format.xlsx");
+            $result = response()->download($format);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
     }
+
 
     /**
      * Display the specified resource.
@@ -149,11 +149,31 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+    public function loadCodeWithDesignerSection()
+    {
+        $result = $this->successResponse("Load Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadCodeWithDesignerSection();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
     public function loadPartNumberWithCode()
     {
         $result = $this->successResponse("Load Part Number Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadPartNumberWithCode();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function loadPartNumberWithCritical()
+    {
+        $result = $this->successResponse("Load Part Number Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadPartNumberWithCritical();
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

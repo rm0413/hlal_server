@@ -9,5 +9,6 @@ interface AgreementListServiceContract{
     public function update($id, $data);
     public function delete($id);
     public function loadCodeWithInspectionData();
+    public function loadCodeWithDesignerSection();
 
 }
