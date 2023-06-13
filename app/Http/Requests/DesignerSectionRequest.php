@@ -6,7 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-class InspectionDataRequest extends FormRequest
+
+class DesignerSectionRequest extends FormRequest
 {
     use ResponseTrait;
     /**
@@ -28,22 +29,24 @@ class InspectionDataRequest extends FormRequest
     {
         return [
             'agreement_request_id' => 'required',
-            'cpk_data' => 'required',
-            'inspection_after_rework' => 'required',
-            'revised_date_igm' => 'required',
-            'sent_date_igm' => 'required',
+            'designer_answer' => 'required',
+            'designer_in_charge' => 'required',
+            'request_result' => 'required',
+            'answer_date' => 'required',
         ];
     }
-    public function messages(){
+    public function messages()
+    {
         return [
-            "agreement_request_id.required" => "Agreement List ID is required.",
-            "cpk_data.required" => "Cpk data is required.",
-            "inspection_after_rework.required" => "Inspection after rework is required.",
-            "revised_date_igm.required" => "Revised Date IGM is required.",
-            "sent_date_igm.required" => "Sent Date IGM is required.",
+            "agreement_request_id.required" => "Agreement Id is required.",
+            "designer_answer.required" => "Designer Answer is required.",
+            "designer_in_charge.required" => "Designer in Charge is required.",
+            "request_result.required" => "Request Result is required.",
+            "answer_date.required" => "Answer Date is required.",
         ];
     }
-    public function failedValidation(Validator $validator){
+    public function failedValidation(Validator $validator)
+    {
         $response = $this->failedValidationResponse($validator->errors());
         throw new HttpResponseException(response()->json($response));
     }

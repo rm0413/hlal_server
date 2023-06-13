@@ -39,7 +39,7 @@ class InspectionDataController extends Controller
      */
     public function store(InspectionDataRequest $request)
     {
-        $result = $this->successResponse("Stored Successfully");
+        $result = $this->successResponse("Inspection Data Added Successfully");
         try {
             foreach ($request->agreement_request_id as $agreement_req_id) {
                 $data = [

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgreementListController;
+use App\Http\Controllers\AttachmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,4 +19,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('download', [AgreementListController::class, 'download']);
+Route::get('download-format', [AgreementListController::class, 'downloadFormat']);
+Route::get('download-attachment', [AttachmentController::class, 'downloadAttachment']);
