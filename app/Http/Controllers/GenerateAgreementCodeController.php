@@ -14,7 +14,6 @@ class GenerateAgreementCodeController extends Controller
     use ResponseTrait;
     protected $generate_agreement_code_service;
     protected $agreement_list_code_service;
-
     public function __construct(GenerateAgreementCodeService $generate_agreement_code_service, AgreementListCodeService $agreement_list_code_service)
     {
         $this->generate_agreement_code_service = $generate_agreement_code_service;
@@ -48,10 +47,12 @@ class GenerateAgreementCodeController extends Controller
         $characters = Str::random(6);
         $characterNumbers = strlen($characters);
         $code = '';
+        $with = ['generate_code', 'agreement_list'];
+        $datastorage = [];
         try {
-            while(strlen($code) < 4){
+            while (strlen($code) < 4) {
 
-                 $position = rand(0, $characterNumbers - 1);
+                $position = rand(0, $characterNumbers - 1);
                 $character = $characters[$position];
                 $code = $code . $character;
             }
@@ -60,19 +61,21 @@ class GenerateAgreementCodeController extends Controller
                 'code' => $generated_code
             ];
             $code_id = $this->generate_agreement_code_service->store($data);
-            foreach($request->agreement_request_id as $agreement_id){
+            foreach ($request->agreement_request_id as $agreement_id) {
 
-            $agreement_list_code_data = [
-                'agreement_request_id' => $agreement_id,
-                'code_id' => $code_id['id']
+                $agreement_list_code_data = [
+                    'agreement_request_id' => $agreement_id,
+                    'code_id' => $code_id['id']
 
-            ];
-            $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
-        }
+                ];
+                $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
+            }
+            $where = [['id', '=', $result['data']['id']]];
+            $datastorage = $this->agreement_list_code_service->show($result['data']['id'], $where, $with);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        return $result;
+        return $datastorage;
     }
 
     /**

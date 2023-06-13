@@ -17,7 +17,7 @@ class CreateAgreementListsTable extends Migration
             $table->id();
             $table->string('trial_number', 255);
             $table->timestamp('request_date');
-            $table->timestamp('additional_request_qty_date');
+            $table->timestamp('additional_request_qty_date')->nullable();
             $table->string('tri_number', 255);
             $table->string('tri_quantity', 255);
             $table->string('request_person', 255);

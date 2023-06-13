@@ -30,7 +30,7 @@ class AgreementListRequest extends FormRequest
         return [
             'trial_number' => 'required',
             'request_date' => 'required|date',
-            'additional_request_qty_date' => 'required|date',
+            'additional_request_qty_date' => 'date',
             'tri_number' => 'required',
             'tri_quantity' => 'required',
             'request_person' => 'required',
@@ -55,7 +55,7 @@ class AgreementListRequest extends FormRequest
         return [
             "trial_number.required" => "Trial Number is required.",
             "request_date.required" => "Request Date is required.",
-            "additional_request_qty_date.required" => "Additional Request Qty Date is required.",
+            "additional_request_qty_date.date" => "Additional Request Qty Date must be a date.",
             "tri_number.required" => "TRI Number is required.",
             "tri_quantity.required" => "TRI Quantity is required.",
             "request_person.required" => "Request Person is required.",

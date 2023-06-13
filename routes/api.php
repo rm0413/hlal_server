@@ -40,3 +40,4 @@ Route::get('/load-with-code-inspection',[AgreementListController::class, 'loadCo
 Route::get('/load-with-no-code-request',[AgreementListController::class, 'loadWithNoCodeRequest']);
 Route::get('/load-part-number-with-code',[AgreementListController::class, 'loadPartNumberWithCode']);
 Route::get('/count-request',[AgreementListController::class, 'countRequest']);
+Route::post('/upload-multiple-agreement-request',[AgreementListController::class, 'multipleStore']);

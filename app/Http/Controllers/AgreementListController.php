@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AgreementListMultipleRequest;
 use App\Http\Requests\AgreementListRequest;
 use App\Services\AgreementListService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use PHPMailer\PHPMailer\PHPMailer;
-
+use Carbon\Carbon;
+use Exception;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class AgreementListController extends Controller
 {
@@ -66,30 +72,52 @@ class AgreementListController extends Controller
                 "unit_id" => $request["unit_id"],
                 "requestor_employee_id" => $request["requestor_employee_id"]
             ];
-            $this->agreement_list_service->store($data);
-            // $inspection_data = [
-            //     'agreement_request_id' => $result_agreement_request["id"],
-            //     'cpk_data' => "-",
-            //     'inspection_after_rework' => "-",
-            //     'revised_date_igm' => $agreement_request->revised_date_igm,
-            //     'sent_date_igm' => $agreement_request->sent_date_igm
-            // ];
-            // $this->inspection_service->storeInspectionData($inspection_data);
-            if($request->critical_parts === 'Yes'){
-                $mail = new PHPMailer();
-                $mail->isSMTP();
-                $mail->SMTPDebug  = 0;
-                $mail->SMTPAuth = false;
-                $mail->SMTPAutoTLS = false;
-                $mail->Port = 25;
-                $mail->Host = "203.127.104.86";
-                $mail->isHTML(true);
-                $mail->From = "fdtp.system@ph.fujitsu.com";
-                $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'Hinsei & LSA Agreenent List');
-                $mail->addAddress('reinamae.sorisantos@fujitsu.com');
-                $mail->Subject = 'Hinsei & LSA Agreement List | Critical Parts';
-                $mail->Body    = view('inspection_email', compact('data'))->render();
-                $mail->send();
+            $result['data']  = $this->agreement_list_service->store($data);
+        } catch (Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function multipleStore(AgreementListMultipleRequest $request)
+    {
+        // $reader = new Xlsx;
+        $file_name = $request->file('uploaded_file');
+        $spreadsheet = IOFactory::load($file_name->getRealPath());
+        $datastorage = [];
+        $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
+        $highest_row = $worksheet->getHighestRow();
+        $sheet = $spreadsheet->getSheet(0);
+        $result = $this->successResponse("Stored Successfully");
+        try {
+            for ($i = 10; $i < $highest_row + 1; $i++) {
+                if ($sheet->getCell("B{$i}")->getValue() != null) {
+                    $datastorage = [
+                        // 'NO' =>  $sheet->getCell("B{$i}")->getValue(),
+                        'trial_number' => $sheet->getCell("C{$i}")->getValue(),
+                        'request_date' => Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
+                        'additional_request_qty_date' =>  Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d') === '1970-01-01' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
+                        'tri_number' => $sheet->getCell("F{$i}")->getValue(),
+                        'tri_quantity' => $sheet->getCell("G{$i}")->getValue(),
+                        'request_person' => $sheet->getCell("H{$i}")->getValue(),
+                        'superior_approval' => $sheet->getCell("I{$i}")->getValue(),
+                        'supplier_name' => $sheet->getCell("J{$i}")->getValue(),
+                        'part_number' => $sheet->getCell("K{$i}")->getValue(),
+                        'sub_part_number' => $sheet->getCell("L{$i}")->getValue(),
+                        'revision' => $sheet->getCell("M{$i}")->getValue(),
+                        'coordinates' => $sheet->getCell("N{$i}")->getValue(),
+                        'dimension' => $sheet->getCell("O{$i}")->getValue(),
+                        'actual_value' => $sheet->getCell("P{$i}")->getValue(),
+                        'critical_parts' => $sheet->getCell("Q{$i}")->getValue(),
+                        'critical_dimension' => $sheet->getCell("R{$i}")->getValue(),
+                        // 'CPK_DATA/INS_DATA' => $sheet->getCell($data_cell['CPK_DATA/INS_DATA'])->getValue(),
+                        'request_type' => $sheet->getCell("T{$i}")->getValue(),
+                        'request_value' => $sheet->getCell("U{$i}")->getValue(),
+                        'request_quantity' => $sheet->getCell("V{$i}")->getValue(),
+                        'unit_id' => $request['unit_id'],
+                        'requestor_employee_id' => $request['requestor_employee_id']
+                    ];
+                    $this->agreement_list_service->store($datastorage);
+                }
             }
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
