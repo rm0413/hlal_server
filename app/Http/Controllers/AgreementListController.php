@@ -14,6 +14,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
+use Illuminate\Support\Facades\DB;
 
 class AgreementListController extends Controller
 {
@@ -33,7 +34,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Loaded Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadAgreementListRequest();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -89,6 +90,7 @@ class AgreementListController extends Controller
         $sheet = $spreadsheet->getSheet(0);
         $result = $this->successResponse("Stored Successfully");
         try {
+            DB::beginTransaction();
             for ($i = 10; $i < $highest_row + 1; $i++) {
                 if ($sheet->getCell("B{$i}")->getValue() != null) {
                     $datastorage = [
@@ -119,7 +121,9 @@ class AgreementListController extends Controller
                     $this->agreement_list_service->store($datastorage);
                 }
             }
-        } catch (\Exception $e) {
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -130,7 +134,7 @@ class AgreementListController extends Controller
         try {
             $format = storage_path("formatStorage\Excel_format.xlsx");
             $result = response()->download($format);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -152,7 +156,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadWithCodeRequest();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -162,7 +166,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadWithNoCodeRequest();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -172,7 +176,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadCodeWithInspectionData();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -182,7 +186,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadCodeWithDesignerSection();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -192,7 +196,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Part Number Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadPartNumberWithCode();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -202,7 +206,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Part Number Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadPartNumberWithCritical();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -212,7 +216,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Count Request Successfully");
         try {
             $result['data'] = $this->agreement_list_service->countRequest();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -253,7 +257,7 @@ class AgreementListController extends Controller
                 "requestor_employee_id" => $request["requestor_employee_id"]
             ];
             $this->agreement_list_service->update($id, $data);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             //throw $e;
             $result = $this->errorResponse($e);
         }

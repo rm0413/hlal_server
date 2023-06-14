@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ResponseTrait;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\HttpExceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 
 class UserRequest extends FormRequest

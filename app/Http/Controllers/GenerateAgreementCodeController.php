@@ -8,6 +8,7 @@ use App\Http\Requests\GenerateAgreementCodeRequest;
 use Illuminate\Support\Str;
 use App\Services\GenerateAgreementCodeService;
 use App\Services\AgreementListCodeService;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class GenerateAgreementCodeController extends Controller
 {
@@ -49,6 +50,7 @@ class GenerateAgreementCodeController extends Controller
         $code = '';
         $with = ['generate_code', 'agreement_list'];
         $datastorage = [];
+        $where = [];
         try {
             while (strlen($code) < 4) {
 
@@ -68,14 +70,29 @@ class GenerateAgreementCodeController extends Controller
                     'code_id' => $code_id['id']
 
                 ];
-                $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
+                $this->agreement_list_code_service->store($agreement_list_code_data);
+                $where = [['agreement_request_id', '=', $agreement_id]];
+                $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with);
             }
-            $where = [['id', '=', $result['data']['id']]];
-            $datastorage = $this->agreement_list_code_service->show($result['data']['id'], $where, $with);
-        } catch (\Exception $e) {
+            $mail = new PHPMailer;
+            $mail->isSMTP();
+            $mail->SMTPDebug  = 0;
+            $mail->SMTPAuth = false;
+            $mail->SMTPAutoTLS = false;
+            $mail->Port = 25;
+            $mail->Host = "203.127.104.86";
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->From = "fdtp.system@ph.fujitsu.com";
+            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI | HLAL');
+            $mail->addAddress('jonathandave.detorres@fujitsu.com', 'Cancelled Archive Request');
+            $mail->addAddress('reinamae.sorisantos@fujitsu.com', 'Cancelled Archive Request');
+            $mail->Subject = 'HINSEI | Generated Code';
+            $mail->Body    = view('generate_code_email', compact('datastorage'))->render();
+            $mail->send();
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
-        return $datastorage;
+        return $result;
     }
 
     /**

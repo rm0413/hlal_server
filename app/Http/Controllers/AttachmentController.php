@@ -28,7 +28,7 @@ class AttachmentController extends Controller
         //     // $result['data'] = $this->agreement_list_service->loadWithCodeRequest();
         //     $format = storage_path("format\${$request->file_path_attachment}");
         //     return response()->file($format);
-        // } catch (\Exception $e) {
+        // } catch (Exception $e) {
         //     $result = $this->errorResponse($e);
         // }
         // return $result;
@@ -44,19 +44,19 @@ class AttachmentController extends Controller
     {
         $result = $this->successResponse("Attachment Added Successfully");
         try {
-            $year = date("Y");   
-            $month = date("m");   
+            $year = date("Y");
+            $month = date("m");
             $day = date("d");
-            $filename = "uploads/".$year.$month.$day;   
-            $filename2 = "uploads/".$year.$month.$day;
-            
-            if(file_exists($filename)){
-                if(file_exists($filename2)==false){
-                    mkdir($filename2,777, true);
-                    }
-            }else{
-                mkdir($filename, 777,true);
-                 mkdir($filename2,777, true);
+            $filename = "uploads/" . $year . $month . $day;
+            $filename2 = "uploads/" . $year . $month . $day;
+
+            if (file_exists($filename)) {
+                if (file_exists($filename2) == false) {
+                    mkdir($filename2, 777, true);
+                }
+            } else {
+                mkdir($filename, 777, true);
+                mkdir($filename2, 777, true);
             }
             foreach ($request->agreement_request_id as $agreement_req_id) {
                 $path = $request->file('file_path_attachment')->store($filename2, ['disk' => 'c_path']);
@@ -66,8 +66,7 @@ class AttachmentController extends Controller
                 ];
                 $result['data'] = $this->attachment_service->store($data);
             }
-
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -77,10 +76,9 @@ class AttachmentController extends Controller
         $result = $this->successResponse("Download Successfully");
         try {
             $file = $request->file_path_attachment;
-            $format = storage_path('app/'.$file);
+            $format = storage_path('app/' . $file);
             return response()->download($format);
-
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

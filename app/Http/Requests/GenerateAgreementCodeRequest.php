@@ -6,7 +6,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\HttpExceptions\HttpResponseException;
 
 
 class GenerateAgreementCodeRequest extends FormRequest
