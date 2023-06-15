@@ -89,7 +89,7 @@ class GenerateAgreementCodeController extends Controller
             $mail->Subject = 'HINSEI | Generated Code';
             $mail->Body    = view('generate_code_email', compact('datastorage'))->render();
             $mail->send();
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

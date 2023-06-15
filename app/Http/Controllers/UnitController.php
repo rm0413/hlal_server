@@ -48,7 +48,7 @@ class UnitController extends Controller
                 "unit_created_by" => $request["unit_created_by"]
             ];
             $this->unit_service->store($data);
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             //throw $e;
             $result = $this->errorResponse($e);
         }
@@ -83,7 +83,7 @@ class UnitController extends Controller
                 "unit_created_by" => $request["unit_created_by"]
             ];
             $this->unit_service->update($id, $data);
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             //throw $e;
             $result = $this->errorResponse($e);
         }

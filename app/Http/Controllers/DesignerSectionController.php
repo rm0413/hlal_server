@@ -45,7 +45,7 @@ class DesignerSectionController extends Controller
                 ];
                 $this->designer_answer_service->store($data);
             }
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -80,7 +80,7 @@ class DesignerSectionController extends Controller
                 'answer_date' => $request["answer_date"],
             ];
             $this->designer_answer_service->update($id, $data);
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

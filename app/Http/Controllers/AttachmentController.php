@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class AttachmentController extends Controller
 {
+
     use ResponseTrait;
     protected $attachment_service;
     public function __construct(AttachmentService $attachment_service)
@@ -66,7 +67,7 @@ class AttachmentController extends Controller
                 ];
                 $result['data'] = $this->attachment_service->store($data);
             }
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -78,7 +79,7 @@ class AttachmentController extends Controller
             $file = $request->file_path_attachment;
             $format = storage_path('app/' . $file);
             return response()->download($format);
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

@@ -47,7 +47,7 @@ class AgreementListCodeController extends Controller
                 'agreement_request_id' => $request['agreement_request_id']
             ];
             $result['data'] = $this->agreement_list_code_service->store($data);
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

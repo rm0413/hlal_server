@@ -27,7 +27,7 @@ class UserController extends Controller
         $result = $this->successResponse("Loaded Successfully");
         try {
             $result["data"] = $this->user_service->loadUserProfile();
-        } catch (Exception $e) {
+        } catch (ErrorException $e) {
             $result = $this->errorResponse($e);
         }
 
@@ -49,7 +49,7 @@ class UserController extends Controller
                 'role_access' => $request->role_access
             ];
             $this->user_service->store($data);
-        } catch (Exception $e) {
+        } catch (ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -88,7 +88,7 @@ class UserController extends Controller
                 'role_access' => $request->role_access,
             ];
             $this->user_service->updateUserPortal($id, $data);
-        } catch (Exception $e) {
+        } catch (ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -105,7 +105,7 @@ class UserController extends Controller
         $result = $this->successResponse('Deleted Successfully!');
         try {
             $this->user_service->delete($id);
-        } catch (Exception $e) {
+        } catch (ErrorException $e) {
 
             $result = $this->errorResponse($e);
         }

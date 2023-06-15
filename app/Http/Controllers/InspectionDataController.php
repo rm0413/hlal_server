@@ -25,7 +25,7 @@ class InspectionDataController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->inspection_data_service->loadInspectionData();
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -51,7 +51,7 @@ class InspectionDataController extends Controller
                 ];
                 $result['data'] = $this->inspection_data_service->store($data);
             }
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -81,7 +81,7 @@ class InspectionDataController extends Controller
             // {
                 $this->inspection_data_service->update($id, $data);
             // }
-        } catch (Exception $e) {
+        } catch (\ErrorException $e) {
             //throw $e;
             $result = $this->errorResponse($e);
         }
