@@ -1,14 +1,14 @@
 <?php
 
-namespace AppExceptions;
+namespace App\Exceptions;
 
-use Illuminate\FoundationExceptions\Handler as ExceptionHandler;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that are not reported.
+     * A list of the \Exception types that are not reported.
      *
      * @var array<int, class-string<Throwable>>
      */
@@ -17,7 +17,7 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * A list of the inputs that are never flashed for validation exceptions.
+     * A list of the inputs that are never flashed for validation \Exceptions.
      *
      * @var array<int, string>
      */
@@ -28,7 +28,7 @@ class Handler extends ExceptionHandler
     ];
 
     /**
-     * Register the exception handling callbacks for the application.
+     * Register the \Exception handling callbacks for the application.
      *
      * @return void
      */

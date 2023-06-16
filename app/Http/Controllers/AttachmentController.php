@@ -29,7 +29,7 @@ class AttachmentController extends Controller
         //     // $result['data'] = $this->agreement_list_service->loadWithCodeRequest();
         //     $format = storage_path("format\${$request->file_path_attachment}");
         //     return response()->file($format);
-        // } catch (Exception $e) {
+        // } catch (\Exception $e) {
         //     $result = $this->errorResponse($e);
         // }
         // return $result;
@@ -67,7 +67,7 @@ class AttachmentController extends Controller
                 ];
                 $result['data'] = $this->attachment_service->store($data);
             }
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -79,7 +79,7 @@ class AttachmentController extends Controller
             $file = $request->file_path_attachment;
             $format = storage_path('app/' . $file);
             return response()->download($format);
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

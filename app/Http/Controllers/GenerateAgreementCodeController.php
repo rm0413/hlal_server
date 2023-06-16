@@ -30,7 +30,7 @@ class GenerateAgreementCodeController extends Controller
         $result = $this->successResponse("Loaded Successfully");
         try {
             $result['data'] = $this->generate_agreement_code_service->loadAll();
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -89,7 +89,7 @@ class GenerateAgreementCodeController extends Controller
             $mail->Subject = 'HINSEI | Generated Code';
             $mail->Body    = view('generate_code_email', compact('datastorage'))->render();
             $mail->send();
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

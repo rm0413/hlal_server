@@ -9,7 +9,7 @@ use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use PHPMailer\PHPMailer\PHPMailer;
 use Carbon\Carbon;
-use Exception;
+use \Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -34,7 +34,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Loaded Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadAgreementListRequest();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -74,7 +74,7 @@ class AgreementListController extends Controller
                 "requestor_employee_id" => $request["requestor_employee_id"]
             ];
             $result['data']  = $this->agreement_list_service->store($data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -95,9 +95,9 @@ class AgreementListController extends Controller
                 if ($sheet->getCell("B{$i}")->getValue() != null) {
                     $datastorage = [
                         // 'NO' =>  $sheet->getCell("B{$i}")->getValue(),
-                        'trial_number' => $sheet->getCell("C{$i}")->getValue(),
-                        'request_date' => Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
-                        'additional_request_qty_date' =>  Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d') === '1970-01-01' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
+                       'trial_number' => $sheet->getCell("C{$i}")->getValue(),
+                        'request_date' =>$sheet->getCell("D{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
+                        'additional_request_qty_date' =>  $sheet->getCell("E{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
                         'tri_number' => $sheet->getCell("F{$i}")->getValue(),
                         'tri_quantity' => $sheet->getCell("G{$i}")->getValue(),
                         'request_person' => $sheet->getCell("H{$i}")->getValue(),
@@ -108,7 +108,7 @@ class AgreementListController extends Controller
                         'revision' => $sheet->getCell("M{$i}")->getValue(),
                         'coordinates' => $sheet->getCell("N{$i}")->getValue(),
                         'dimension' => $sheet->getCell("O{$i}")->getValue(),
-                        'actual_value' => $sheet->getCell("P{$i}")->getValue(),
+                        'actual_value' => $sheet->getCell("O25")->getValue(),
                         'critical_parts' => $sheet->getCell("Q{$i}")->getValue(),
                         'critical_dimension' => $sheet->getCell("R{$i}")->getValue(),
                         // 'CPK_DATA/INS_DATA' => $sheet->getCell($data_cell['CPK_DATA/INS_DATA'])->getValue(),
@@ -134,7 +134,7 @@ class AgreementListController extends Controller
         try {
             $format = storage_path("formatStorage\Excel_format.xlsx");
             $result = response()->download($format);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -156,7 +156,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadWithCodeRequest();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -166,7 +166,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadWithNoCodeRequest();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -176,7 +176,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadCodeWithInspectionData();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -186,7 +186,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadCodeWithDesignerSection();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -196,7 +196,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Part Number Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadPartNumberWithCode();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -206,7 +206,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Part Number Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadPartNumberWithCritical();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -216,7 +216,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Count Request Successfully");
         try {
             $result['data'] = $this->agreement_list_service->countRequest();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -257,7 +257,7 @@ class AgreementListController extends Controller
                 "requestor_employee_id" => $request["requestor_employee_id"]
             ];
             $this->agreement_list_service->update($id, $data);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             //throw $e;
             $result = $this->errorResponse($e);
         }
@@ -275,7 +275,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Deleted Successfully");
         try {
             $result['data'] = $this->agreement_list_service->delete($id);
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

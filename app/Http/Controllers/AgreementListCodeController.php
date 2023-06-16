@@ -26,7 +26,7 @@ class AgreementListCodeController extends Controller
         $result = $this->successResponse("Loaded Successfully");
         try {
             $result['data'] = $this->agreement_list_code_service->loadGenaratedAgreementCode();
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -47,7 +47,7 @@ class AgreementListCodeController extends Controller
                 'agreement_request_id' => $request['agreement_request_id']
             ];
             $result['data'] = $this->agreement_list_code_service->store($data);
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -68,7 +68,7 @@ class AgreementListCodeController extends Controller
         $with = ['generate_code' , 'agreement_list'];
         try {
             $result['data'] = $this->agreement_list_code_service->show($id, $where, $with);
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;

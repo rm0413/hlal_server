@@ -26,7 +26,7 @@ class UnitController extends Controller
         $result = $this->successResponse("Loaded Successfully");
         try {
             $result['data'] = $this->unit_service->loadUnits();
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -48,7 +48,7 @@ class UnitController extends Controller
                 "unit_created_by" => $request["unit_created_by"]
             ];
             $this->unit_service->store($data);
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             //throw $e;
             $result = $this->errorResponse($e);
         }
@@ -83,7 +83,7 @@ class UnitController extends Controller
                 "unit_created_by" => $request["unit_created_by"]
             ];
             $this->unit_service->update($id, $data);
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             //throw $e;
             $result = $this->errorResponse($e);
         }
@@ -101,7 +101,7 @@ class UnitController extends Controller
         $result = $this->successResponse("Deleted Successfully");
         try {
             $result['data'] = $this->unit_service->delete($id);
-        } catch (\ErrorException $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
