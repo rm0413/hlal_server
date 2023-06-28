@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponse\Exception;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AgreementListRequest extends FormRequest
 {
@@ -78,6 +78,6 @@ class AgreementListRequest extends FormRequest
     }
     public function failedValidation(Validator $validator){
         $response = $this->failedValidationResponse($validator->errors());
-        throw new HttpResponse\Exception(response()->json($response));
+        throw new HttpResponseException(response()->json($response));
     }
 }

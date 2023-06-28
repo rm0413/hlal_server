@@ -65,7 +65,7 @@ class AgreementListCodeController extends Controller
         $where = [
             ['id', '=', $id],
         ];
-        $with = ['generate_code' , 'agreement_list'];
+        $with = ['generate_code', 'agreement_list'];
         try {
             $result['data'] = $this->agreement_list_code_service->show($id, $where, $with);
         } catch (\Exception $e) {

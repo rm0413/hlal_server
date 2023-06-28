@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponse\Exception;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class DesignerSectionRequest extends FormRequest
 {
@@ -28,11 +28,12 @@ class DesignerSectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'agreement_request_id' => 'required',
-            'designer_answer' => 'required',
-            'designer_in_charge' => 'required',
-            'request_result' => 'required',
-            'answer_date' => 'required',
+            // 'agreement_request_id' => 'required',
+            // 'designer_answer' => 'required',
+            // 'designer_in_charge' => 'required',
+            // 'request_result' => 'required',
+            // 'answer_date' => 'required',
+            'upload_file' =>'file|mimes:xls,xlsx'
         ];
     }
     public function messages()
@@ -48,6 +49,6 @@ class DesignerSectionRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         $response = $this->failedValidationResponse($validator->errors());
-        throw new HttpResponse\Exception(response()->json($response));
+        throw new HttpResponseException(response()->json($response));
     }
 }
