@@ -45,22 +45,40 @@ class AttachmentController extends Controller
     {
         $result = $this->successResponse("Attachment Added Successfully");
         try {
+            // $year = date("Y");
+            // $month = date("m");
+            // $day = date("d");
+            // $filename = "uploads/" . $year . $month . $day;
+            // $filename_date = "uploads/" . $year . $month . $day;
+
+            // if (file_exists($filename)) {
+            //     if (file_exists($filename_date) == false) {
+            //         mkdir($filename_date, 777, true);
+            //     }
+            // } else {
+            //     mkdir($filename, 777, true);
+            //     mkdir($filename_date, 777, true);
+            // }
+            // foreach ($request->agreement_request_id as $agreement_req_id) { // store in drive C:
+            //     // $path = $request->file('file_path_attachment')->store($filename_date, ['disk' => 'c_path']);
+            //     $file = $request->file('file_path_attachment');
+            //     $orig_name = $file->getClientOriginalName();
+            //     // $path = $file->storeAs($filename_date, $orig_name, ['disk' => 'c_path']); //per date store
+            //     $path = $file->storeAs('uploads/', $orig_name, ['disk' => 'c_path']);
+            //     $data = [
+            //         'agreement_request_id' => $agreement_req_id,
+            //         'file_path_attachment' => $path,
+            //     ];
+            //     $result['data'] = $this->attachment_service->store($data);
+            // }
+
             $year = date("Y");
             $month = date("m");
             $day = date("d");
-            $filename = "uploads/" . $year . $month . $day;
-            $filename2 = "uploads/" . $year . $month . $day;
-
-            if (file_exists($filename)) {
-                if (file_exists($filename2) == false) {
-                    mkdir($filename2, 777, true);
-                }
-            } else {
-                mkdir($filename, 777, true);
-                mkdir($filename2, 777, true);
-            }
             foreach ($request->agreement_request_id as $agreement_req_id) {
-                $path = $request->file('file_path_attachment')->store($filename2, ['disk' => 'c_path']);
+                $file = $request->file('file_path_attachment');
+                $file_name = $file->getClientOriginalName();
+                $path = $file->storeAs('uploads', $year.$month.$day.'-'.$file_name, ['disk' => 'public']);
                 $data = [
                     'agreement_request_id' => $agreement_req_id,
                     'file_path_attachment' => $path,
@@ -76,13 +94,28 @@ class AttachmentController extends Controller
     {
         $result = $this->successResponse("Download Successfully");
         try {
-            $file = $request->file_path_attachment;
-            $format = storage_path('app/' . $file);
-            return response()->download($format);
+            $file_upload = $request->file_path_attachment;
+            $file_name = explode('/', $file_upload);
+            $name = $file_name[1];
+            // $file = Storage::disk('c_path')->download('uploads/', $file_name[1]);
+
+            $file_path = public_path('storage/uploads/' . $name);
+            // $file_path = storage_path($file);
+            // $file = $request->file_path_attachment;
+            // $format = storage_path('app/' . $file);
+            $result =  response()->download($file_path);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
+    }
+    public function viewAttachement(Request $request)
+    {
+        $file_upload = $request->file_path_attachment;
+        $file_name = explode('/', $file_upload);
+        $name = $file_name[1];
+
+        return response()->file(public_path('storage/uploads/' . $name), ['content-type' => 'application/pdf']);
     }
     /**
      * Display the specified resource.

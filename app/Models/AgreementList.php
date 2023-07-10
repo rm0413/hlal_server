@@ -49,4 +49,8 @@ class AgreementList extends Model
     {
         return $this->hasOne(DesignerSection::class, 'agreement_request_id', 'id');
     }
+    public function attachment()
+    {
+        return $this->hasOne(Attachement::class, 'agreement_request_id', 'id');
+    }
 }

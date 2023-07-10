@@ -70,7 +70,7 @@ class GenerateAgreementCodeController extends Controller
                     'code_id' => $code_id['id']
 
                 ];
-                $this->agreement_list_code_service->store($agreement_list_code_data);
+               $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
                 $where = [['agreement_request_id', '=', $agreement_id]];
                 $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with);
             }

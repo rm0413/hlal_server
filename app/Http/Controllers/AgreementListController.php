@@ -108,7 +108,7 @@ class AgreementListController extends Controller
                         'revision' => $sheet->getCell("M{$i}")->getValue(),
                         'coordinates' => $sheet->getCell("N{$i}")->getValue(),
                         'dimension' => $sheet->getCell("O{$i}")->getValue(),
-                        'actual_value' => $sheet->getCell("O25")->getValue(),
+                        'actual_value' => $sheet->getCell("P{$i}")->getValue(),
                         'critical_parts' => $sheet->getCell("Q{$i}")->getValue(),
                         'critical_dimension' => $sheet->getCell("R{$i}")->getValue(),
                         // 'CPK_DATA/INS_DATA' => $sheet->getCell($data_cell['CPK_DATA/INS_DATA'])->getValue(),
@@ -206,6 +206,16 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Part Number Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadPartNumberWithCritical();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function loadWithCodeAttachment()
+    {
+        $result = $this->successResponse("Load Part Number Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadWithCodeAttachment();
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

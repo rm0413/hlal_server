@@ -8,6 +8,7 @@ use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Carbon\Carbon;
 
 class DesignerSectionController extends Controller
 {
@@ -85,7 +86,7 @@ class DesignerSectionController extends Controller
                         'supplier_name' => $sheet->getCell("J{$i}")->getValue(),
                         'part_number' => $sheet->getCell("K{$i}")->getValue(),
                         'sub_part_number' => $sheet->getCell("L{$i}")->getValue(),
-                        'revision' => $sheet->getCell("M{$i}")->getValue(),
+                        'revision' => "{$sheet->getCell("M{$i}")->getValue()}",
                         'coordinates' => $sheet->getCell("N{$i}")->getValue(),
                         'dimension' => $sheet->getCell("O{$i}")->getValue(),
                         'actual_value' => $sheet->getCell("P{$i}")->getValue(),
@@ -122,7 +123,7 @@ class DesignerSectionController extends Controller
                         $data_request['actual_value'] === $datastorage[$i]['actual_value'] &&
                         $data_request['critical_parts'] === $datastorage[$i]['critical_parts'] &&
                         $data_request['critical_dimension'] === $datastorage[$i]['critical_dimension'] &&
-                        $data_request['request_type'] === $datastorage[$i]['request_type'] &&
+                        $data_request['request_type'] === $datastorage[$i]['request_type']  &&
                         $data_request['request_value'] === $datastorage[$i]['request_value'] &&
                         $data_request['request_quantity'] === $datastorage[$i]['request_quantity']
                     ) {
@@ -142,8 +143,28 @@ class DesignerSectionController extends Controller
                     'agreement_request_id' => $store_data['agreement_request_id'],
                     'designer_answer' => $store_data['designer_ans'],
                     'designer_in_charge' => $store_data["designer_incharge"],
-                    'request_result' => $store_data["designer_ans"],
+                    'request_result' => $request["request_result"],
                     'answer_date' => $store_data["answer_date"],
+                ];
+                $this->designer_answer_service->store($data);
+            }
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+
+    public function storeSingleDesignerAnswer(DesignerSectionRequest $request)
+    {
+        $result = $this->successResponse("Designer Section Answer Added Successfully");
+        try {
+            foreach ($request->agreement_request_id as $agreement_req_id) {
+                $data = [
+                    'agreement_request_id' => $agreement_req_id,
+                    'designer_answer' => $request["designer_answer"],
+                    'designer_in_charge' => $request["designer_in_charge"],
+                    'request_result' => $request["request_result"],
+                    'answer_date' => $request["answer_date"],
                 ];
                 $this->designer_answer_service->store($data);
             }

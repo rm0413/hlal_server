@@ -25,8 +25,8 @@ class AgreementListService implements AgreementListServiceContract
             $datastorage[] = [
                 "agreement_id_pk" => $data_with_code["id"],
                 'trial_number' => $data_with_code['trial_number'],
-                'request_date' => Carbon::parse($data_with_code['request_date'])->format('Y/m/d'),
-                'additional_request_qty_date' =>  Carbon::parse($data_with_code['additional_request_qty_date'])->format('Y/m/d'),
+                'request_date' => $data_with_code['request_date'] ? Carbon::parse($data_with_code['request_date'])->toDateString() : "",
+                'additional_request_qty_date' =>  $data_with_code['additional_request_qty_date'] ? Carbon::parse($data_with_code['additional_request_qty_date'])->toDateString() : "",
                 'tri_number' => $data_with_code['tri_number'],
                 'tri_quantity' => $data_with_code['tri_quantity'],
                 'request_person' => $data_with_code['request_person'],
@@ -59,8 +59,8 @@ class AgreementListService implements AgreementListServiceContract
             $datastorage[] = [
                 "agreement_id_pk" => $data_with_code["id"],
                 'trial_number' => $data_with_code['trial_number'],
-                'request_date' => Carbon::parse($data_with_code['request_date'])->toDateString(),
-                'additional_request_qty_date' =>  Carbon::parse($data_with_code['additional_request_qty_date'])->toDateString(),
+                'request_date' => $data_with_code['request_date'] ? Carbon::parse($data_with_code['request_date'])->toDateString() : "",
+                'additional_request_qty_date' =>  $data_with_code['additional_request_qty_date'] ? Carbon::parse($data_with_code['additional_request_qty_date'])->toDateString() : "",
                 'tri_number' => $data_with_code['tri_number'],
                 'tri_quantity' => $data_with_code['tri_quantity'],
                 'request_person' => $data_with_code['request_person'],
@@ -110,8 +110,8 @@ class AgreementListService implements AgreementListServiceContract
             $datastorage[] = [
                 "agreement_id" => $agreement_data["id"],
                 'trial_number' => $agreement_data['trial_number'],
-                'request_date' =>  Carbon::parse($agreement_data['request_date'])->toDateString(),
-                'additional_request_qty_date' =>  Carbon::parse($agreement_data['additional_request_qty_date'])->toDateString(),
+                'request_date' =>  $agreement_data['request_date'] ? Carbon::parse($agreement_data['request_date'])->toDateString() : "",
+                'additional_request_qty_date' =>  $agreement_data['additional_request_qty_date'] ? Carbon::parse($agreement_data['additional_request_qty_date'])->toDateString() : "",
                 'tri_number' => $agreement_data['tri_number'],
                 'tri_quantity' => $agreement_data['tri_quantity'],
                 'request_person' => $agreement_data['request_person'],
@@ -162,8 +162,8 @@ class AgreementListService implements AgreementListServiceContract
             $datastorage[] = [
                 "agreement_id_pk" => $data_code_with_inspection["id"],
                 'trial_number' => $data_code_with_inspection['trial_number'],
-                'request_date' => Carbon::parse($data_code_with_inspection['request_date'])->toDateString(),
-                'additional_request_qty_date' =>  Carbon::parse($data_code_with_inspection['additional_request_qty_date'])->toDateString(),
+                'request_date' => $data_code_with_inspection['request_date'] ? Carbon::parse($data_code_with_inspection['request_date'])->toDateString() : "",
+                'additional_request_qty_date' =>  $data_code_with_inspection['additional_request_qty_date'] ? Carbon::parse($data_code_with_inspection['additional_request_qty_date'])->toDateString() : "",
                 'tri_number' => $data_code_with_inspection['tri_number'],
                 'tri_quantity' => $data_code_with_inspection['tri_quantity'],
                 'request_person' => $data_code_with_inspection['request_person'],
@@ -191,8 +191,8 @@ class AgreementListService implements AgreementListServiceContract
                 'inspection_id' => $data_code_with_inspection->inspection_data['id'],
                 'cpk_data' => $data_code_with_inspection->inspection_data['cpk_data'],
                 'inspection_after_rework' => $data_code_with_inspection->inspection_data['inspection_after_rework'],
-                'revised_date_igm' => Carbon::parse($data_code_with_inspection->inspection_data['revised_date_igm'])->toDateString(),
-                'sent_date_igm' => Carbon::parse($data_code_with_inspection->inspection_data['sent_date_igm'])->toDateString(),
+                'revised_date_igm' => $data_code_with_inspection->inspection_data['revised_date_igm'] ? Carbon::parse($data_code_with_inspection->inspection_data['revised_date_igm'])->toDateString() : "",
+                'sent_date_igm' => $data_code_with_inspection->inspection_data['sent_date_igm']? Carbon::parse($data_code_with_inspection->inspection_data['sent_date_igm'])->toDateString() : "",
             ];
         }
         rsort($datastorage);
@@ -200,14 +200,14 @@ class AgreementListService implements AgreementListServiceContract
     }
     public function loadCodeWithDesignerSection()
     {
-        $result = $this->agreement_list_contract->loadCodeWithDesignerSection();
+        $result = $this->agreement_list_contract->loadWithCodeRequest();
         $datastorage = [];
         foreach ($result as $data_code_designer) {
             $datastorage[] = [
                 "agreement_id_pk" => $data_code_designer["id"],
                 'trial_number' => $data_code_designer['trial_number'],
-                'request_date' => Carbon::parse($data_code_designer['request_date'])->toDateString(),
-                'additional_request_qty_date' =>  Carbon::parse($data_code_designer['additional_request_qty_date'])->toDateString(),
+                'request_date' => $data_code_designer['request_date'] ? Carbon::parse($data_code_designer['request_date'])->toDateString() : null,
+                'additional_request_qty_date' =>  $data_code_designer['additional_request_qty_date'] ? Carbon::parse($data_code_designer['additional_request_qty_date'])->toDateString() : null,
                 'tri_number' => $data_code_designer['tri_number'],
                 'tri_quantity' => $data_code_designer['tri_quantity'],
                 'request_person' => $data_code_designer['request_person'],
@@ -235,12 +235,54 @@ class AgreementListService implements AgreementListServiceContract
                 'inspection_id' => $data_code_designer->inspection_data['id'],
                 'cpk_data' => $data_code_designer->inspection_data['cpk_data'],
                 'inspection_after_rework' => $data_code_designer->inspection_data['inspection_after_rework'],
-                'revised_date_igm' => Carbon::parse($data_code_designer->inspection_data['revised_date_igm'])->toDateString(),
-                'sent_date_igm' => Carbon::parse($data_code_designer->inspection_data['sent_date_igm'])->toDateString(),
+                'revised_date_igm' => $data_code_designer->inspection_data['revised_date_igm'] ? Carbon::parse($data_code_designer->inspection_data['revised_date_igm'])->toDateString() : "",
+                'sent_date_igm' => $data_code_designer->inspection_data['sent_date_igm'] ? Carbon::parse($data_code_designer->inspection_data['sent_date_igm'])->toDateString() : "",
                 'designer_section_id' => $data_code_designer->designer_section_answer['id'],
                 'designer_answer' => $data_code_designer->designer_section_answer['designer_answer'],
-                'answer_date' => Carbon::parse($data_code_designer->designer_section_answer['answer_date'])->toDateString(),
+                'designer_in_charge' => $data_code_designer->designer_section_answer['designer_in_charge'],
+                'answer_date' => $data_code_designer->designer_section_answer['answer_date'] ? Carbon::parse($data_code_designer->designer_section_answer['answer_date'])->toDateString() : "",
                 'request_result' => $data_code_designer->designer_section_answer['request_result'],
+            ];
+        }
+        rsort($datastorage);
+        return $datastorage;
+    }
+    public function loadWithCodeAttachment()
+    {
+        $result = $this->agreement_list_contract->loadWithCodeRequest();
+        $datastorage = [];
+        foreach ($result as $data_code_attachement) {
+            $datastorage[] = [
+                "agreement_id_pk" => $data_code_attachement["id"],
+                'trial_number' => $data_code_attachement['trial_number'],
+                'request_date' => $data_code_attachement['request_date'] ? Carbon::parse($data_code_attachement['request_date'])->toDateString() : "",
+                'additional_request_qty_date' =>  $data_code_attachement['additional_request_qty_date'] ? Carbon::parse($data_code_attachement['additional_request_qty_date'])->toDateString() : "",
+                'tri_number' => $data_code_attachement['tri_number'],
+                'tri_quantity' => $data_code_attachement['tri_quantity'],
+                'request_person' => $data_code_attachement['request_person'],
+                'superior_approval' => $data_code_attachement['superior_approval'],
+                'supplier_name' => $data_code_attachement['supplier_name'],
+                'part_number' => $data_code_attachement['part_number'],
+                'sub_part_number' => $data_code_attachement['sub_part_number'],
+                'revision' => $data_code_attachement['revision'],
+                'coordinates' => $data_code_attachement['coordinates'],
+                'dimension' => $data_code_attachement['dimension'],
+                'actual_value' => $data_code_attachement['actual_value'],
+                'critical_parts' => $data_code_attachement['critical_parts'],
+                'critical_dimension' => $data_code_attachement['critical_dimension'],
+                'request_type' => $data_code_attachement['request_type'],
+                'request_value' => $data_code_attachement['request_value'],
+                'request_quantity' => $data_code_attachement['request_quantity'],
+                'unit_id' => $data_code_attachement['unit_id'],
+                'requestor_employee_id' => $data_code_attachement['requestor_employee_id'],
+                'requestor_full_name' => "{$data_code_attachement->hris_masterlist['emp_first_name']} {$data_code_attachement->hris_masterlist['emp_last_name']}",
+                'agreement_list_code_id_pk' => $data_code_attachement->agreement_list_code['id'],
+                'agreement_request_id_fk' => $data_code_attachement->agreement_list_code['agreement_request_id'],
+                'code_id_fk' => $data_code_attachement->agreement_list_code['code_id'],
+                'generate_code_id_pk' => $data_code_attachement->agreement_list_code->generate_code['id'],
+                'code' => $data_code_attachement->agreement_list_code->generate_code['code'],
+                'attachement_id' => $data_code_attachement->attachment['id'],
+                'file_path_attachment' => $data_code_attachement->attachment['file_path_attachment'],
             ];
         }
         rsort($datastorage);
@@ -271,6 +313,7 @@ class AgreementListService implements AgreementListServiceContract
         }
         rsort($datastorage);
         return $datastorage;
+
     }
     public function countRequest()
     {

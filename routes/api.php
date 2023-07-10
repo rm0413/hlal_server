@@ -28,7 +28,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::apiResource('/user',UserController::class);
-Route::apiResource('/user',UserController::class);
 Route::apiResource('/unit',UnitController::class);
 Route::apiResource('/agreement-list',AgreementListController::class);
 Route::apiResource('/agreement-list-code',AgreementListCodeController::class);
@@ -45,3 +44,5 @@ Route::get('/load-part-number-with-code',[AgreementListController::class, 'loadP
 Route::get('/count-request',[AgreementListController::class, 'countRequest']);
 Route::post('/upload-multiple-agreement-request',[AgreementListController::class, 'multipleStore']);
 Route::get('/load-part-number-with-critical',[AgreementListController::class, 'loadPartNumberWithCritical']);
+Route::get('/load-with-code-attachment',[AgreementListController::class, 'loadWithCodeAttachment']);
+Route::post('/insert-designer-answer',[DesignerSectionController::class, 'storeSingleDesignerAnswer']);
