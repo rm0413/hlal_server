@@ -85,6 +85,7 @@ class AgreementListController extends Controller
         $file_name = $request->file('uploaded_file');
         $spreadsheet = IOFactory::load($file_name->getRealPath());
         $datastorage = [];
+        $yes_datastorage = [];
         $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
         $highest_row = $worksheet->getHighestRow();
         $sheet = $spreadsheet->getSheet(0);
@@ -93,10 +94,11 @@ class AgreementListController extends Controller
             DB::beginTransaction();
             for ($i = 10; $i < $highest_row + 1; $i++) {
                 if ($sheet->getCell("B{$i}")->getValue() != null) {
+
                     $datastorage = [
                         // 'NO' =>  $sheet->getCell("B{$i}")->getValue(),
-                       'trial_number' => $sheet->getCell("C{$i}")->getValue(),
-                        'request_date' =>$sheet->getCell("D{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
+                        'trial_number' => $sheet->getCell("C{$i}")->getValue(),
+                        'request_date' => $sheet->getCell("D{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
                         'additional_request_qty_date' =>  $sheet->getCell("E{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
                         'tri_number' => $sheet->getCell("F{$i}")->getValue(),
                         'tri_quantity' => $sheet->getCell("G{$i}")->getValue(),
@@ -118,9 +120,27 @@ class AgreementListController extends Controller
                         'unit_id' => $request['unit_id'],
                         'requestor_employee_id' => $request['requestor_employee_id']
                     ];
+                    if ($sheet->getCell("Q{$i}")->getValue() === 'YES') {
+                        $yes_datastorage[] = $datastorage;
+                    }
                     $this->agreement_list_service->store($datastorage);
                 }
             }
+            $mail = new PHPMailer;
+            $mail->isSMTP();
+            $mail->SMTPDebug  = 0;
+            $mail->SMTPAuth = false;
+            $mail->SMTPAutoTLS = false;
+            $mail->Port = 25;
+            $mail->Host = "203.127.104.86";
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->From = "fdtp.system@ph.fujitsu.com";
+            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI | HLAL');
+            $mail->addAddress('jonathandave.detorres@fujitsu.com', 'Cancelled Archive Request');
+            $mail->addAddress('reinamae.sorisantos@fujitsu.com', 'Cancelled Archive Request');
+            $mail->Subject = 'HINSEI | Generated Code';
+            $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
+            $mail->send();
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
