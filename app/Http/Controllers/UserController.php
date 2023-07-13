@@ -42,7 +42,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-        $result = $this->successResponse("Stored Successfully");
+        $result = $this->successResponse("User Added Successfully.");
         try {
             $data = [
                 'employee_id' => $request->employee_id,

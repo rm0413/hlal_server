@@ -83,10 +83,11 @@ class GenerateAgreementCodeController extends Controller
             $mail->Host = "203.127.104.86";
             $mail->isHTML(true);                                  //Set email format to HTML
             $mail->From = "fdtp.system@ph.fujitsu.com";
-            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI | HLAL');
-            $mail->addAddress('jonathandave.detorres@fujitsu.com', 'Cancelled Archive Request');
-            $mail->addAddress('reinamae.sorisantos@fujitsu.com', 'Cancelled Archive Request');
-            $mail->Subject = 'HINSEI | Generated Code';
+            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
+            $mail->addAddress('jonathandave.detorres@fujitsu.com');
+            $mail->addAddress('reinamae.sorisantos@fujitsu.com');
+            $mail->addAddress('gerly.hernandez@fujitsu.com');
+            $mail->Subject = 'HINSEI & LSA Agreement List | Generated Code';
             $mail->Body    = view('generate_code_email', compact('datastorage'))->render();
             $mail->send();
         } catch (\Exception $e) {

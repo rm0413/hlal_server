@@ -94,19 +94,8 @@ class AgreementListService implements AgreementListServiceContract
     {
         $result = $this->agreement_list_contract->loadAgreementListRequest();
         $datastorage = [];
-        // $datastorage_count = [];
-        // $data_count = [];
-        // $hinsei_count = 0;
-        // $lsa_count = 0;
 
         foreach ($result as $agreement_data) {
-            // $data_count = [$agreement_data['request_type']];
-            // foreach ($data_count as $count_data) {
-            //     if ($count_data === "Hinsei Request") {
-            //         $hinsei_count += 1;
-            //     } elseif ($count_data === "LSA Request") {
-            //         $lsa_count += 1;
-            //     }
             $datastorage[] = [
                 "agreement_id" => $agreement_data["id"],
                 'trial_number' => $agreement_data['trial_number'],
@@ -134,14 +123,8 @@ class AgreementListService implements AgreementListServiceContract
                 'unit_created_by' => $agreement_data->units['unit_created_by'],
                 'requestor_employee_id' => $agreement_data['requestor_employee_id'],
                 'requestor_full_name' => "{$agreement_data->hris_masterlist['emp_first_name']} {$agreement_data->hris_masterlist['emp_last_name']}",
-                // 'lsa_hinsei_count' => $datastorage_count,
             ];
         }
-        // $datastorage_count[] = [
-        //     'count_lsa' => $lsa_count,
-        //     'hinsei_count' => $hinsei_count
-        // ];
-        // }
 
         rsort($datastorage);
         return $datastorage;
@@ -192,7 +175,7 @@ class AgreementListService implements AgreementListServiceContract
                 'cpk_data' => $data_code_with_inspection->inspection_data['cpk_data'],
                 'inspection_after_rework' => $data_code_with_inspection->inspection_data['inspection_after_rework'],
                 'revised_date_igm' => $data_code_with_inspection->inspection_data['revised_date_igm'] ? Carbon::parse($data_code_with_inspection->inspection_data['revised_date_igm'])->toDateString() : "",
-                'sent_date_igm' => $data_code_with_inspection->inspection_data['sent_date_igm']? Carbon::parse($data_code_with_inspection->inspection_data['sent_date_igm'])->toDateString() : "",
+                'sent_date_igm' => $data_code_with_inspection->inspection_data['sent_date_igm'] ? Carbon::parse($data_code_with_inspection->inspection_data['sent_date_igm'])->toDateString() : "",
             ];
         }
         rsort($datastorage);
@@ -313,7 +296,6 @@ class AgreementListService implements AgreementListServiceContract
         }
         rsort($datastorage);
         return $datastorage;
-
     }
     public function countRequest()
     {

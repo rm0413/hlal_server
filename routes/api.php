@@ -46,3 +46,4 @@ Route::post('/upload-multiple-agreement-request',[AgreementListController::class
 Route::get('/load-part-number-with-critical',[AgreementListController::class, 'loadPartNumberWithCritical']);
 Route::get('/load-with-code-attachment',[AgreementListController::class, 'loadWithCodeAttachment']);
 Route::post('/insert-designer-answer',[DesignerSectionController::class, 'storeSingleDesignerAnswer']);
+Route::get('/load-monitoring',[AgreementListController::class, 'loadMonitoring']);
