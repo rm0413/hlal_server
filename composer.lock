@@ -5694,7 +5694,7 @@
             "description": "Send PHP errors to Flare",
             "homepage": "https://github.com/facade/flare-client-php",
             "keywords": [
-                "\Exception",
+                "Exception",
                 "facade",
                 "flare",
                 "reporting"
@@ -5962,7 +5962,7 @@
             "homepage": "https://filp.github.io/whoops/",
             "keywords": [
                 "error",
-                "\Exception",
+                "Exception",
                 "handling",
                 "library",
                 "throwable",

@@ -62,7 +62,7 @@
                 <td>{{ $data[0]['request_date'] }}</td> --}}
                 <td>{{ $data[0]['supplier_name'] }}</td>
                 <td>{{ $data[0]['part_number'] }}</td>
-                {{-- <td>{{ $data[0]['revision'] }}</td> --}}
+                {{-- <td>{{ $data['revision'] }}</td> --}}
                 <td>{{ $data[0]['dimension'] }}</td>
                 {{-- <td>{{ $data[0]['actual_value'] }}</td>
                 <td>{{ $data[0]['request_type'] }}</td>
