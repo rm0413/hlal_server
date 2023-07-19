@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 use App\Services\GenerateAgreementCodeService;
 use App\Services\AgreementListCodeService;
 use PHPMailer\PHPMailer\PHPMailer;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ReaderXlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class GenerateAgreementCodeController extends Controller
 {
@@ -70,10 +73,43 @@ class GenerateAgreementCodeController extends Controller
                     'code_id' => $code_id['id']
 
                 ];
-               $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
+                $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
                 $where = [['agreement_request_id', '=', $agreement_id]];
                 $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with);
             }
+            $file_name = storage_path("formatStorage\Excel_format.xlsx");
+            $file_path = public_path("test.xlsx");
+            $spreadsheet = IOFactory::load($file_name);
+            $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
+            $highest_row = $worksheet->getHighestRow();
+            $sheet = $spreadsheet->getSheet(0);
+            $sheet->getCell("A1")->setValue($datastorage[0][0]['code']);
+            $i = 10;
+            foreach ($datastorage as $request_item) {
+                $sheet->getCell("C{$i}")->setValue($request_item[0]['trial_number']);
+                $sheet->getCell("D{$i}")->setValue($request_item[0]['request_date']);
+                $sheet->getCell("E{$i}")->setValue($request_item[0]['additional_request_qty_date']);
+                $sheet->getCell("F{$i}")->setValue($request_item[0]['tri_number']);
+                $sheet->getCell("G{$i}")->setValue($request_item[0]['tri_quantity']);
+                $sheet->getCell("H{$i}")->setValue($request_item[0]['request_person']);
+                $sheet->getCell("I{$i}")->setValue($request_item[0]['superior_approval']);
+                $sheet->getCell("J{$i}")->setValue($request_item[0]['supplier_name']);
+                $sheet->getCell("K{$i}")->setValue($request_item[0]['part_number']);
+                $sheet->getCell("L{$i}")->setValue($request_item[0]['sub_part_number']);
+                $sheet->getCell("M{$i}")->setValue($request_item[0]['revision']);
+                $sheet->getCell("N{$i}")->setValue($request_item[0]['coordinates']);
+                $sheet->getCell("O{$i}")->setValue($request_item[0]['dimension']);
+                $sheet->getCell("P{$i}")->setValue($request_item[0]['actual_value']);
+                $sheet->getCell("Q{$i}")->setValue($request_item[0]['critical_parts']);
+                $sheet->getCell("R{$i}")->setValue($request_item[0]['critical_dimension']);
+                $sheet->getCell("T{$i}")->setValue($request_item[0]['request_type']);
+                $sheet->getCell("U{$i}")->setValue($request_item[0]['request_value']);
+                $sheet->getCell("V{$i}")->setValue($request_item[0]['request_quantity']);
+                $i++;
+            }
+            $writer = new Xlsx($spreadsheet);
+            $writer->save("{$file_path}-{$datastorage[0][0]['code']}.xlsx");
+
             $mail = new PHPMailer;
             $mail->isSMTP();
             $mail->SMTPDebug  = 0;
@@ -84,12 +120,14 @@ class GenerateAgreementCodeController extends Controller
             $mail->isHTML(true);                                  //Set email format to HTML
             $mail->From = "fdtp.system@ph.fujitsu.com";
             $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
+            $mail->addAttachment("{$file_path}-{$datastorage[0][0]['code']}.xlsx");
             $mail->addAddress('jonathandave.detorres@fujitsu.com');
             $mail->addAddress('reinamae.sorisantos@fujitsu.com');
             $mail->addAddress('gerly.hernandez@fujitsu.com');
             $mail->Subject = 'HINSEI & LSA Agreement List | Generated Code';
             $mail->Body    = view('generate_code_email', compact('datastorage'))->render();
             $mail->send();
+
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
