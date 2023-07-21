@@ -29,7 +29,7 @@ class AgreementListMultipleRequest extends FormRequest
     public function rules()
     {
         return [
-            'uploaded_file' => 'required|file|mimes:xls,xlsx',
+            'uploaded_file' => 'required|file|filled|sometimes|mimes:xls,xlsx',
             'unit_id' => 'required',
         ];
     }
@@ -37,6 +37,7 @@ class AgreementListMultipleRequest extends FormRequest
     {
         return [
             'uploaded_file.required' => 'Please Upload a File!',
+            'uploaded_file.sometimes' => 'TETST!',
             "unit_id.required" => "Unit ID is required.",
 
         ];

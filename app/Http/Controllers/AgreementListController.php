@@ -9,12 +9,14 @@ use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use PHPMailer\PHPMailer\PHPMailer;
 use Carbon\Carbon;
+use Closure;
 use \Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AgreementListController extends Controller
 {
@@ -185,9 +187,55 @@ class AgreementListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function showMonitoring($unit_id, $supplier_name, $part_number)
     {
-        //
+        $result = $this->successResponse('Load Successfully');
+        $with = [
+            'agreement_list_code', 'designer_section_answer', 'units'
+        ];
+        $id = [];
+        $where = [
+            ['unit_id', '=', $unit_id,],
+            ['supplier_name', '=', $supplier_name],
+            ['part_number', '=', $part_number],
+        ];
+        $whereHas = 'designer_section_answer';
+        try {
+            $result['data'] = $this->agreement_list_service->show($id, $where, $with, $whereHas);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function showMonitoringList($unit_id, $supplier_name, $part_number)
+    {
+        $result = $this->successResponse('Load Successfully');
+        $with = [
+            'agreement_list_code', 'agreement_list_code.generate_code', 'designer_section_answer', 'units'
+        ];
+        $id = [];
+        $where = [
+            ['unit_id', '=', $unit_id,],
+            ['supplier_name', '=', $supplier_name],
+            ['part_number', '=', $part_number],
+        ];
+        $whereHas = 'designer_section_answer';
+        try {
+            $result['data'] = $this->agreement_list_service->showMonitoringList($id, $where, $with, $whereHas);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function loadMonitoringList()
+    {
+        $result = $this->successResponse('Load Successfully');
+        try {
+            $result['data'] = $this->agreement_list_service->loadMonitoringList();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
     public function loadWithCodeRequest()
     {
@@ -322,7 +370,7 @@ class AgreementListController extends Controller
     {
         $result = $this->successResponse("Deleted Successfully");
         try {
-            $result['data'] = $this->agreement_list_service->delete($id);
+            $this->agreement_list_service->delete($id);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

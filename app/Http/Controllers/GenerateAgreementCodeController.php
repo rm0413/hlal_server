@@ -52,6 +52,7 @@ class GenerateAgreementCodeController extends Controller
         $characterNumbers = strlen($characters);
         $code = '';
         $with = ['generate_code', 'agreement_list'];
+        $whereHas = '';
         $datastorage = [];
         $where = [];
         try {
@@ -75,13 +76,13 @@ class GenerateAgreementCodeController extends Controller
                 ];
                 $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
                 $where = [['agreement_request_id', '=', $agreement_id]];
-                $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with);
+                $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with, $whereHas);
             }
             $file_name = storage_path("formatStorage\Excel_format.xlsx");
             $file_path = public_path("test.xlsx");
             $spreadsheet = IOFactory::load($file_name);
             $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
-            $highest_row = $worksheet->getHighestRow();
+            // $highest_row = $worksheet->getHighestRow();
             $sheet = $spreadsheet->getSheet(0);
             $sheet->getCell("A1")->setValue($datastorage[0][0]['code']);
             $i = 10;
@@ -127,7 +128,6 @@ class GenerateAgreementCodeController extends Controller
             $mail->Subject = 'HINSEI & LSA Agreement List | Generated Code';
             $mail->Body    = view('generate_code_email', compact('datastorage'))->render();
             $mail->send();
-
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

@@ -133,6 +133,7 @@ class AgreementListService implements AgreementListServiceContract
     {
         return $this->agreement_list_contract->update($id, $data);
     }
+
     public function delete($id)
     {
         return $this->agreement_list_contract->delete($id);
@@ -318,5 +319,79 @@ class AgreementListService implements AgreementListServiceContract
             'hinsei_count' => $hinsei_count
         ];
         return $datastorage_count;
+    }
+    public function loadMonitoringList()
+    {
+        $result =  $this->agreement_list_contract->loadMonitoringList();
+        $datastorage = [];
+        $result_data = [];
+        foreach ($result as $data_monitoring) {
+            $datastorage[] = [
+                'agreement_list_id' => $data_monitoring['id'],
+                'supplier_name' => $data_monitoring['supplier_name'],
+                'part_number' => $data_monitoring['part_number'],
+                'unit_name' => $data_monitoring->units['unit_name'],
+            ];
+        }
+        $result_data = array_unique($datastorage, SORT_REGULAR);
+        return $result_data;
+    }
+    public function show($id, $where, $with, $whereHas)
+    {
+        $result = $this->agreement_list_contract->show($id, $where, $with, $whereHas);
+        $datastorage = [];
+        $result_data = [];
+        foreach ($result as $data_monitoring) {
+            $datastorage[] = [
+                'unit_id' => $data_monitoring['unit_id'],
+                'supplier_name' => $data_monitoring['supplier_name'],
+                'part_number' => $data_monitoring['part_number'],
+                'unit_name' => $data_monitoring->units['unit_name'],
+            ];
+        }
+        $result_data = array_unique($datastorage, SORT_REGULAR);
+        return $result_data;
+    }
+    public function showMonitoringList($id, $where, $with, $whereHas)
+    {
+        $result = $this->agreement_list_contract->show($id, $where, $with, $whereHas);
+        $datastorage = [];
+
+        foreach ($result as $data_monitoring_list) {
+            $datastorage[] = [
+                "agreement_id_pk" => $data_monitoring_list["id"],
+                'trial_number' => $data_monitoring_list['trial_number'],
+                'request_date' => $data_monitoring_list['request_date'] ? Carbon::parse($data_monitoring_list['request_date'])->toDateString() : "",
+                'additional_request_qty_date' =>  $data_monitoring_list['additional_request_qty_date'] ? Carbon::parse($data_monitoring_list['additional_request_qty_date'])->toDateString() : "",
+                'tri_number' => $data_monitoring_list['tri_number'],
+                'tri_quantity' => $data_monitoring_list['tri_quantity'],
+                'request_person' => $data_monitoring_list['request_person'],
+                'superior_approval' => $data_monitoring_list['superior_approval'],
+                'supplier_name' => $data_monitoring_list['supplier_name'],
+                'part_number' => $data_monitoring_list['part_number'],
+                'sub_part_number' => $data_monitoring_list['sub_part_number'],
+                'revision' => $data_monitoring_list['revision'],
+                'coordinates' => $data_monitoring_list['coordinates'],
+                'dimension' => $data_monitoring_list['dimension'],
+                'actual_value' => $data_monitoring_list['actual_value'],
+                'critical_parts' => $data_monitoring_list['critical_parts'],
+                'critical_dimension' => $data_monitoring_list['critical_dimension'],
+                'request_type' => $data_monitoring_list['request_type'],
+                'request_value' => $data_monitoring_list['request_value'],
+                'request_quantity' => $data_monitoring_list['request_quantity'],
+                'unit_id' => $data_monitoring_list['unit_id'],
+                'requestor_employee_id' => $data_monitoring_list['requestor_employee_id'],
+                'requestor_full_name' => "{$data_monitoring_list->hris_masterlist['emp_first_name']} {$data_monitoring_list->hris_masterlist['emp_last_name']}",
+                'agreement_list_code_id_pk' => $data_monitoring_list->agreement_list_code['id'],
+                'agreement_request_id_fk' => $data_monitoring_list->agreement_list_code['agreement_request_id'],
+                'code_id_fk' => $data_monitoring_list->agreement_list_code['code_id'],
+                'generate_code_id_pk' => $data_monitoring_list->agreement_list_code->generate_code['id'],
+                'code' => $data_monitoring_list->agreement_list_code->generate_code['code'],
+                // 'attachement_id' => $data_monitoring_list->attachment['id'],
+                // 'file_path_attachment' => $data_monitoring_list->attachment['file_path_attachment'],
+            ];
+            }
+
+        return $datastorage;
     }
 }

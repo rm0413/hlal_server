@@ -9,6 +9,8 @@ public function loadWithNoCodeRequest();
 public function update($id, $data);
 public function delete($id);
 public function loadCodeWithInspectionData();
+public function loadMonitoringList();
+public function show($id, $where, $with, $whereHas);
 }
 
 

@@ -7,5 +7,5 @@ interface AgreementListCodeServiceContract
     public function store($data);
     public function loadGenaratedAgreementCode();
 
-    public function show($id, $where, $with);
+    public function show($id, $where, $with, $whereHas);
 }
