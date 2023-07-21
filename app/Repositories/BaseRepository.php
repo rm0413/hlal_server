@@ -84,7 +84,7 @@ abstract class BaseRepository implements BaseContract
     public function loadCodeWithInspectionData()
     {
         return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'inspection_data')
-            ->where(([['critical_parts', '=', 'YES']]))
+            ->where(([['critical_parts', '=', 'Yes']]))
             ->whereHas('agreement_list_code', function ($q) {
             })
             ->get();

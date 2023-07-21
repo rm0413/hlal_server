@@ -75,7 +75,7 @@ class AgreementListController extends Controller
                 "unit_id" => $request["unit_id"],
                 "requestor_employee_id" => $request["requestor_employee_id"]
             ];
-            if ($request->critical_parts === 'YES') {
+            if ($request->critical_parts === 'Yes') {
                 $mail = new PHPMailer;
                 $mail->isSMTP();
                 $mail->SMTPDebug  = 0;
@@ -140,7 +140,7 @@ class AgreementListController extends Controller
                         'unit_id' => $request['unit_id'],
                         'requestor_employee_id' => $request['requestor_employee_id']
                     ];
-                    if ($sheet->getCell("Q{$i}")->getValue() === 'YES') {
+                    if ($sheet->getCell("Q{$i}")->getValue() === 'Yes') {
                         $yes_datastorage[] = $datastorage;
                     }
                     $this->agreement_list_service->store($datastorage);
@@ -158,7 +158,7 @@ class AgreementListController extends Controller
             $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI | HLAL');
             $mail->addAddress('jonathandave.detorres@fujitsu.com', 'Cancelled Archive Request');
             $mail->addAddress('reinamae.sorisantos@fujitsu.com', 'Cancelled Archive Request');
-            $mail->Subject = 'HINSEI | Generated Code';
+            $mail->Subject = 'HINSEI & LSA Agreement List | Generated Code';
             $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
             $mail->send();
             DB::commit();
