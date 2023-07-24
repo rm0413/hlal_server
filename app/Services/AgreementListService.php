@@ -387,8 +387,18 @@ class AgreementListService implements AgreementListServiceContract
                 'code_id_fk' => $data_monitoring_list->agreement_list_code['code_id'],
                 'generate_code_id_pk' => $data_monitoring_list->agreement_list_code->generate_code['id'],
                 'code' => $data_monitoring_list->agreement_list_code->generate_code['code'],
-                // 'attachement_id' => $data_monitoring_list->attachment['id'],
-                // 'file_path_attachment' => $data_monitoring_list->attachment['file_path_attachment'],
+                'inspection_id' => $data_monitoring_list->inspection_data['id'],
+                'cpk_data' => $data_monitoring_list->inspection_data['cpk_data'],
+                'inspection_after_rework' => $data_monitoring_list->inspection_data['inspection_after_rework'],
+                'revised_date_igm' => $data_monitoring_list->inspection_data['revised_date_igm'] ? Carbon::parse($data_monitoring_list->inspection_data['revised_date_igm'])->toDateString() : "",
+                'sent_date_igm' => $data_monitoring_list->inspection_data['sent_date_igm'] ? Carbon::parse($data_monitoring_list->inspection_data['sent_date_igm'])->toDateString() : "",
+                'designer_section_id' => $data_monitoring_list->designer_section_answer['id'],
+                'designer_answer' => $data_monitoring_list->designer_section_answer['designer_answer'],
+                'designer_in_charge' => $data_monitoring_list->designer_section_answer['designer_in_charge'],
+                'answer_date' => $data_monitoring_list->designer_section_answer['answer_date'] ? Carbon::parse($data_monitoring_list->designer_section_answer['answer_date'])->toDateString() : "",
+                'request_result' => $data_monitoring_list->designer_section_answer['request_result'],
+                'attachement_id' => $data_monitoring_list->attachment['id'],
+                'file_path_attachment' => $data_monitoring_list->attachment['file_path_attachment'],
             ];
             }
 
