@@ -390,8 +390,70 @@ class AgreementListService implements AgreementListServiceContract
                 // 'attachement_id' => $data_monitoring_list->attachment['id'],
                 // 'file_path_attachment' => $data_monitoring_list->attachment['file_path_attachment'],
             ];
-            }
-
+        }
+        rsort($datastorage);
         return $datastorage;
+    }
+    public function loadCountResult($data)
+    {
+        $result = $this->agreement_list_contract->loadCountResult($data);
+        $datastorage = [];
+        $data_count_type = [];
+        $hinsei_request_count = 0;
+        $lsa_request_count = 0;
+        $hinsei_ok = 0;
+        $hinsei_ng = 0;
+        $lsa_ok = 0;
+        $lsa_ng = 0;
+        $lsa_request_pending = 0;
+        $hinsei_request_pending = 0;
+
+        // foreach ($result as $request_type_count) {
+        //     $datastorage[] = [
+        //         'request_type' => $request_type_count->agreement_request_list['request_type'],
+        //         'request_result' => $request_type_count['request_result'],
+        //     ];
+        // }
+        // foreach ($datastorage as $data_request_type) {
+        //     $data_count_type = [$data_request_type['request_type']];
+        //     foreach ($data_count_type as $count_request_type) {
+        //         if ($count_request_type === "Hinsei Request") {
+        //             $hinsei_request_count += 1;
+        //         } elseif ($count_request_type === "LSA Request") {
+        //             $lsa_request_count += 1;
+        //         }
+        //     }
+        // }
+
+        foreach ($result as $data_request_result) {
+            if ($data_request_result['request_type'] === 'LSA Request') {
+                if ($data_request_result['designer_section_answer']['request_result'] === "LSA OK") {
+                    $lsa_ok += 1;
+                } elseif ($data_request_result['designer_section_answer']['request_result'] === "LSA NG") {
+                    $lsa_ng += 1;
+                } else {
+                    $lsa_request_pending += 1;
+                }
+            } else {
+                if ($data_request_result['designer_section_answer']['request_result'] === "Hinsei OK") {
+                    $hinsei_ok += 1;
+                } elseif ($data_request_result['designer_section_answer']['request_result'] === "Hinsei NG") {
+                    $hinsei_ng += 1;
+                } else {
+                    $hinsei_request_pending += 1;
+                }
+            }
+        }
+
+        $datastorage_count_request[] = [
+            'hinsei' => [
+                $hinsei_ok, $hinsei_ng, $hinsei_request_pending
+            ],
+            'lsa' => [
+                $lsa_ok, $lsa_ng, $lsa_request_pending
+            ]
+        ];
+
+        return $datastorage_count_request;
     }
 }

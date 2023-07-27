@@ -21,4 +21,5 @@ interface BaseContract
     public function loadCodeWithInspectionData();
     public function loadInspectionData();
     public function loadMonitoringList();
+    public function loadCountResult($data);
 }

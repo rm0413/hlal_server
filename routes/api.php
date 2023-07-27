@@ -48,3 +48,4 @@ Route::get('/load-with-code-attachment', [AgreementListController::class, 'loadW
 Route::post('/insert-designer-answer', [DesignerSectionController::class, 'storeSingleDesignerAnswer']);
 Route::get('/show-monitoring-list/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoring']);
 Route::get('/show-monitoring-list-edit/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoringList']);
+Route::get('/load-count-result', [AgreementListController::class, 'loadCountResult']);

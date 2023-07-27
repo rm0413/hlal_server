@@ -317,7 +317,21 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+    public function loadCountResult(Request $request)
+    {
+        $result = $this->successResponse("Load Request Result");
 
+        try {
+            $data = [
+                'date_from' => $request['date_from'],
+                'date_to' => $request['date_to'],
+            ];
+            $result['data'] = $this->agreement_list_service->loadCountResult($data);
+        } catch(\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
     /**
      * Update the specified resource in storage.
      *

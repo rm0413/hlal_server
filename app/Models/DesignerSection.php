@@ -18,4 +18,8 @@ class DesignerSection extends Model
 
     protected $guarded = [ 'id' ];
 
+    public function agreement_request_list()
+    {
+        return $this->hasOne(AgreementList::class, 'id', 'agreement_request_id');
+    }
 }

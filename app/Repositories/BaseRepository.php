@@ -96,4 +96,22 @@ abstract class BaseRepository implements BaseContract
             })
             ->get();
     }
+    public function loadCountResult($data)
+    {
+        return $this->model->with('designer_section_answer')
+            // ->whereHas('designer_section_answer', function ($q) use ($data) {
+                ->whereBetween('created_at', ["{$data['date_from']} 00:00:00", "{$data['date_to']} 24:00:00"])
+            // })
+            // ->orWhereDoesntHave('designer_section_answer', function ($q) use ($data) {
+            //     $q->whereBetween('created_at', ["{$data['date_from']} ", "{$data['date_to']} "]);
+            // })
+            ->get();
+    }
+    //     public function loadCountResult()
+    //     {
+    //         return $this->model->with('designer_section_answer')
+    //             // ->whereBetween('created_at', [$data['date_from'], $data['date_to']])
+    //             ->get();
+    //     }
+    // }
 }
