@@ -211,7 +211,7 @@ class AgreementListController extends Controller
     {
         $result = $this->successResponse('Load Successfully');
         $with = [
-            'agreement_list_code', 'agreement_list_code.generate_code', 'designer_section_answer', 'units'
+            'agreement_list_code', 'agreement_list_code.generate_code', 'designer_section_answer', 'units', 'attachment', 'inspection_data'
         ];
         $id = [];
         $where = [
