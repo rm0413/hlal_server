@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AgreementListMultipleRequest;
+use App\Http\Requests\DateRangeRequest;
 use App\Http\Requests\AgreementListRequest;
 use App\Services\AgreementListService;
 use App\Traits\ResponseTrait;
@@ -387,7 +388,7 @@ class AgreementListController extends Controller
         }
         return $result;
     }
-    public function loadCountResult(Request $request)
+    public function loadCountResult(DateRangeRequest $request)
     {
         $result = $this->successResponse("Load Request Result");
 
