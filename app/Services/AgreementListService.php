@@ -419,25 +419,9 @@ class AgreementListService implements AgreementListServiceContract
         $lsa_request_pending = 0;
         $hinsei_request_pending = 0;
 
-        // foreach ($result as $request_type_count) {
-        //     $datastorage[] = [
-        //         'request_type' => $request_type_count->agreement_request_list['request_type'],
-        //         'request_result' => $request_type_count['request_result'],
-        //     ];
-        // }
-        // foreach ($datastorage as $data_request_type) {
-        //     $data_count_type = [$data_request_type['request_type']];
-        //     foreach ($data_count_type as $count_request_type) {
-        //         if ($count_request_type === "Hinsei Request") {
-        //             $hinsei_request_count += 1;
-        //         } elseif ($count_request_type === "LSA Request") {
-        //             $lsa_request_count += 1;
-        //         }
-        //     }
-        // }
-
         foreach ($result as $data_request_result) {
             if ($data_request_result['request_type'] === 'LSA Request') {
+                $lsa_request_count += 1;
                 if ($data_request_result['designer_section_answer']['request_result'] === "LSA OK") {
                     $lsa_ok += 1;
                 } elseif ($data_request_result['designer_section_answer']['request_result'] === "LSA NG") {
@@ -446,6 +430,7 @@ class AgreementListService implements AgreementListServiceContract
                     $lsa_request_pending += 1;
                 }
             } else {
+                $hinsei_request_count += 1;
                 if ($data_request_result['designer_section_answer']['request_result'] === "Hinsei OK") {
                     $hinsei_ok += 1;
                 } elseif ($data_request_result['designer_section_answer']['request_result'] === "Hinsei NG") {
@@ -462,7 +447,9 @@ class AgreementListService implements AgreementListServiceContract
             ],
             'lsa' => [
                 $lsa_ok, $lsa_ng, $lsa_request_pending
-            ]
+            ],
+            'hinsei_request' => $hinsei_request_count,
+            'lsa_request' => $lsa_request_count,
         ];
 
         return $datastorage_count_request;
