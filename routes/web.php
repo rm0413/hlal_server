@@ -22,3 +22,4 @@ Route::get('/', function () {
 Route::get('download-format', [AgreementListController::class, 'downloadFormat']);
 Route::get('download-attachment', [AttachmentController::class, 'downloadAttachment']);
 Route::get('view-attachment', [AttachmentController::class, 'viewAttachement']);
+Route::get('/export/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'exportMonitoringList']);

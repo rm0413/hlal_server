@@ -336,9 +336,9 @@ class AgreementListService implements AgreementListServiceContract
         $result_data = array_unique($datastorage, SORT_REGULAR);
         return $result_data;
     }
-    public function show($id, $where, $with, $whereHas)
+    public function showWhereHas($id, $where, $with, $whereHas)
     {
-        $result = $this->agreement_list_contract->show($id, $where, $with, $whereHas);
+        $result = $this->agreement_list_contract->showWhereHas($id, $where, $with, $whereHas);
         $datastorage = [];
         $result_data = [];
         foreach ($result as $data_monitoring) {
@@ -354,7 +354,7 @@ class AgreementListService implements AgreementListServiceContract
     }
     public function showMonitoringList($id, $where, $with, $whereHas)
     {
-        $result = $this->agreement_list_contract->show($id, $where, $with, $whereHas);
+        $result = $this->agreement_list_contract->showWhereHas($id, $where, $with, $whereHas);
         $datastorage = [];
 
         foreach ($result as $data_monitoring_list) {
@@ -380,6 +380,7 @@ class AgreementListService implements AgreementListServiceContract
                 'request_value' => $data_monitoring_list['request_value'],
                 'request_quantity' => $data_monitoring_list['request_quantity'],
                 'unit_id' => $data_monitoring_list['unit_id'],
+                'unit_name' => $data_monitoring_list->units['unit_name'],
                 'requestor_employee_id' => $data_monitoring_list['requestor_employee_id'],
                 'requestor_full_name' => "{$data_monitoring_list->hris_masterlist['emp_first_name']} {$data_monitoring_list->hris_masterlist['emp_last_name']}",
                 'agreement_list_code_id_pk' => $data_monitoring_list->agreement_list_code['id'],

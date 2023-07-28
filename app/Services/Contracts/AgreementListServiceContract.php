@@ -10,8 +10,7 @@ interface AgreementListServiceContract{
     public function delete($id);
     public function loadCodeWithInspectionData();
     public function loadMonitoringList();
-    public function show($id, $where, $with, $whereHas);
     public function loadCountResult($data);
-    // public function loadCountResult($data);
+    public function showWhereHas($id, $where, $with, $whereHas);
 
 }
