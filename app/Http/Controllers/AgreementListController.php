@@ -323,8 +323,8 @@ class AgreementListController extends Controller
 
         try {
             $data = [
-                'date_from' => $request['date_from'],
-                'date_to' => $request['date_to'],
+                'date_from' => Carbon::parse($request['date_from'])->format('Y/m/d'),
+                'date_to' => Carbon::parse($request['date_to'])->format('Y/m/d'),
             ];
             $result['data'] = $this->agreement_list_service->loadCountResult($data);
         } catch(\Exception $e) {

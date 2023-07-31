@@ -301,22 +301,46 @@ class AgreementListService implements AgreementListServiceContract
     public function countRequest()
     {
         $result = $this->agreement_list_contract->loadAgreementListRequest();
-        $data_count = [];
         $hinsei_count = 0;
         $lsa_count = 0;
-        foreach ($result as $count) {
-            $data_count = [$count['request_type']];
-            foreach ($data_count as $count_data) {
-                if ($count_data === "Hinsei Request") {
-                    $hinsei_count += 1;
-                } elseif ($count_data === "LSA Request") {
-                    $lsa_count += 1;
+        $lsa_ok = 0;
+        $lsa_ng = 0;
+        $lsa_pending = 0;
+        $hinsei_ok = 0;
+        $hinsei_ng = 0;
+        $hinsei_pending = 0;
+
+        foreach ($result as $data_request) {
+            if ($data_request["request_type"] === "LSA Request") {
+                $lsa_count += 1;
+                if ($data_request["designer_section_answer"]["request_result"] === "LSA OK") {
+                    $lsa_ok += 1;
+                } elseif ($data_request["designer_section_answer"]["request_result"] === "LSA NG") {
+                    $lsa_ng += 1;
+                } else {
+                    $lsa_pending += 1;
+                }
+            } else {
+                $hinsei_count += 1;
+                if ($data_request["designer_section_answer"]["request_result"] === "Hinsei OK") {
+                    $hinsei_ok += 1;
+                } elseif ($data_request["designer_section_answer"]["request_result"] === "Hinsei NG") {
+                    $hinsei_ng += 1;
+                } else {
+                    $hinsei_pending += 1;
                 }
             }
         }
         $datastorage_count[] = [
             'count_lsa' => $lsa_count,
-            'hinsei_count' => $hinsei_count
+            'lsa_ok' => $lsa_ok,
+            'lsa_ng' => $lsa_ng,
+            'lsa_pending' => $lsa_pending,
+            'hinsei_count' => $hinsei_count,
+            'hinsei_ok' => $hinsei_ok,
+            'hinsei_ng' => $hinsei_ng,
+            'hinsei_pending' => $hinsei_pending,
+
         ];
         return $datastorage_count;
     }
@@ -407,33 +431,12 @@ class AgreementListService implements AgreementListServiceContract
     public function loadCountResult($data)
     {
         $result = $this->agreement_list_contract->loadCountResult($data);
-        $datastorage = [];
-        $data_count_type = [];
-        $hinsei_request_count = 0;
-        $lsa_request_count = 0;
         $hinsei_ok = 0;
         $hinsei_ng = 0;
         $lsa_ok = 0;
         $lsa_ng = 0;
         $lsa_request_pending = 0;
         $hinsei_request_pending = 0;
-
-        // foreach ($result as $request_type_count) {
-        //     $datastorage[] = [
-        //         'request_type' => $request_type_count->agreement_request_list['request_type'],
-        //         'request_result' => $request_type_count['request_result'],
-        //     ];
-        // }
-        // foreach ($datastorage as $data_request_type) {
-        //     $data_count_type = [$data_request_type['request_type']];
-        //     foreach ($data_count_type as $count_request_type) {
-        //         if ($count_request_type === "Hinsei Request") {
-        //             $hinsei_request_count += 1;
-        //         } elseif ($count_request_type === "LSA Request") {
-        //             $lsa_request_count += 1;
-        //         }
-        //     }
-        // }
 
         foreach ($result as $data_request_result) {
             if ($data_request_result['request_type'] === 'LSA Request') {
