@@ -22,9 +22,9 @@ class AgreementListCodeService implements AgreementListCodeServiceContract
     {
         return $this->agreement_list_code_contract->loadGenaratedAgreementCode();
     }
-    public function show($id, $where, $with, $whereHas)
+    public function show($id, $where, $with)
     {
-        $result =  $this->agreement_list_code_contract->show($id, $where, $with, $whereHas);
+        $result =  $this->agreement_list_code_contract->show($id, $where, $with);
         $datastorage = [];
         foreach ($result as $data) {
             foreach ($data->agreement_list as $data_agreement_list) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AgreementListMultipleRequest;
+use App\Http\Requests\DateRangeRequest;
 use App\Http\Requests\AgreementListRequest;
 use App\Services\AgreementListService;
 use App\Traits\ResponseTrait;
@@ -13,10 +14,12 @@ use Closure;
 use \Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 
 class AgreementListController extends Controller
 {
@@ -142,25 +145,25 @@ class AgreementListController extends Controller
                     ];
                     if ($sheet->getCell("Q{$i}")->getValue() === 'Yes') {
                         $yes_datastorage[] = $datastorage;
+                        $mail = new PHPMailer;
+                        $mail->isSMTP();
+                        $mail->SMTPDebug  = 0;
+                        $mail->SMTPAuth = false;
+                        $mail->SMTPAutoTLS = false;
+                        $mail->Port = 25;
+                        $mail->Host = "203.127.104.86";
+                        $mail->isHTML(true);                                  //Set email format to HTML
+                        $mail->From = "fdtp.system@ph.fujitsu.com";
+                        $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
+                        $mail->addAddress('jonathandave.detorres@fujitsu.com');
+                        $mail->addAddress('reinamae.sorisantos@fujitsu.com');
+                        $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
+                        $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
+                        $mail->send();
                     }
                     $this->agreement_list_service->store($datastorage);
                 }
             }
-            $mail = new PHPMailer;
-            $mail->isSMTP();
-            $mail->SMTPDebug  = 0;
-            $mail->SMTPAuth = false;
-            $mail->SMTPAutoTLS = false;
-            $mail->Port = 25;
-            $mail->Host = "203.127.104.86";
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->From = "fdtp.system@ph.fujitsu.com";
-            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI | HLAL');
-            $mail->addAddress('jonathandave.detorres@fujitsu.com', 'Cancelled Archive Request');
-            $mail->addAddress('reinamae.sorisantos@fujitsu.com', 'Cancelled Archive Request');
-            $mail->Subject = 'HINSEI & LSA Agreement List | Generated Code';
-            $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
-            $mail->send();
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -201,7 +204,7 @@ class AgreementListController extends Controller
         ];
         $whereHas = 'designer_section_answer';
         try {
-            $result['data'] = $this->agreement_list_service->show($id, $where, $with, $whereHas);
+            $result['data'] = $this->agreement_list_service->showWhereHas($id, $where, $with, $whereHas);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
@@ -222,6 +225,74 @@ class AgreementListController extends Controller
         $whereHas = 'designer_section_answer';
         try {
             $result['data'] = $this->agreement_list_service->showMonitoringList($id, $where, $with, $whereHas);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function exportMonitoringList($unit_id, $supplier_name, $part_number)
+    {
+        $result = $this->successResponse('Load Successfully');
+        // $format = "";
+        $with = [
+            'agreement_list_code', 'agreement_list_code.generate_code', 'designer_section_answer', 'units', 'attachment', 'inspection_data'
+        ];
+        $id = [];
+        $where = [
+            ['unit_id', '=', $unit_id,],
+            ['supplier_name', '=', $supplier_name],
+            ['part_number', '=', $part_number],
+        ];
+        $whereHas = 'designer_section_answer';
+        try {
+            $datastorage = $this->agreement_list_service->showMonitoringList($id, $where, $with, $whereHas);
+            $file_name = storage_path("formatStorage\Excel_format.xlsx");
+            $file_path = public_path("storage/files/test.xlsx");
+            $spreadsheet = IOFactory::load($file_name);
+            $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
+            // $highest_row = $worksheet->getHighestRow();
+            $sheet = $spreadsheet->getSheet(0);
+            $i = 10;
+            $x = 1;
+            foreach ($datastorage as $export_data) {
+                $sheet->getCell("B{$i}")->setValue($x);
+                $sheet->getCell("C{$i}")->setValue($export_data['trial_number']);
+                $sheet->getCell("D{$i}")->setValue($export_data['request_date']);
+                $sheet->getCell("E{$i}")->setValue($export_data['additional_request_qty_date']);
+                $sheet->getCell("F{$i}")->setValue($export_data['tri_number']);
+                $sheet->getCell("G{$i}")->setValue($export_data['tri_quantity']);
+                $sheet->getCell("H{$i}")->setValue($export_data['request_person']);
+                $sheet->getCell("I{$i}")->setValue($export_data['superior_approval']);
+                $sheet->getCell("J{$i}")->setValue($export_data['supplier_name']);
+                $sheet->getCell("K{$i}")->setValue($export_data['part_number']);
+                $sheet->getCell("L{$i}")->setValue($export_data['sub_part_number']);
+                $sheet->getCell("M{$i}")->setValue($export_data['revision']);
+                $sheet->getCell("N{$i}")->setValue($export_data['coordinates']);
+                $sheet->getCell("O{$i}")->setValue($export_data['dimension']);
+                $sheet->getCell("P{$i}")->setValueExplicit("{$export_data['actual_value']}", DataType::TYPE_STRING);
+                $sheet->getCell("Q{$i}")->setValue($export_data['critical_parts']);
+                $sheet->getCell("R{$i}")->setValue($export_data['critical_dimension']);
+                $sheet->getCell("S{$i}")->setValue($export_data['cpk_data']);
+                $sheet->getCell("T{$i}")->setValue($export_data['request_type']);
+                $sheet->getCell("U{$i}")->setValue($export_data['request_value']);
+                $sheet->getCell("V{$i}")->setValue($export_data['request_quantity']);
+                $sheet->getCell("W{$i}")->setValue($export_data['designer_answer']);
+                $sheet->getCell("X{$i}")->setValue($export_data['designer_in_charge']);
+                $sheet->getCell("Y{$i}")->setValue($export_data['answer_date']);
+                $sheet->getCell("Z{$i}")->setValue($export_data['inspection_after_rework']);
+                $sheet->getCell("AA{$i}")->setValue($export_data['revised_date_igm']);
+                $sheet->getCell("AB{$i}")->setValue($export_data['sent_date_igm']);
+                $i++;
+                $x++;
+            }
+            $date = date('Y-m-d');
+            $time = time();
+            $writer = new Xlsx($spreadsheet);
+            $writer->save(public_path("storage/files/" . "{$datastorage[0]['unit_name']}-{$date}-{$time}.xlsx"));
+            // return Response::download(public_path('storage/files/' . "{$datastorage[0]['unit_name']}-{$date}-{$time}.xlsx"));
+
+            header("Content-Type: application/vnd.ms-excel");
+            return redirect(url('/') . "/storage/files/" . "{$datastorage[0]['unit_name']}-{$date}-{$time}.xlsx");
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
@@ -317,7 +388,7 @@ class AgreementListController extends Controller
         }
         return $result;
     }
-    public function loadCountResult(Request $request)
+    public function loadCountResult(DateRangeRequest $request)
     {
         $result = $this->successResponse("Load Request Result");
 

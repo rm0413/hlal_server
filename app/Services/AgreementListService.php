@@ -360,9 +360,9 @@ class AgreementListService implements AgreementListServiceContract
         $result_data = array_unique($datastorage, SORT_REGULAR);
         return $result_data;
     }
-    public function show($id, $where, $with, $whereHas)
+    public function showWhereHas($id, $where, $with, $whereHas)
     {
-        $result = $this->agreement_list_contract->show($id, $where, $with, $whereHas);
+        $result = $this->agreement_list_contract->showWhereHas($id, $where, $with, $whereHas);
         $datastorage = [];
         $result_data = [];
         foreach ($result as $data_monitoring) {
@@ -378,7 +378,7 @@ class AgreementListService implements AgreementListServiceContract
     }
     public function showMonitoringList($id, $where, $with, $whereHas)
     {
-        $result = $this->agreement_list_contract->show($id, $where, $with, $whereHas);
+        $result = $this->agreement_list_contract->showWhereHas($id, $where, $with, $whereHas);
         $datastorage = [];
 
         foreach ($result as $data_monitoring_list) {
@@ -404,6 +404,7 @@ class AgreementListService implements AgreementListServiceContract
                 'request_value' => $data_monitoring_list['request_value'],
                 'request_quantity' => $data_monitoring_list['request_quantity'],
                 'unit_id' => $data_monitoring_list['unit_id'],
+                'unit_name' => $data_monitoring_list->units['unit_name'],
                 'requestor_employee_id' => $data_monitoring_list['requestor_employee_id'],
                 'requestor_full_name' => "{$data_monitoring_list->hris_masterlist['emp_first_name']} {$data_monitoring_list->hris_masterlist['emp_last_name']}",
                 'agreement_list_code_id_pk' => $data_monitoring_list->agreement_list_code['id'],
@@ -440,6 +441,7 @@ class AgreementListService implements AgreementListServiceContract
 
         foreach ($result as $data_request_result) {
             if ($data_request_result['request_type'] === 'LSA Request') {
+                $lsa_request_count += 1;
                 if ($data_request_result['designer_section_answer']['request_result'] === "LSA OK") {
                     $lsa_ok += 1;
                 } elseif ($data_request_result['designer_section_answer']['request_result'] === "LSA NG") {
@@ -448,6 +450,7 @@ class AgreementListService implements AgreementListServiceContract
                     $lsa_request_pending += 1;
                 }
             } else {
+                $hinsei_request_count += 1;
                 if ($data_request_result['designer_section_answer']['request_result'] === "Hinsei OK") {
                     $hinsei_ok += 1;
                 } elseif ($data_request_result['designer_section_answer']['request_result'] === "Hinsei NG") {
@@ -464,7 +467,9 @@ class AgreementListService implements AgreementListServiceContract
             ],
             'lsa' => [
                 $lsa_ok, $lsa_ng, $lsa_request_pending
-            ]
+            ],
+            'hinsei_request' => $hinsei_request_count,
+            'lsa_request' => $lsa_request_count,
         ];
 
         return $datastorage_count_request;

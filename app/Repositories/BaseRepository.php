@@ -70,11 +70,16 @@ abstract class BaseRepository implements BaseContract
 
             ->get();
     }
-    public function show($id, $where, $with, $whereHas)
+    public function showWhereHas($id, $where, $with, $whereHas)
     {
         return $this->model->with($with)->where($where)
-            // ->whereHas($whereHas, function ($q) {
-            // })
+            ->whereHas($whereHas, function ($q) {
+            })
+            ->get();
+    }
+    public function show($id, $where, $with)
+    {
+        return $this->model->with($with)->where($where)
             ->get();
     }
     public function loadInspectionData()
@@ -83,6 +88,11 @@ abstract class BaseRepository implements BaseContract
     }
     public function loadCodeWithInspectionData()
     {
+        // return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'inspection_data')
+        //     ->where(([['critical_parts', '=', 'Yes']]))
+        //     ->whereHas('agreement_list_code', function ($q) {
+        //     })
+        //     ->get();
         return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'inspection_data')
             ->where(([['critical_parts', '=', 'Yes']]))
             ->whereHas('agreement_list_code', function ($q) {

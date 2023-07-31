@@ -17,7 +17,8 @@ interface BaseContract
     public function loadGenaratedAgreementCode();
     public function loadWithCodeRequest();
     public function loadWithNoCodeRequest();
-    public function show($id, $where, $with, $whereHas);
+    public function showWhereHas($id, $where, $with, $whereHas);
+    public function show($id, $where, $with);
     public function loadCodeWithInspectionData();
     public function loadInspectionData();
     public function loadMonitoringList();

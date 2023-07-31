@@ -9,8 +9,8 @@ use Illuminate\Support\Str;
 use App\Services\GenerateAgreementCodeService;
 use App\Services\AgreementListCodeService;
 use PHPMailer\PHPMailer\PHPMailer;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ReaderXlsx;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class GenerateAgreementCodeController extends Controller
@@ -79,14 +79,17 @@ class GenerateAgreementCodeController extends Controller
                 $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with, $whereHas);
             }
             $file_name = storage_path("formatStorage\Excel_format.xlsx");
-            $file_path = public_path("test.xlsx");
+            $file_path = public_path("storage/files/test.xlsx");
             $spreadsheet = IOFactory::load($file_name);
             $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
-            // $highest_row = $worksheet->getHighestRow();
             $sheet = $spreadsheet->getSheet(0);
             $sheet->getCell("A1")->setValue($datastorage[0][0]['code']);
+            $count = count($datastorage) + 10;
+
             $i = 10;
+            $x = 1;
             foreach ($datastorage as $request_item) {
+                $sheet->getCell("B{$i}")->setValue($x);
                 $sheet->getCell("C{$i}")->setValue($request_item[0]['trial_number']);
                 $sheet->getCell("D{$i}")->setValue($request_item[0]['request_date']);
                 $sheet->getCell("E{$i}")->setValue($request_item[0]['additional_request_qty_date']);
@@ -100,15 +103,17 @@ class GenerateAgreementCodeController extends Controller
                 $sheet->getCell("M{$i}")->setValue($request_item[0]['revision']);
                 $sheet->getCell("N{$i}")->setValue($request_item[0]['coordinates']);
                 $sheet->getCell("O{$i}")->setValue($request_item[0]['dimension']);
-                $sheet->getCell("P{$i}")->setValue($request_item[0]['actual_value']);
+                $sheet->getCell("P{$i}")->setValueExplicit("{$request_item[0]['actual_value']}", DataType::TYPE_STRING);
                 $sheet->getCell("Q{$i}")->setValue($request_item[0]['critical_parts']);
                 $sheet->getCell("R{$i}")->setValue($request_item[0]['critical_dimension']);
                 $sheet->getCell("T{$i}")->setValue($request_item[0]['request_type']);
                 $sheet->getCell("U{$i}")->setValue($request_item[0]['request_value']);
                 $sheet->getCell("V{$i}")->setValue($request_item[0]['request_quantity']);
                 $i++;
+                $x++;
             }
             $writer = new Xlsx($spreadsheet);
+
             $writer->save("{$file_path}-{$datastorage[0][0]['code']}.xlsx");
 
             $mail = new PHPMailer;
