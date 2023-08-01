@@ -28,14 +28,13 @@ class AttachmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'file_path_attachment' => 'required'
+            'file_path_attachment' => 'required|mimes:pdf',
         ];
     }
     public function messages()
     {
         return [
             "file_path_attachment.required" => "Attachment is required.",
-            // "file_path_attachment.required" => "Pdf Only.",
         ];
     }
     public function failedValidation(Validator $validator)

@@ -54,6 +54,7 @@ class AgreementListCodeService implements AgreementListCodeServiceContract
                     'request_value' => $data_agreement_list['request_value'],
                     'request_quantity' => $data_agreement_list['request_quantity'],
                     'unit_id' => $data_agreement_list['unit_id'],
+                    'unit_name' => $data_agreement_list->units['unit_name'],
                     'requestor_employee_id' => $data_agreement_list['requestor_employee_id'],
                 ];
             }

@@ -434,8 +434,10 @@ class AgreementListService implements AgreementListServiceContract
         $result = $this->agreement_list_contract->loadCountResult($data);
         $hinsei_ok = 0;
         $hinsei_ng = 0;
+        $lsa_request_count = 0;
         $lsa_ok = 0;
         $lsa_ng = 0;
+        $hinsei_request_count = 0;
         $lsa_request_pending = 0;
         $hinsei_request_pending = 0;
 
