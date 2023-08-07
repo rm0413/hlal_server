@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use App\Http\Requests\AgreementListMultipleRequest;
 use App\Http\Requests\DateRangeRequest;
 use App\Http\Requests\AgreementListRequest;
@@ -100,6 +101,8 @@ class AgreementListController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Stored Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
+
         return $result;
     }
     public function multipleStore(AgreementListMultipleRequest $request)
@@ -145,30 +148,32 @@ class AgreementListController extends Controller
                     ];
                     if ($sheet->getCell("Q{$i}")->getValue() === 'Yes') {
                         $yes_datastorage[] = $datastorage;
-                        $mail = new PHPMailer;
-                        $mail->isSMTP();
-                        $mail->SMTPDebug  = 0;
-                        $mail->SMTPAuth = false;
-                        $mail->SMTPAutoTLS = false;
-                        $mail->Port = 25;
-                        $mail->Host = "203.127.104.86";
-                        $mail->isHTML(true);                                  //Set email format to HTML
-                        $mail->From = "fdtp.system@ph.fujitsu.com";
-                        $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
-                        $mail->addAddress('jonathandave.detorres@fujitsu.com');
-                        $mail->addAddress('reinamae.sorisantos@fujitsu.com');
-                        $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
-                        $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
-                        $mail->send();
                     }
                     $this->agreement_list_service->store($datastorage);
                 }
             }
+            $mail = new PHPMailer;
+            $mail->isSMTP();
+            $mail->SMTPDebug  = 0;
+            $mail->SMTPAuth = false;
+            $mail->SMTPAutoTLS = false;
+            $mail->Port = 25;
+            $mail->Host = "203.127.104.86";
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->From = "fdtp.system@ph.fujitsu.com";
+            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
+            $mail->addAddress('jonathandave.detorres@fujitsu.com');
+            $mail->addAddress('reinamae.sorisantos@fujitsu.com');
+            $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
+            $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
+            $mail->send();
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
             $result = $this->errorResponse($e);
         }
+
+        LogActivity::addToLog('Stored Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
     public function downloadFormat()
@@ -308,6 +313,16 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+    public function loadTaskToDo()
+    {
+        $result = $this->successResponse('Load Successfully');
+        try {
+            $result['data'] = $this->agreement_list_service->loadTaskToDo();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
     public function loadWithCodeRequest()
     {
         $result = $this->successResponse("Load Successfully");
@@ -398,7 +413,7 @@ class AgreementListController extends Controller
                 'date_to' => Carbon::parse($request['date_to'])->format('Y/m/d'),
             ];
             $result['data'] = $this->agreement_list_service->loadCountResult($data);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -442,6 +457,7 @@ class AgreementListController extends Controller
             //throw $e;
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Updated Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
 
@@ -451,7 +467,7 @@ class AgreementListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteAgreement($id, $emp_id)
     {
         $result = $this->successResponse("Deleted Successfully");
         try {
@@ -459,6 +475,7 @@ class AgreementListController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Delete Agreement Request', $emp_id,  $result["status"]);
         return $result;
     }
 }

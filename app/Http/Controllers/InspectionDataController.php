@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use App\Http\Requests\InspectionDataRequest;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
@@ -54,6 +55,8 @@ class InspectionDataController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+
+        LogActivity::addToLog('Stored Inspection Data Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
 
@@ -85,6 +88,8 @@ class InspectionDataController extends Controller
             //throw $e;
             $result = $this->errorResponse($e);
         }
+
+        LogActivity::addToLog('Stored Designer Answer Request', $update_request->requestor_employee_id,  $result["status"]);
         return $result;
     }
 

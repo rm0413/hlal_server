@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\ActivityLogRepository;
+use App\Repositories\Contracts\ActivityLogRepositoryContract;
 use App\Repositories\Contracts\UserRepositoryContract;
 use App\Repositories\UserRepository;
 use App\Repositories\Contracts\UnitRepositoryContract;
@@ -60,6 +62,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             DesignerSectionRepositoryContract::class,
             DesignerSectionRepository::class
+        );
+        $this->app->bind(
+            ActivityLogRepositoryContract::class,
+            ActivityLogRepository::class
         );
     }
 

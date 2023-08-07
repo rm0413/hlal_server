@@ -17,6 +17,25 @@ class AgreementListService implements AgreementListServiceContract
     {
         return $this->agreement_list_contract->store($data);
     }
+    public function loadTaskToDo()
+    {
+
+        $result =  $this->agreement_list_contract->loadTaskToDo();
+        $generate_code_count = 0;
+        // $generate_code_count = 0;
+        $datastorage = [];
+
+        // foreach ($result as $data) {
+        //     if (
+        //         empty($data['attachment'])  &&
+        //         empty($data['agreement_list_code']) &&
+        //         empty($data['designer_section_answer'])
+        //     ) {
+        //         $generate_code_count++;
+        //     }elseif()
+        // }
+        return $generate_code_count;
+    }
     public function loadWithNoCodeRequest()
     {
         $result =  $this->agreement_list_contract->loadWithNoCodeRequest();
@@ -436,6 +455,8 @@ class AgreementListService implements AgreementListServiceContract
         $hinsei_ng = 0;
         $lsa_request_count = 0;
         $lsa_ok = 0;
+        $lsa_request_count = 0;
+        $hinsei_request_count = 0;
         $lsa_ng = 0;
         $hinsei_request_count = 0;
         $lsa_request_pending = 0;

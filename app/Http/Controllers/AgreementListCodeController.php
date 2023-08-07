@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use App\Http\Requests\AgreementListCodeRequest;
 use App\Traits\ResponseTrait;
 
@@ -50,6 +51,7 @@ class AgreementListCodeController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Stored Agreement List Code Request', $request->emp_id,  $result["status"]);
         return $result;
     }
 

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\ResponseTrait;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
+use App\Helpers\LogActivity;
 class UnitRequest extends FormRequest
 {
     use ResponseTrait;
@@ -25,7 +25,7 @@ class UnitRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+     public function rules()
     {
         return [
             'unit_name' => 'required|unique:units,unit_name,NULL,id',
@@ -41,8 +41,9 @@ class UnitRequest extends FormRequest
             "unit_created_by.required" => "Unit created by is required."
         ];
     }
-    public function failedValidation(Validator $validator){
+    protected function failedValidation(Validator $validator)
+    {
         $response = $this->failedValidationResponse($validator->errors());
-        throw new HttpResponseException(response()->json($response));
+        throw new HttpResponseException(response()->json($response, 200));
     }
 }

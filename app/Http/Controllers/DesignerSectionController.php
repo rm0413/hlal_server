@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use App\Http\Requests\DesignerSectionRequest;
 use App\Services\DesignerSectionService;
 use App\Traits\ResponseTrait;
@@ -151,6 +152,8 @@ class DesignerSectionController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+
+        LogActivity::addToLog('Stored Designer Answer Request', $request->emp_id,  $result["status"]);
         return $result;
     }
 
@@ -171,6 +174,8 @@ class DesignerSectionController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+
+        LogActivity::addToLog('Stored Single Designer Answer Request', $request->emp_id,  $result["status"]);
         return $result;
     }
 
@@ -206,6 +211,7 @@ class DesignerSectionController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Updated Designer Answer Request', $request->emp_id,  $result["status"]);
         return $result;
     }
 

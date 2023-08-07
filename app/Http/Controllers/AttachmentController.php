@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use App\Http\Requests\AttachmentRequest;
 use App\Services\AttachmentService;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 
 class AttachmentController extends Controller
@@ -51,7 +53,7 @@ class AttachmentController extends Controller
             foreach ($request->agreement_request_id as $agreement_req_id) {
                 $file = $request->file('file_path_attachment');
                 $file_name = $file->getClientOriginalName();
-                $path = $file->storeAs('uploads', $year.$month.$day.'-'.$file_name, ['disk' => 'public']);
+                $path = $file->storeAs('uploads', $year . $month . $day . '-' . $file_name, ['disk' => 'public']);
                 $data = [
                     'agreement_request_id' => $agreement_req_id,
                     'file_path_attachment' => $path,
@@ -61,6 +63,7 @@ class AttachmentController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Add Attachment Request', $request->emp_id,  $result["status"]);
         return $result;
     }
     public function downloadAttachment(Request $request)
@@ -71,12 +74,12 @@ class AttachmentController extends Controller
             $file_name = explode('/', $file_upload);
             $name = $file_name[1];
 
-            $file_path = storage_path('app/public/uploads/' . $name);
-            $result =  response()->download($file_path);
+            // $file_path = storage_path('app\\public\\uploads\\' . $name);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        return $result;
+        LogActivity::addToLog('Download Attachment', $request->emp_id,  $result['status']);
+        return response()->download(storage_path("app\\public\\uploads\\" . $name), 'Request.pdf', ['content-type' => 'application/pdf']);
     }
     public function viewAttachement(Request $request)
     {
@@ -84,7 +87,7 @@ class AttachmentController extends Controller
         $file_name = explode('/', $file_upload);
         $name = $file_name[1];
 
-        return response()->file(storage_path('app/public/uploads/' . $name), ['content-type' => 'application/pdf']);
+        return response()->file(storage_path("app\\public\\uploads\\" . $name), ['content-type' => 'application/pdf']);
     }
     /**
      * Display the specified resource.

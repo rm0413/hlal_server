@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Traits\ResponseTrait;
@@ -27,7 +28,7 @@ class UserController extends Controller
         $result = $this->successResponse("Loaded Successfully");
         try {
             $result["data"] = $this->user_service->loadUserProfile();
-        } catch (Error\Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
 
@@ -49,9 +50,11 @@ class UserController extends Controller
                 'role_access' => $request->role_access
             ];
             $this->user_service->store($data);
-        } catch (Error\Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog($result["message"], $request->employee_id,  $result["status"]);
+
         return $result;
     }
 
@@ -66,7 +69,7 @@ class UserController extends Controller
         $result = $this->successResponse('Loaded Successfully');
         try {
             $result['data'] = $this->user_service->showProfile($id);
-        } catch (Error\Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -88,7 +91,7 @@ class UserController extends Controller
                 'role_access' => $request->role_access,
             ];
             $this->user_service->updateUserPortal($id, $data);
-        } catch (Error\Exception $e) {
+        } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
         return $result;
@@ -105,10 +108,21 @@ class UserController extends Controller
         $result = $this->successResponse('Deleted Successfully!');
         try {
             $this->user_service->delete($id);
-        } catch (Error\Exception $e) {
+        } catch (\Exception $e) {
 
             $result = $this->errorResponse($e);
         }
         return $result;
+    }
+    public function loadActivityLogs()
+    {
+        $result = $this->successResponse("Activitiy Logs Loaded Successfully", 200);
+        try {
+            $result["data"] = $this->user_service->loadActivityLogs();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+
+        return $this->returnResponse($result);
     }
 }

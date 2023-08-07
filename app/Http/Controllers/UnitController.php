@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use App\Http\Requests\UnitRequest;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
@@ -40,7 +41,7 @@ class UnitController extends Controller
      */
     public function store(UnitRequest $request)
     {
-        $result = $this->successResponse("Added Successfully.");
+        $result = $this->successResponse("Added Successfully.", 200);
         try {
             $data = [
                 "unit_name" => $request["unit_name"],
@@ -51,7 +52,10 @@ class UnitController extends Controller
         } catch (\Exception $e) {
             //throw $e;
             $result = $this->errorResponse($e);
+
         }
+        LogActivity::addToLog('Create Unit', $request->unit_created_by,  $result["status"]);
+
         return $result;
     }
 
@@ -75,7 +79,7 @@ class UnitController extends Controller
      */
     public function update(UnitRequest $request, $id)
     {
-        $result = $this->successResponse("Updated Successfully.");
+        $result = $this->successResponse("Updated Successfully.", 200);
         try {
             $data = [
                 "unit_name" => $request["unit_name"],
@@ -87,6 +91,7 @@ class UnitController extends Controller
             //throw $e;
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Updated Unit Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
 
@@ -96,7 +101,17 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    // public function destroy($id)
+    // {
+    //     $result = $this->successResponse("Deleted Successfully");
+    //     try {
+    //         $result['data'] = $this->unit_service->delete($id);
+    //     } catch (\Exception $e) {
+    //         $result = $this->errorResponse($e);
+    //     }
+    //     return $result;
+    // }
+    public function deleteUnit($id, $emp_id)
     {
         $result = $this->successResponse("Deleted Successfully");
         try {
@@ -104,6 +119,7 @@ class UnitController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Delete Unit Request', $emp_id,  $result["status"]);
         return $result;
     }
 }

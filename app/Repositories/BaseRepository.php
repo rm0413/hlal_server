@@ -112,4 +112,12 @@ abstract class BaseRepository implements BaseContract
             ->whereBetween('created_at', ["{$data['date_from']} 00:00:00", "{$data['date_to']} 24:00:00"])
             ->get();
     }
+    public function loadActivityLogs()
+    {
+        return $this->model->with('hris_masterlist')->latest()->get();
+    }
+    public function loadTaskToDo()
+    {
+        return $this->model->with('hris_masterlist', 'units', 'inspection_data', 'agreement_list_code', 'designer_section_answer', 'attachment')->get();
+    }
 }

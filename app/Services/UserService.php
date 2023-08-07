@@ -4,15 +4,43 @@ namespace App\Services;
 
 use App\Services\Contracts\UserServiceContract;
 use App\Repositories\Contracts\UserRepositoryContract;
+use App\Repositories\Contracts\ActivityLogRepositoryContract;
 
 class UserService implements UserServiceContract
 {
 
     protected $user_repository_contract;
+    protected $logActivity;
 
-    public function __construct(UserRepositoryContract $user_repository_contract)
+    public function __construct(UserRepositoryContract $user_repository_contract , ActivityLogRepositoryContract $logActivity)
     {
         $this->user_repository_contract = $user_repository_contract;
+        $this->logActivity = $logActivity;
+
+    }
+    public function loadActivityLogs()
+    {
+        $load_activity_logs = $this->logActivity->loadActivityLogs();
+
+        $activity_logs = [];
+
+        foreach ($load_activity_logs as $load_activity_log)
+        {
+            $activity_logs[] =
+            [
+                'id'            =>  $load_activity_log->id,
+                'picture'       =>  $load_activity_log->hris_masterlist['emp_photo'],
+                'name'          =>  $load_activity_log->hris_masterlist['emp_first_name'] . ' ' . $load_activity_log->hris_masterlist['emp_middle_name'] . ' ' . $load_activity_log->hris_masterlist['emp_last_name'],
+                'ip'            =>  $load_activity_log->ip,
+                'subject'       =>  $load_activity_log->subject,
+                'status'        =>  $load_activity_log->status,
+                'url'           =>  $load_activity_log->url,
+                'method'        =>  $load_activity_log->method,
+                'agent'         =>  $load_activity_log->agent,
+                'created_at'    =>  date('m-d-Y h:i:s', strtotime($load_activity_log->created_at)),
+            ];
+        }
+        return $activity_logs;
     }
     public function loadAll()
     {

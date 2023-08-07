@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\LogActivity;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use App\Http\Requests\GenerateAgreementCodeRequest;
@@ -76,7 +77,7 @@ class GenerateAgreementCodeController extends Controller
                 ];
                 $result['data'] = $this->agreement_list_code_service->store($agreement_list_code_data);
                 $where = [['agreement_request_id', '=', $agreement_id]];
-                $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with, $whereHas);
+                $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with,);
             }
             $file_name = storage_path("formatStorage\Excel_format.xlsx");
             // $file_path = public_path("storage/files/test.xlsx");
@@ -135,6 +136,7 @@ class GenerateAgreementCodeController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog('Generate Agreement Code', $request->emp_id,  $result["status"]);
         return $result;
     }
 

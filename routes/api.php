@@ -37,6 +37,8 @@ Route::apiResource('/attachment', AttachmentController::class);
 Route::apiResource('designer-section-answer', DesignerSectionController::class);
 
 Route::get('/load-with-code-request', [AgreementListController::class, 'loadWithCodeRequest']);
+Route::get('/load-task-to-do', [AgreementListController::class, 'loadTaskToDo']);
+Route::get('/load-activity-logs', [UserController::class, 'loadActivityLogs']);
 Route::get('/load-with-code-inspection', [AgreementListController::class, 'loadCodeWithInspectionData']);
 Route::get('/load-with-code-designer-section', [AgreementListController::class, 'loadCodeWithDesignerSection']);
 Route::get('/load-with-no-code-request', [AgreementListController::class, 'loadWithNoCodeRequest']);
@@ -45,8 +47,12 @@ Route::get('/count-request', [AgreementListController::class, 'countRequest']);
 Route::post('/upload-multiple-agreement-request', [AgreementListController::class, 'multipleStore']);
 Route::get('/load-part-number-with-critical', [AgreementListController::class, 'loadPartNumberWithCritical']);
 Route::get('/load-with-code-attachment', [AgreementListController::class, 'loadWithCodeAttachment']);
+Route::delete('/delete-unit/{id}/{emp_id}', [UnitController::class, 'deleteUnit']);
+Route::delete('/delete-agreement-list/{id}/{emp_id}', [AgreementListController::class, 'deleteAgreement']);
 Route::post('/insert-designer-answer', [DesignerSectionController::class, 'storeSingleDesignerAnswer']);
 Route::get('/show-monitoring-list/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoring']);
 Route::get('/show-monitoring-list-edit/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoringList']);
 Route::get('/load-count-result', [AgreementListController::class, 'loadCountResult']);
 Route::get('/export-monitoring-list/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'exportMonitoringList']);
+
+Route::post('download-attachment', [AttachmentController::class, 'downloadAttachment']);
