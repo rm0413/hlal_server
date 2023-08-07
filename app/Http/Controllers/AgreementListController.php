@@ -101,7 +101,7 @@ class AgreementListController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Stored Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        LogActivity::addToLog('Added Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
 
         return $result;
     }
@@ -173,7 +173,7 @@ class AgreementListController extends Controller
             $result = $this->errorResponse($e);
         }
 
-        LogActivity::addToLog('Stored Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
     public function downloadFormat()
@@ -475,7 +475,7 @@ class AgreementListController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Delete Agreement Request', $emp_id,  $result["status"]);
+        LogActivity::addToLog('Removed Agreement Request', $emp_id,  $result["status"]);
         return $result;
     }
 }

@@ -51,7 +51,7 @@ class AgreementListCodeController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Stored Agreement List Code Request', $request->emp_id,  $result["status"]);
+        LogActivity::addToLog('Added Agreement List Code Request', $request->emp_id,  $result["status"]);
         return $result;
     }
 

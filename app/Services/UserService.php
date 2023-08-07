@@ -18,9 +18,9 @@ class UserService implements UserServiceContract
         $this->logActivity = $logActivity;
 
     }
-    public function loadActivityLogs()
+    public function loadActivityLogs($data)
     {
-        $load_activity_logs = $this->logActivity->loadActivityLogs();
+        $load_activity_logs = $this->logActivity->loadActivityLogs($data);
 
         $activity_logs = [];
 

@@ -63,7 +63,7 @@ class AttachmentController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Add Attachment Request', $request->emp_id,  $result["status"]);
+        LogActivity::addToLog('Added Attachment Request', $request->emp_id,  $result["status"]);
         return $result;
     }
     public function downloadAttachment(Request $request)
@@ -78,7 +78,7 @@ class AttachmentController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Download Attachment', $request->emp_id,  $result['status']);
+        LogActivity::addToLog('Downloaded Attachment', $request->emp_id,  $result['status']);
         return response()->download(storage_path("app\\public\\uploads\\" . $name), 'Request.pdf', ['content-type' => 'application/pdf']);
     }
     public function viewAttachement(Request $request)

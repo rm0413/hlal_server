@@ -8,6 +8,7 @@ use App\Services\UserService;
 use App\Traits\ResponseTrait;
 use App\Http\Requests\UserRequest;
 use Error\Exception;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -114,15 +115,19 @@ class UserController extends Controller
         }
         return $result;
     }
-    public function loadActivityLogs()
+    public function loadActivityLogs(Request $data)
     {
         $result = $this->successResponse("Activitiy Logs Loaded Successfully", 200);
         try {
-            $result["data"] = $this->user_service->loadActivityLogs();
+            $datastorage = [
+                'date_from' => Carbon::parse($data['date_from'])->format('Y/m/d'),
+                'date_to' => Carbon::parse($data['date_to'])->format('Y/m/d'),
+            ];
+            $result["data"] = $this->user_service->loadActivityLogs($datastorage);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
 
-        return $this->returnResponse($result);
+        return $result;
     }
 }
