@@ -49,6 +49,7 @@ Route::get('/load-part-number-with-critical', [AgreementListController::class, '
 Route::get('/load-with-code-attachment', [AgreementListController::class, 'loadWithCodeAttachment']);
 Route::delete('/delete-unit/{id}/{emp_id}', [UnitController::class, 'deleteUnit']);
 Route::delete('/delete-agreement-list/{id}/{emp_id}', [AgreementListController::class, 'deleteAgreement']);
+Route::delete('/delete-user/{id}/{emp_id}', [UserController::class, 'deleteUser']);
 Route::post('/insert-designer-answer', [DesignerSectionController::class, 'storeSingleDesignerAnswer']);
 Route::get('/show-monitoring-list/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoring']);
 Route::get('/show-monitoring-list-edit/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoringList']);

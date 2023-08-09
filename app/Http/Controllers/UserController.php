@@ -54,7 +54,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog($result["message"], $request->employee_id,  $result["status"]);
+        LogActivity::addToLog("User Added Successfully", $request->emp_id,  $result["status"]);
 
         return $result;
     }
@@ -95,6 +95,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog("User Updated Successfully", $request->emp_id,  $result["status"]);
         return $result;
     }
 
@@ -104,7 +105,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteUser($id, $emp_id)
     {
         $result = $this->successResponse('Deleted Successfully!');
         try {
@@ -113,6 +114,7 @@ class UserController extends Controller
 
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog("Removed User Successfully", $emp_id,  $result["status"]);
         return $result;
     }
     public function loadActivityLogs(Request $data)
