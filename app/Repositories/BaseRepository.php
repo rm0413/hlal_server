@@ -116,6 +116,7 @@ abstract class BaseRepository implements BaseContract
     {
         return $this->model->with('hris_masterlist')
         ->whereBetween('created_at', ["{$data['date_from']} 00:00:00", "{$data['date_to']} 24:00:00"])
+        ->orderBy('created_at', 'desc')
         ->latest()->get();
     }
     public function loadTaskToDo()
