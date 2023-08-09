@@ -65,7 +65,7 @@ class UserService implements UserServiceContract
                 'emp_email' => $users->fdtp_portal_user['email'],
             ];
         }
-
+        rsort($datastorage);
         return $datastorage;
     }
     public function store($data)
