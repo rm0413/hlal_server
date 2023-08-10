@@ -12,6 +12,7 @@ interface AgreementListServiceContract{
     public function loadCodeWithInspectionData();
     public function loadMonitoringList();
     public function loadCountResult($data);
+    public function countRequest($data);
     public function showWhereHas($id, $where, $with, $whereHas);
 
 }

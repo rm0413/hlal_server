@@ -317,9 +317,9 @@ class AgreementListService implements AgreementListServiceContract
         rsort($datastorage);
         return $datastorage;
     }
-    public function countRequest()
+    public function countRequest($data)
     {
-        $result = $this->agreement_list_contract->loadAgreementListRequest();
+        $result = $this->agreement_list_contract->countRequest($data);
         $hinsei_count = 0;
         $lsa_count = 0;
         $lsa_ok = 0;

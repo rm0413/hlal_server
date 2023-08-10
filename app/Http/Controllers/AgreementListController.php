@@ -413,11 +413,15 @@ class AgreementListController extends Controller
         }
         return $result;
     }
-    public function countRequest()
+    public function countRequest(Request $data)
     {
         $result = $this->successResponse("Load Count Request Successfully");
         try {
-            $result['data'] = $this->agreement_list_service->countRequest();
+            $data = [
+                'date_from' => Carbon::parse($data['date_from'])->format('Y/m/d'),
+                'date_to' => Carbon::parse($data['date_to'])->format('Y/m/d'),
+            ];
+            $result['data'] = $this->agreement_list_service->countRequest($data);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
