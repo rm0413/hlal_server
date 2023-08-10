@@ -23,7 +23,7 @@ interface BaseContract
     public function loadInspectionData();
     public function loadMonitoringList();
     public function loadCountResult($data);
-    public function loadActivityLogs();
+    public function loadActivityLogs($data);
     public function loadTaskToDo();
     public function updateEmail($id, $data);
 }

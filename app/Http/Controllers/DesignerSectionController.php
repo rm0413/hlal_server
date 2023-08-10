@@ -153,7 +153,7 @@ class DesignerSectionController extends Controller
             $result = $this->errorResponse($e);
         }
 
-        LogActivity::addToLog('Stored Designer Answer Request', $request->emp_id,  $result["status"]);
+        LogActivity::addToLog('Added Designer Answer Request', $request->emp_id,  $result["status"]);
         return $result;
     }
 
@@ -175,7 +175,7 @@ class DesignerSectionController extends Controller
             $result = $this->errorResponse($e);
         }
 
-        LogActivity::addToLog('Stored Single Designer Answer Request', $request->emp_id,  $result["status"]);
+        LogActivity::addToLog('Added Single Designer Answer Request', $request->emp_id,  $result["status"]);
         return $result;
     }
 

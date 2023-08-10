@@ -136,7 +136,7 @@ class GenerateAgreementCodeController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Generate Agreement Code', $request->emp_id,  $result["status"]);
+        LogActivity::addToLog('Generated Agreement Code', $request->emp_id,  $result["status"]);
         return $result;
     }
 

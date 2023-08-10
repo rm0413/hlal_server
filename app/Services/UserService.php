@@ -18,9 +18,9 @@ class UserService implements UserServiceContract
         $this->logActivity = $logActivity;
 
     }
-    public function loadActivityLogs()
+    public function loadActivityLogs($data)
     {
-        $load_activity_logs = $this->logActivity->loadActivityLogs();
+        $load_activity_logs = $this->logActivity->loadActivityLogs($data);
 
         $activity_logs = [];
 
@@ -66,7 +66,7 @@ class UserService implements UserServiceContract
                 'email_notification' => $users->employee_notification['recieve_notification']
             ];
         }
-
+        rsort($datastorage);
         return $datastorage;
     }
     public function store($data)

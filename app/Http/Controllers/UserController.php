@@ -9,6 +9,7 @@ use App\Traits\ResponseTrait;
 use App\Http\Requests\UserRequest;
 use Error\Exception;
 use App\Services\EmployeeNotificationService;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -61,7 +62,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog($result["message"], $request->employee_id,  $result["status"]);
+        LogActivity::addToLog("User Added Successfully", $request->emp_id,  $result["status"]);
 
         return $result;
     }
@@ -102,6 +103,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog("User Updated Successfully", $request->emp_id,  $result["status"]);
         return $result;
     }
 
@@ -111,7 +113,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function deleteUser($id, $emp_id)
     {
         $result = $this->successResponse('Deleted Successfully!');
         try {
@@ -120,17 +122,22 @@ class UserController extends Controller
 
             $result = $this->errorResponse($e);
         }
+        LogActivity::addToLog("Removed User Successfully", $emp_id,  $result["status"]);
         return $result;
     }
-    public function loadActivityLogs()
+    public function loadActivityLogs(Request $data)
     {
         $result = $this->successResponse("Activitiy Logs Loaded Successfully", 200);
         try {
-            $result["data"] = $this->user_service->loadActivityLogs();
+            $datastorage = [
+                'date_from' => Carbon::parse($data['date_from'])->format('Y/m/d'),
+                'date_to' => Carbon::parse($data['date_to'])->format('Y/m/d'),
+            ];
+            $result["data"] = $this->user_service->loadActivityLogs($datastorage);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
 
-        return $this->returnResponse($result);
+        return $result;
     }
 }

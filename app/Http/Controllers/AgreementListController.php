@@ -101,7 +101,7 @@ class AgreementListController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Stored Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        LogActivity::addToLog('Added Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
 
         return $result;
     }
@@ -173,7 +173,7 @@ class AgreementListController extends Controller
             $result = $this->errorResponse($e);
         }
 
-        LogActivity::addToLog('Stored Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
     public function downloadFormat()
@@ -228,6 +228,26 @@ class AgreementListController extends Controller
             ['part_number', '=', $part_number],
         ];
         $whereHas = 'designer_section_answer';
+        try {
+            $result['data'] = $this->agreement_list_service->showMonitoringList($id, $where, $with, $whereHas);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function showAttachment($unit_id, $supplier_name, $part_number)
+    {
+        $result = $this->successResponse('Load Successfully');
+        $with = [
+            'agreement_list_code', 'agreement_list_code.generate_code', 'designer_section_answer', 'units', 'attachment', 'inspection_data'
+        ];
+        $id = [];
+        $where = [
+            ['unit_id', '=', $unit_id,],
+            ['supplier_name', '=', $supplier_name],
+            ['part_number', '=', $part_number],
+        ];
+        $whereHas = 'attachment';
         try {
             $result['data'] = $this->agreement_list_service->showMonitoringList($id, $where, $with, $whereHas);
         } catch (\Exception $e) {
@@ -432,7 +452,7 @@ class AgreementListController extends Controller
             $data = [
                 "trial_number" => $request["trial_number"],
                 "request_date" => $request["request_date"],
-                "additional_request_qty_date" => $request["additional_request_qty_date"],
+                "additional_request_qty_date" => $request["additional_request_qty_date"] ? Carbon::parse($request["additional_request_qty_date"])->toDateString() : null,
                 "tri_number" => $request["tri_number"],
                 "tri_quantity" => $request["tri_quantity"],
                 "request_person" => $request["request_person"],
@@ -475,7 +495,7 @@ class AgreementListController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Delete Agreement Request', $emp_id,  $result["status"]);
+        LogActivity::addToLog('Removed Agreement Request', $emp_id,  $result["status"]);
         return $result;
     }
 }

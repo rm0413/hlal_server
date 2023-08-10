@@ -54,7 +54,7 @@ class UnitController extends Controller
             $result = $this->errorResponse($e);
 
         }
-        LogActivity::addToLog('Create Unit', $request->unit_created_by,  $result["status"]);
+        LogActivity::addToLog('Created Unit', $request->unit_created_by,  $result["status"]);
 
         return $result;
     }
@@ -119,7 +119,7 @@ class UnitController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Delete Unit Request', $emp_id,  $result["status"]);
+        LogActivity::addToLog('Removed Unit Request', $emp_id,  $result["status"]);
         return $result;
     }
 }
