@@ -25,4 +25,5 @@ interface BaseContract
     public function loadCountResult($data);
     public function loadActivityLogs();
     public function loadTaskToDo();
+    public function updateEmail($id, $data);
 }

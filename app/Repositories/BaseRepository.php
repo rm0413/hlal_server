@@ -18,7 +18,7 @@ abstract class BaseRepository implements BaseContract
     }
     public function loadUserProfile()
     {
-        return $this->model->with('hris_masterlist', 'fdtp_portal_user')->get();
+        return $this->model->with('employee_notification','hris_masterlist', 'fdtp_portal_user')->get();
     }
     public function store($data)
     {
@@ -26,11 +26,15 @@ abstract class BaseRepository implements BaseContract
     }
     public function showProfile($id)
     {
-        return $this->model->with('hris_masterlist', 'fdtp_portal_user')->find($id);
+        return $this->model->with('employee_notification','hris_masterlist', 'fdtp_portal_user')->find($id);
     }
     public function update($id, $data)
     {
         return $this->model->where('id', $id)->update($data);
+    }
+    public function updateEmail($id, $data)
+    {
+        return $this->model->where('emp_id', $id)->update($data);
     }
     public function updateMultiple($data, $id)
     {

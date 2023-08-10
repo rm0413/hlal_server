@@ -6,6 +6,7 @@ use App\Http\Controllers\GenerateAgreementCodeController;
 use App\Http\Controllers\InspectionDataController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DesignerSectionController;
+use App\Http\Controllers\EmployeeNotification;
 use App\Http\Controllers\UnitController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,7 @@ Route::apiResource('/generate-agreement-code', GenerateAgreementCodeController::
 Route::apiResource('/inspection-data', InspectionDataController::class);
 Route::apiResource('/attachment', AttachmentController::class);
 Route::apiResource('designer-section-answer', DesignerSectionController::class);
+Route::apiResource('employee-notification', EmployeeNotification::class);
 
 Route::get('/load-with-code-request', [AgreementListController::class, 'loadWithCodeRequest']);
 Route::get('/load-task-to-do', [AgreementListController::class, 'loadTaskToDo']);

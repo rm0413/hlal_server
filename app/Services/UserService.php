@@ -63,6 +63,7 @@ class UserService implements UserServiceContract
                 'position' => $users->hris_masterlist['position'],
                 'section_code' => $users->hris_masterlist['section_code'],
                 'emp_email' => $users->fdtp_portal_user['email'],
+                'email_notification' => $users->employee_notification['recieve_notification']
             ];
         }
 
@@ -90,6 +91,7 @@ class UserService implements UserServiceContract
                 "section" =>  $result["hris_masterlist"]["section"],
                 'section_code' => $result->hris_masterlist['section_code'],
                 'email' => $result->fdtp_portal_user['email'],
+                'email_notification' => $result->employee_notification['recieve_notification']
             ];
         // }
         rsort($datastorage);

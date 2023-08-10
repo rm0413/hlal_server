@@ -8,15 +8,18 @@ use App\Services\UserService;
 use App\Traits\ResponseTrait;
 use App\Http\Requests\UserRequest;
 use Error\Exception;
+use App\Services\EmployeeNotificationService;
 
 class UserController extends Controller
 {
     use ResponseTrait;
     protected $user_service;
+    protected $employee_notification_service;
 
-    public function __construct(UserService $user_service)
+    public function __construct(UserService $user_service, EmployeeNotificationService $employee_notification_service)
     {
         $this->user_service = $user_service;
+        $this->employee_notification_service = $employee_notification_service;
     }
     /**
      * Display a listing of the resource.
@@ -49,7 +52,12 @@ class UserController extends Controller
                 'employee_id' => $request->employee_id,
                 'role_access' => $request->role_access
             ];
+            $datastorage = [
+                'emp_id' => $data['employee_id']
+            ];
             $this->user_service->store($data);
+            $this->employee_notification_service->store($datastorage);
+
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

@@ -18,7 +18,9 @@ use App\Repositories\Contracts\GenerateAgreementCodeRepositoryContract;
 use App\Repositories\Contracts\InspectionDataRepositoryContract;
 use App\Repositories\Contracts\AttachmentRepositoryContract;
 use App\Repositories\Contracts\DesignerSectionRepositoryContract;
+use App\Repositories\Contracts\EmployeeNotificationRepositoryContract;
 use App\Repositories\DesignerSectionRepository;
+use App\Repositories\EmployeeNotificationRepository;
 use App\Repositories\GenerateAgreementCodeRepository;
 use App\Repositories\InspectionDataRepository;
 
@@ -66,6 +68,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ActivityLogRepositoryContract::class,
             ActivityLogRepository::class
+        );
+        $this->app->bind(
+            EmployeeNotificationRepositoryContract::class,
+            EmployeeNotificationRepository::class
         );
     }
 

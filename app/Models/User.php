@@ -58,4 +58,7 @@ class User extends Authenticatable
     public function hris_masterlist(){
         return $this->hasOne(HrisMasterlist::class, "emp_pms_id", "employee_id");
     }
+    public function employee_notification(){
+        return $this->hasOne(EmployeeNotification::class, "emp_id", "employee_id");
+    }
 }

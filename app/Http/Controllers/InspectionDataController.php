@@ -89,7 +89,7 @@ class InspectionDataController extends Controller
             $result = $this->errorResponse($e);
         }
 
-        LogActivity::addToLog('Stored Designer Answer Request', $update_request->requestor_employee_id,  $result["status"]);
+        LogActivity::addToLog('Update Designer Answer Request', $update_request->requestor_employee_id,  $result["status"]);
         return $result;
     }
 

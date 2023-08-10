@@ -17,24 +17,22 @@ class AgreementListService implements AgreementListServiceContract
     {
         return $this->agreement_list_contract->store($data);
     }
+    public function show($id, $where, $with)
+    {
+        return $this->agreement_list_contract->show($id, $where, $with);
+    }
     public function loadTaskToDo()
     {
+        $request_data = $this->agreement_list_contract->loadCodeWithInspectionData();
+        $generate_data = $this->agreement_list_contract->loadWithCodeRequest();
+        $inspection_data = $this->agreement_list_contract->loadCodeWithInspectionData();
+        $datastorage = [
+            'request_generate_data' => ['part_number' => $request_data, 'total_count' => count($request_data)],
+            'designer_data' => ['part_number' => $generate_data, 'total_count' => count($generate_data)],
+            'inspection_data' => ['part_number' => $inspection_data, 'total_count' => count($inspection_data)]
+        ];
 
-        $result =  $this->agreement_list_contract->loadTaskToDo();
-        $generate_code_count = 0;
-        // $generate_code_count = 0;
-        $datastorage = [];
-
-        // foreach ($result as $data) {
-        //     if (
-        //         empty($data['attachment'])  &&
-        //         empty($data['agreement_list_code']) &&
-        //         empty($data['designer_section_answer'])
-        //     ) {
-        //         $generate_code_count++;
-        //     }elseif()
-        // }
-        return $generate_code_count;
+        return $datastorage;
     }
     public function loadWithNoCodeRequest()
     {

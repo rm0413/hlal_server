@@ -2,7 +2,8 @@
 
 namespace App\Services\Contracts;
 
-interface AgreementListServiceContract{
+interface AgreementListServiceContract
+{
     public function store($data);
     public function loadWithCodeRequest();
     public function loadWithNoCodeRequest();
@@ -13,5 +14,5 @@ interface AgreementListServiceContract{
     public function loadMonitoringList();
     public function loadCountResult($data);
     public function showWhereHas($id, $where, $with, $whereHas);
-
+    public function show($id, $where, $with);
 }
