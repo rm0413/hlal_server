@@ -54,7 +54,7 @@ class UserController extends Controller
                 'role_access' => $request->role_access
             ];
             $datastorage = [
-                'emp_id' => $data['employee_id']
+                'emp_id' => $request['employee_id']
             ];
             $this->user_service->store($data);
             $this->employee_notification_service->store($datastorage);
@@ -62,7 +62,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog("User Added Successfully", $request->emp_id,  $result["status"]);
+        LogActivity::addToLog("User Added Successfully", $request['employee_id'],  $result["status"]);
 
         return $result;
     }

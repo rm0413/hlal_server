@@ -502,4 +502,15 @@ class AgreementListController extends Controller
         LogActivity::addToLog('Removed Agreement Request', $emp_id,  $result["status"]);
         return $result;
     }
+    public function deleteMonitoring($id, $emp_id)
+    {
+        $result = $this->successResponse("Deleted Successfully");
+        try {
+            $this->agreement_list_service->delete($id);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        LogActivity::addToLog('Removed Agreement Request', $emp_id,  $result["status"]);
+        return $result;
+    }
 }
