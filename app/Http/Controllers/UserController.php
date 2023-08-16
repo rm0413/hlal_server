@@ -38,6 +38,17 @@ class UserController extends Controller
 
         return $result;
     }
+    public function loadEmailList()
+    {
+        $result = $this->successResponse("Loaded Successfully");
+        try {
+            $result["data"] = $this->user_service->loadEmailList();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+
+        return $result;
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -62,7 +73,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog("User Added Successfully", $request->emp_id,  $result["status"]);
+        LogActivity::addToLog("User Added Successfully", $request['employee_id'],  $result["status"]);
 
         return $result;
     }

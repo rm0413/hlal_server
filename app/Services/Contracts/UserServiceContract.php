@@ -9,4 +9,5 @@ interface UserServiceContract {
     public function update($id, $data);
     public function updateUserPortal($id, $data);
     public function delete($id);
+    public function loadEmailList();
 }
