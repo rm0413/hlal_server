@@ -39,6 +39,7 @@ Route::apiResource('designer-section-answer', DesignerSectionController::class);
 Route::apiResource('employee-notification', EmployeeNotification::class);
 
 Route::get('/load-with-code-request', [AgreementListController::class, 'loadWithCodeRequest']);
+Route::get('/load-email-list', [UserController::class, 'loadEmailList']);
 Route::get('/load-task-to-do', [AgreementListController::class, 'loadTaskToDo']);
 Route::get('/load-activity-logs', [UserController::class, 'loadActivityLogs']);
 Route::get('/load-with-code-inspection', [AgreementListController::class, 'loadCodeWithInspectionData']);
