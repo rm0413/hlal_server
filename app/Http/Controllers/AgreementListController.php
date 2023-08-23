@@ -7,6 +7,7 @@ use App\Http\Requests\AgreementListMultipleRequest;
 use App\Http\Requests\DateRangeRequest;
 use App\Http\Requests\AgreementListRequest;
 use App\Services\AgreementListService;
+use App\Services\UserService;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -25,10 +26,11 @@ use Illuminate\Support\Facades\Response;
 class AgreementListController extends Controller
 {
     use ResponseTrait;
-    protected $agreement_list_service;
-    public function __construct(AgreementListService $agreementListService)
+    protected $agreement_list_service, $user_service;
+    public function __construct(AgreementListService $agreementListService, UserService $user_service)
     {
         $this->agreement_list_service = $agreementListService;
+        $this->user_service = $user_service;
     }
     /**
      * Display a listing of the resource.
@@ -55,6 +57,7 @@ class AgreementListController extends Controller
     public function store(AgreementListRequest $request)
     {
         $result = $this->successResponse("Request Added Successfully.");
+        $QCI_email_list = $this->user_service->loadQCIEmailList();
         try {
             $data = [
                 "trial_number" => $request["trial_number"],
@@ -90,14 +93,17 @@ class AgreementListController extends Controller
                 $mail->isHTML(true);                                  //Set email format to HTML
                 $mail->From = "fdtp.system@ph.fujitsu.com";
                 $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
-                $mail->addAddress('jonathandave.detorres@fujitsu.com');
-                $mail->addAddress('reinamae.sorisantos@fujitsu.com');
-                $mail->addAddress('gerly.hernandez@fujitsu.com');
+
+                foreach ($QCI_email_list as $email_list) {
+                    $mail->addAddress($email_list['emp_email']);
+                }
+                // $mail->addAddress('reinamae.sorisantos@fujitsu.com');
+                // $mail->addAddress('gerly.hernandez@fujitsu.com');
                 $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
                 $mail->Body    = view('inspection_email', compact('data'))->render();
                 $mail->send();
             }
-            $result['data']  = $this->agreement_list_service->store($data);
+            // $result['data']  = $this->agreement_list_service->store($data);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

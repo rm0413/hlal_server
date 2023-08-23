@@ -151,4 +151,14 @@ class UserController extends Controller
 
         return $result;
     }
+    public function loadQCIEmailList()
+    {
+        $result = $this->successResponse("Load QCI Successfully");
+        try{
+            $result['data'] = $this->user_service->loadQCIEmailList();
+        }catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
 }
