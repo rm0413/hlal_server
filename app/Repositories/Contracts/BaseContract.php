@@ -27,4 +27,5 @@ interface BaseContract
     public function loadActivityLogs($data);
     public function loadTaskToDo();
     public function updateEmail($id, $data);
+    public function loadWithoutDesignerAnswer();
 }

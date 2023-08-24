@@ -519,4 +519,14 @@ class AgreementListController extends Controller
         LogActivity::addToLog('Removed Agreement Request', $emp_id,  $result["status"]);
         return $result;
     }
+    public function loadWithoutDesignerAnswer()
+    {
+        $result = $this->successResponse('Load Successfully');
+        try{
+            $this->agreement_list_service->loadWithoutDesignerAnswer();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
 }

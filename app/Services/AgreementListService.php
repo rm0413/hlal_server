@@ -24,7 +24,7 @@ class AgreementListService implements AgreementListServiceContract
     public function loadTaskToDo()
     {
         $request_data = $this->agreement_list_contract->loadWithNoCodeRequest();
-        $generate_data = $this->agreement_list_contract->loadWithCodeRequest();
+        $generate_data = $this->agreement_list_contract->loadWithoutDesignerAnswer();
         $inspection_data = $this->agreement_list_contract->loadCodeWithInspectionData();
         $datastorage = [
             'request_generate_data' => ['part_number' => $request_data, 'total_count' => count($request_data)],
@@ -494,5 +494,9 @@ class AgreementListService implements AgreementListServiceContract
         ];
 
         return $datastorage_count_request;
+    }
+    public function loadWithoutDesignerAnswer()
+    {
+        return $this->agreement_list_contract->loadWithoutDesignerAnswer();
     }
 }
