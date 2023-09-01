@@ -24,8 +24,8 @@ class AgreementListService implements AgreementListServiceContract
     public function loadTaskToDo()
     {
         $request_data = $this->agreement_list_contract->loadWithNoCodeRequest();
-        $generate_data = $this->agreement_list_contract->loadWithCodeRequest();
-        $inspection_data = $this->agreement_list_contract->loadCodeWithInspectionData();
+        $generate_data = $this->agreement_list_contract->loadTaskToDo();
+        $inspection_data = $this->agreement_list_contract->countInspectionData();
         $datastorage = [
             'request_generate_data' => ['part_number' => $request_data, 'total_count' => count($request_data)],
             'designer_data' => ['part_number' => $generate_data, 'total_count' => count($generate_data)],
@@ -292,27 +292,39 @@ class AgreementListService implements AgreementListServiceContract
     public function loadPartNumberWithCritical()
     {
         $result = $this->agreement_list_contract->loadCodeWithInspectionData();
-        $part_number = [];
-        foreach ($result as $results) {
-            $part_number[] = $results->part_number;
+        $datastorage = [];
+        $code = [];
+        $part_no = [];
+        foreach ($result as $data) {
+            $code[] = $data['agreement_list_code']['generate_code']['code'];
+            $part_no[] =  $data['part_number'];
         }
-        foreach (array_unique($part_number) as $load_part_number) {
-            $datastorage[] = $load_part_number;
-        }
-        rsort($datastorage);
+        $datastorage = [
+            'part_number' => array_unique($part_no),
+            'code' => array_unique($code),
+        ];
+
+        rsort($datastorage['part_number']);
+        rsort($datastorage['code']);
         return $datastorage;
     }
     public function loadPartNumberWithCode()
     {
         $result = $this->agreement_list_contract->loadWithCodeRequest();
-        $part_number = [];
-        foreach ($result as $results) {
-            $part_number[] = $results->part_number;
+        $datastorage = [];
+        $code = [];
+        $part_no = [];
+        foreach ($result as $data) {
+            $code[] = $data['agreement_list_code']['generate_code']['code'];
+            $part_no[] =  $data['part_number'];
         }
-        foreach (array_unique($part_number) as $load_part_number) {
-            $datastorage[] = $load_part_number;
-        }
-        rsort($datastorage);
+        $datastorage = [
+            'part_number' => array_unique($part_no),
+            'code' => array_unique($code),
+        ];
+
+        rsort($datastorage['part_number']);
+        rsort($datastorage['code']);
         return $datastorage;
     }
     public function countRequest($data)

@@ -6,7 +6,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+<style>
+    hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 1px solid #ccc;
+        margin: 1em 0;
+        padding: 0;
+    }
 
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    th {
+        background: #a30b1a;
+        color: white;
+        padding: 10px;
+        font-size: 15px;
+    }
+</style>
 <body>
     <h4>Notice:</h4>
     <p style="color: #a30b1a;">Please be informed that this is a system generated email and all replies to this email
@@ -15,9 +38,23 @@
     <p>Hello!</p>
     <p>Below item have Critical Dimension and need to have data of CPK.</p>
     <p>Please update</p>
-    <ul><b>{{ $data["part_number"]}}</b>
+    {{-- <ul><b>{{ $data["part_number"]}}</b>
+        <li><code>{{$data["tri_number"]}}</code></li>
         <li><code>{{$data["dimension"]}}</code></li>
-    </ul>
+    </ul> --}}
+    <table style="width: 100%; text-align: center;">
+
+        <tr>
+            <th style="width: 8%;">TRI NUMBER</th>
+            <th style="width: 8%;">PART NUMBER</th>
+            <th style="width: 8%;">DIMENSION</th>
+        </tr>
+            <tr>
+                <td>{{ $data['tri_number'] }}</td>
+                <td>{{ $data['part_number'] }}</td>
+                <td>{{ $data['dimension'] }}</td>
+            </tr>
+    </table>
 
     <p>Thank you,<br>Parts PE</p>
     <br>

@@ -24,6 +24,7 @@ interface BaseContract
     public function loadMonitoringList();
     public function loadCountResult($data);
     public function countRequest($data);
+    public function countInspectionData();
     public function loadActivityLogs($data);
     public function loadTaskToDo();
     public function updateEmail($id, $data);

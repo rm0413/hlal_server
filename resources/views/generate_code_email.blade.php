@@ -46,27 +46,15 @@
     <table style="width: 100%; text-align: center;">
 
         <tr>
-            {{-- <th style="width: 8%;">TRIAL NUMBER</th>
-            <th style="width: 8%;">REQUEST DATE</th> --}}
             <th style="width: 8%;">SUPPLIER</th>
             <th style="width: 8%;">PART NUMBER</th>
-            {{-- <th style="width: 28%;">REVISION</th> --}}
             <th style="width: 8%;">DIMENSION</th>
-            {{-- <th style="width: 16%;">ACTUAL VALUE</th>
-            <th style="width: 16%;">KIND OF REQUEST</th>
-            <th style="width: 16%;">VALUE OF REQUEST</th> --}}
         </tr>
         @foreach ($datastorage as $data)
             <tr>
-                {{-- <td>{{ $data[0]['trial_number'] }}</td>
-                <td>{{ $data[0]['request_date'] }}</td> --}}
                 <td>{{ $data[0]['supplier_name'] }}</td>
                 <td>{{ $data[0]['part_number'] }}</td>
-                {{-- <td>{{ $data['revision'] }}</td> --}}
                 <td>{{ $data[0]['dimension'] }}</td>
-                {{-- <td>{{ $data[0]['actual_value'] }}</td>
-                <td>{{ $data[0]['request_type'] }}</td>
-                <td>{{ $data[0]['request_value'] }}</td> --}}
             </tr>
         @endforeach
     </table>

@@ -114,7 +114,7 @@ class GenerateAgreementCodeController extends Controller
                 $x++;
             }
             $writer = new Xlsx($spreadsheet);
-            $writer->save(public_path("storage/files/". "{$datastorage[0][0]['unit_name']}-{$datastorage[0][0]['code']}.xlsx"));
+            $writer->save(public_path("storage/files/" . "{$datastorage[0][0]['unit_name']}-{$datastorage[0][0]['code']}.xlsx"));
 
             $mail = new PHPMailer;
             $mail->isSMTP();
@@ -126,7 +126,7 @@ class GenerateAgreementCodeController extends Controller
             $mail->isHTML(true);                                  //Set email format to HTML
             $mail->From = "fdtp.system@ph.fujitsu.com";
             $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
-            $mail->addAttachment(public_path("storage/files/". "{$datastorage[0][0]['unit_name']}-{$datastorage[0][0]['code']}.xlsx"));
+            $mail->addAttachment(public_path("storage/files/" . "{$datastorage[0][0]['unit_name']}-{$datastorage[0][0]['code']}.xlsx"));
             // $mail->addAddress('jonathandave.detorres@fujitsu.com');
             $mail->addAddress('reinamae.sorisantos@fujitsu.com');
             $mail->addAddress('gerly.hernandez@fujitsu.com');

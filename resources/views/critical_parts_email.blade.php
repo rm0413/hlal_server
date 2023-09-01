@@ -6,6 +6,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+<style>
+    hr {
+        display: block;
+        height: 1px;
+        border: 0;
+        border-top: 1px solid #ccc;
+        margin: 1em 0;
+        padding: 0;
+    }
+
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    th {
+        background: #a30b1a;
+        color: white;
+        padding: 10px;
+        font-size: 15px;
+    }
+</style>
 
 <body>
     <h4>Notice:</h4>
@@ -16,29 +40,16 @@
     <p><strong>Below item have Critical Dimension and need to have data of CPK.</strong></p>
     <p>Please update</p>
     <table style="width: 100%; text-align: center;">
-
         <tr>
-            {{-- <th style="width: 8%;">TRIAL NUMBER</th>
-            <th style="width: 8%;">REQUEST DATE</th> --}}
-            {{-- <th style="width: 8%;">SUPPLIER</th> --}}
+            <th style="width: 8%;">TRI NUMBER</th>
             <th style="width: 8%;">PART NUMBER</th>
-            {{-- <th style="width: 28%;">REVISION</th> --}}
             <th style="width: 8%;">DIMENSION</th>
-            {{-- <th style="width: 16%;">ACTUAL VALUE</th>
-            <th style="width: 16%;">KIND OF REQUEST</th>
-            <th style="width: 16%;">VALUE OF REQUEST</th> --}}
         </tr>
         @foreach ($yes_datastorage as $data)
             <tr>
-                {{-- <td>{{ $data[0]['trial_number'] }}</td>
-                <td>{{ $data[0]['request_date'] }}</td> --}}
-                {{-- <td>{{ $data['critical_parts'] }}</td> --}}
+                <td>{{ $data['tri_number'] }}</td>
                 <td>{{ $data['part_number'] }}</td>
-                {{-- <td>{{ $data[0]['revision'] }}</td> --}}
                 <td>{{ $data['dimension'] }}</td>
-                {{-- <td>{{ $data[0]['actual_value'] }}</td>
-                <td>{{ $data[0]['request_type'] }}</td>
-                <td>{{ $data[0]['request_value'] }}</td> --}}
             </tr>
         @endforeach
     </table>

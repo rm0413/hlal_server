@@ -73,7 +73,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog("User Added Successfully", $request['employee_id'],  $result["status"]);
+        LogActivity::addToLog("User Added Successfully", $request['emp_id'],  $result["status"]);
 
         return $result;
     }

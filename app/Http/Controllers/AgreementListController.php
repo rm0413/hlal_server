@@ -97,13 +97,13 @@ class AgreementListController extends Controller
                 foreach ($QCI_email_list as $email_list) {
                     $mail->addAddress($email_list['emp_email']);
                 }
-                // $mail->addAddress('reinamae.sorisantos@fujitsu.com');
-                // $mail->addAddress('gerly.hernandez@fujitsu.com');
+                // $mail->addBCC('reinamae.sorisantos@fujitsu.com');
+                // $mail->addBCC('gerly.hernandez@fujitsu.com');
                 $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
                 $mail->Body    = view('inspection_email', compact('data'))->render();
                 $mail->send();
             }
-            // $result['data']  = $this->agreement_list_service->store($data);
+            $result['data']  = $this->agreement_list_service->store($data);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
@@ -121,7 +121,7 @@ class AgreementListController extends Controller
         $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
         $highest_row = $worksheet->getHighestRow();
         $sheet = $spreadsheet->getSheet(0);
-        $result = $this->successResponse("Stored Successfully");
+        $result = $this->successResponse("Multiple Request Added Successfully");
         try {
             DB::beginTransaction();
             for ($i = 10; $i < $highest_row + 1; $i++) {
@@ -154,25 +154,26 @@ class AgreementListController extends Controller
                     ];
                     if ($sheet->getCell("Q{$i}")->getValue() === 'Yes') {
                         $yes_datastorage[] = $datastorage;
+                        $mail = new PHPMailer;
+                        $mail->isSMTP();
+                        $mail->SMTPDebug  = 0;
+                        $mail->SMTPAuth = false;
+                        $mail->SMTPAutoTLS = false;
+                        $mail->Port = 25;
+                        $mail->Host = "203.127.104.86";
+                        $mail->isHTML(true);                                  //Set email format to HTML
+                        $mail->From = "fdtp.system@ph.fujitsu.com";
+                        $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
+                        // $mail->addAddress('jonathandave.detorres@fujitsu.com');
+                        // $mail->addAddress('gerly.hernandez@fujitsu.com');
+                        $mail->addAddress('reinamae.sorisantos@fujitsu.com');
+                        $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
+                        $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
+                        $mail->send();
                     }
                     $this->agreement_list_service->store($datastorage);
                 }
             }
-            $mail = new PHPMailer;
-            $mail->isSMTP();
-            $mail->SMTPDebug  = 0;
-            $mail->SMTPAuth = false;
-            $mail->SMTPAutoTLS = false;
-            $mail->Port = 25;
-            $mail->Host = "203.127.104.86";
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->From = "fdtp.system@ph.fujitsu.com";
-            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
-            $mail->addAddress('jonathandave.detorres@fujitsu.com');
-            $mail->addAddress('reinamae.sorisantos@fujitsu.com');
-            $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
-            $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
-            $mail->send();
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
@@ -329,6 +330,7 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+
     public function loadMonitoringList()
     {
         $result = $this->successResponse('Load Successfully');

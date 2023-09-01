@@ -18,7 +18,7 @@ abstract class BaseRepository implements BaseContract
     }
     public function loadUserProfile()
     {
-        return $this->model->with('employee_notification','hris_masterlist', 'fdtp_portal_user')->get();
+        return $this->model->with('employee_notification', 'hris_masterlist', 'fdtp_portal_user')->get();
     }
     public function store($data)
     {
@@ -26,7 +26,7 @@ abstract class BaseRepository implements BaseContract
     }
     public function showProfile($id)
     {
-        return $this->model->with('employee_notification','hris_masterlist', 'fdtp_portal_user')->find($id);
+        return $this->model->with('employee_notification', 'hris_masterlist', 'fdtp_portal_user')->find($id);
     }
     public function update($id, $data)
     {
@@ -62,9 +62,10 @@ abstract class BaseRepository implements BaseContract
     }
     public function loadWithCodeRequest()
     {
-        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'designer_section_answer', 'attachment')
+        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'attachment')
             ->whereHas('agreement_list_code', function ($q) {
             })
+            // ->whereDoesntHave('designer_section_answer')
             ->get();
     }
     public function loadWithNoCodeRequest()
@@ -88,16 +89,14 @@ abstract class BaseRepository implements BaseContract
     }
     public function loadInspectionData()
     {
-        return $this->model->with('agreement_list')->get();
+        return $this->model->with('agreement_list', 'agreement_list_code.generate_code')
+        ->whereHas('agreement_list_code', function ($q) {
+        })
+            ->get();
     }
     public function loadCodeWithInspectionData()
     {
-        // return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'inspection_data')
-        //     ->where(([['critical_parts', '=', 'Yes']]))
-        //     ->whereHas('agreement_list_code', function ($q) {
-        //     })
-        //     ->get();
-        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'inspection_data')
+        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist')
             ->where(([['critical_parts', '=', 'Yes']]))
             ->whereHas('agreement_list_code', function ($q) {
             })
@@ -125,12 +124,25 @@ abstract class BaseRepository implements BaseContract
     public function loadActivityLogs($data)
     {
         return $this->model->with('hris_masterlist')
-        ->whereBetween('created_at', ["{$data['date_from']} 00:00:00", "{$data['date_to']} 24:00:00"])
-        ->orderBy('created_at', 'desc')
-        ->latest()->get();
+            ->whereBetween('created_at', ["{$data['date_from']} 00:00:00", "{$data['date_to']} 24:00:00"])
+            ->orderBy('created_at', 'desc')
+            ->latest()->get();
     }
     public function loadTaskToDo()
     {
-        return $this->model->with('hris_masterlist', 'units', 'inspection_data', 'agreement_list_code', 'designer_section_answer', 'attachment')->get();
+        return $this->model->with('agreement_list_code.generate_code','hris_masterlist', 'units')
+        ->whereHas('agreement_list_code', function ($q) {
+        })
+        ->whereDoesntHave('designer_section_answer')
+        ->get();
+    }
+    public function countInspectionData()
+    {
+        return $this->model->with('agreement_list_code.generate_code','hris_masterlist', 'units')
+        ->where(([['critical_parts', '=', 'Yes']]))
+        ->whereHas('agreement_list_code', function ($q) {
+        })
+        ->whereDoesntHave('inspection_data')
+        ->get();
     }
 }
