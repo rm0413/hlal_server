@@ -17,4 +17,5 @@ public function loadCountResult($data);
 public function countRequest($data);
 public function showWhereHas($id, $where, $with, $whereHas);
 public function show($id, $where, $with);
+public function loadWithoutDesignerAnswer();
 }

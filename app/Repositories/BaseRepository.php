@@ -68,11 +68,16 @@ abstract class BaseRepository implements BaseContract
             // ->whereDoesntHave('designer_section_answer')
             ->get();
     }
+    public function loadWithoutDesignerAnswer()
+    {
+        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist')
+        ->doesntHave('designer_section_answer')
+        ->get();
+    }
     public function loadWithNoCodeRequest()
     {
         return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist')
             ->doesntHave('agreement_list_code')
-
             ->get();
     }
     public function showWhereHas($id, $where, $with, $whereHas)

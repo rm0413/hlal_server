@@ -507,4 +507,8 @@ class AgreementListService implements AgreementListServiceContract
 
         return $datastorage_count_request;
     }
+    public function loadWithoutDesignerAnswer()
+    {
+        return $this->agreement_list_contract->loadWithoutDesignerAnswer();
+    }
 }
