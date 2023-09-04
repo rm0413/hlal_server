@@ -401,6 +401,16 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+    public function loadPartNumberAttachment()
+    {
+        $result = $this->successResponse("Load Part Number Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadPartNumberAttachment();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
     public function loadPartNumberWithCritical()
     {
         $result = $this->successResponse("Load Part Number Successfully");

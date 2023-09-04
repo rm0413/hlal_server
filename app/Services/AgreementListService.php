@@ -250,7 +250,7 @@ class AgreementListService implements AgreementListServiceContract
     }
     public function loadWithCodeAttachment()
     {
-        $result = $this->agreement_list_contract->loadWithCodeRequest();
+        $result = $this->agreement_list_contract->loadWithCodeAttachment();
         $datastorage = [];
         foreach ($result as $data_code_attachement) {
             $datastorage[] = [
@@ -311,6 +311,25 @@ class AgreementListService implements AgreementListServiceContract
     public function loadPartNumberWithCode()
     {
         $result = $this->agreement_list_contract->loadWithCodeRequest();
+        $datastorage = [];
+        $code = [];
+        $part_no = [];
+        foreach ($result as $data) {
+            $code[] = $data['agreement_list_code']['generate_code']['code'];
+            $part_no[] =  $data['part_number'];
+        }
+        $datastorage = [
+            'part_number' => array_unique($part_no),
+            'code' => array_unique($code),
+        ];
+
+        rsort($datastorage['part_number']);
+        rsort($datastorage['code']);
+        return $datastorage;
+    }
+    public function loadPartNumberAttachment()
+    {
+        $result = $this->agreement_list_contract->loadWithCodeAttachment();
         $datastorage = [];
         $code = [];
         $part_no = [];

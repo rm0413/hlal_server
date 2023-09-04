@@ -11,6 +11,7 @@ interface AgreementListServiceContract
     public function update($id, $data);
     public function delete($id);
     public function loadCodeWithInspectionData();
+    public function loadWithCodeAttachment();
     public function loadMonitoringList();
     public function loadCountResult($data);
     public function countRequest($data);

@@ -50,6 +50,7 @@ Route::get('/load-part-number-with-code', [AgreementListController::class, 'load
 Route::get('/count-request', [AgreementListController::class, 'countRequest']);
 Route::post('/upload-multiple-agreement-request', [AgreementListController::class, 'multipleStore']);
 Route::get('/load-part-number-with-critical', [AgreementListController::class, 'loadPartNumberWithCritical']);
+Route::get('/load-part-number-with-attachment', [AgreementListController::class, 'loadPartNumberAttachment']);
 Route::get('/load-with-code-attachment', [AgreementListController::class, 'loadWithCodeAttachment']);
 Route::delete('/delete-unit/{id}/{emp_id}', [UnitController::class, 'deleteUnit']);
 Route::delete('/delete-agreement-list/{id}/{emp_id}', [AgreementListController::class, 'deleteAgreement']);

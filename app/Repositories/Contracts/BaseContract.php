@@ -20,6 +20,7 @@ interface BaseContract
     public function showWhereHas($id, $where, $with, $whereHas);
     public function show($id, $where, $with);
     public function loadCodeWithInspectionData();
+    public function loadWithCodeAttachment();
     public function loadInspectionData();
     public function loadMonitoringList();
     public function loadCountResult($data);
