@@ -278,7 +278,7 @@ class AgreementListController extends Controller
         $whereHas = 'designer_section_answer';
         try {
             $datastorage = $this->agreement_list_service->showMonitoringList($id, $where, $with, $whereHas);
-            $file_name = storage_path("formatStorage\Excel_format.xlsx");
+            $file_name = storage_path("formatStorage\\Export.xlsx");
             $file_path = public_path("storage/files/test.xlsx");
             $spreadsheet = IOFactory::load($file_name);
             $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
@@ -286,7 +286,9 @@ class AgreementListController extends Controller
             $sheet = $spreadsheet->getSheet(0);
             $i = 10;
             $x = 1;
+            $sheet->getCell("B4")->setValue("{$datastorage[0]['unit_name']} LSA/Hinsei Agreement List");
             foreach ($datastorage as $export_data) {
+                $sheet->getStyle("B{$i}:AB{$i}")->getAlignment()->setWrapText(true);
                 $sheet->getCell("B{$i}")->setValue($x);
                 $sheet->getCell("C{$i}")->setValue($export_data['trial_number']);
                 $sheet->getCell("D{$i}")->setValue($export_data['request_date']);
@@ -314,6 +316,8 @@ class AgreementListController extends Controller
                 $sheet->getCell("Z{$i}")->setValue($export_data['inspection_after_rework']);
                 $sheet->getCell("AA{$i}")->setValue($export_data['revised_date_igm']);
                 $sheet->getCell("AB{$i}")->setValue($export_data['sent_date_igm']);
+                
+                
                 $i++;
                 $x++;
             }
