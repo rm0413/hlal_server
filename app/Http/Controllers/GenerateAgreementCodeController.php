@@ -9,6 +9,7 @@ use App\Http\Requests\GenerateAgreementCodeRequest;
 use Illuminate\Support\Str;
 use App\Services\GenerateAgreementCodeService;
 use App\Services\AgreementListCodeService;
+use App\Services\UserService;
 use PHPMailer\PHPMailer\PHPMailer;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -19,10 +20,12 @@ class GenerateAgreementCodeController extends Controller
     use ResponseTrait;
     protected $generate_agreement_code_service;
     protected $agreement_list_code_service;
-    public function __construct(GenerateAgreementCodeService $generate_agreement_code_service, AgreementListCodeService $agreement_list_code_service)
+    protected $user_service;
+    public function __construct(GenerateAgreementCodeService $generate_agreement_code_service, AgreementListCodeService $agreement_list_code_service, UserService $user_service)
     {
         $this->generate_agreement_code_service = $generate_agreement_code_service;
         $this->agreement_list_code_service = $agreement_list_code_service;
+        $this->user_service = $user_service;
     }
     /**
      * Display a listing of the resource.
@@ -56,6 +59,8 @@ class GenerateAgreementCodeController extends Controller
         $whereHas = '';
         $datastorage = [];
         $where = [];
+        
+        $PE_email_list = $this->user_service->loadPEEmailList();
         try {
             while (strlen($code) < 4) {
 
@@ -127,9 +132,13 @@ class GenerateAgreementCodeController extends Controller
             $mail->From = "fdtp.system@ph.fujitsu.com";
             $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
             $mail->addAttachment(public_path("storage/files/" . "{$datastorage[0][0]['unit_name']}-{$datastorage[0][0]['code']}.xlsx"));
+            
+            foreach ($PE_email_list as $pe_email_list) {
+                $mail->addCC($pe_email_list['emp_email']);
+            }
             // $mail->addAddress('jonathandave.detorres@fujitsu.com');
-            $mail->addAddress('reinamae.sorisantos@fujitsu.com');
-            $mail->addAddress('gerly.hernandez@fujitsu.com');
+            // $mail->addAddress('reinamae.sorisantos@fujitsu.com');
+            // $mail->addAddress('gerly.hernandez@fujitsu.com');
             $mail->Subject = 'HINSEI & LSA Agreement List | Generated Code';
             $mail->Body    = view('generate_code_email', compact('datastorage'))->render();
             $mail->send();

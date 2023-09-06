@@ -58,6 +58,7 @@ class AgreementListController extends Controller
     {
         $result = $this->successResponse("Request Added Successfully.");
         $QCI_email_list = $this->user_service->loadQCIEmailList();
+        $PE_email_list = $this->user_service->loadPEEmailList();
         try {
             $data = [
                 "trial_number" => $request["trial_number"],
@@ -97,8 +98,12 @@ class AgreementListController extends Controller
                 foreach ($QCI_email_list as $email_list) {
                     $mail->addAddress($email_list['emp_email']);
                 }
+                foreach ($PE_email_list as $pe_email_list) {
+                    $mail->addCC($pe_email_list['emp_email']);
+                }
                 // $mail->addBCC('reinamae.sorisantos@fujitsu.com');
                 // $mail->addBCC('gerly.hernandez@fujitsu.com');
+                // $mail->addBCC('jonathandave.detorres@fujitsu.com');
                 $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
                 $mail->Body    = view('inspection_email', compact('data'))->render();
                 $mail->send();
@@ -122,6 +127,9 @@ class AgreementListController extends Controller
         $highest_row = $worksheet->getHighestRow();
         $sheet = $spreadsheet->getSheet(0);
         $result = $this->successResponse("Multiple Request Added Successfully");
+
+        $QCI_email_list = $this->user_service->loadQCIEmailList();
+        $PE_email_list = $this->user_service->loadPEEmailList();
         try {
             DB::beginTransaction();
             for ($i = 10; $i < $highest_row + 1; $i++) {
@@ -164,9 +172,15 @@ class AgreementListController extends Controller
                         $mail->isHTML(true);                                  //Set email format to HTML
                         $mail->From = "fdtp.system@ph.fujitsu.com";
                         $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
-                        // $mail->addAddress('jonathandave.detorres@fujitsu.com');
-                        // $mail->addAddress('gerly.hernandez@fujitsu.com');
-                        $mail->addAddress('reinamae.sorisantos@fujitsu.com');
+                        foreach ($QCI_email_list as $email_list) {
+                            $mail->addAddress($email_list['emp_email']);
+                        }
+                        foreach ($PE_email_list as $pe_email_list) {
+                            $mail->addCC($pe_email_list['emp_email']);
+                        }
+                        // $mail->addBCC('jonathandave.detorres@fujitsu.com');
+                        // $mail->addBCC('gerly.hernandez@fujitsu.com');
+                        // $mail->addBCC('reinamae.sorisantos@fujitsu.com');
                         $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
                         $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
                         $mail->send();

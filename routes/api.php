@@ -41,6 +41,7 @@ Route::apiResource('employee-notification', EmployeeNotification::class);
 Route::get('/load-with-code-request', [AgreementListController::class, 'loadWithCodeRequest']);
 Route::get('/load-email-list', [UserController::class, 'loadEmailList']);
 Route::get('/load-qci-email-list', [UserController::class, 'loadQCIEmailList']);
+Route::get('/load-pe-email-list', [UserController::class, 'loadPEEmailList']);
 Route::get('/load-task-to-do', [AgreementListController::class, 'loadTaskToDo']);
 Route::get('/load-activity-logs', [UserController::class, 'loadActivityLogs']);
 Route::get('/load-with-code-inspection', [AgreementListController::class, 'loadCodeWithInspectionData']);
