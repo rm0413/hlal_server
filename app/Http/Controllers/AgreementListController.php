@@ -197,12 +197,22 @@ class AgreementListController extends Controller
         LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
-    public function downloadFormat()
+    public function downloadFormat(Request $request)
     {
         $result = $this->successResponse("Download Successfully");
         try {
             $format = storage_path("formatStorage\Excel_format.xlsx");
-            $result = response()->download($format);
+            $spreadsheet = IOFactory::load($format);
+            $sheet = $spreadsheet->getSheet(0);
+            $sheet->getCell("B4")->setValue("{$request->unit_name} LSA/Hinsei Agreement List");
+
+            $date = date('Y-m-d');
+            $time = time();
+            $writer = new Xlsx($spreadsheet);
+            $writer->save(public_path("storage/files/" . "Excel_format-{$date}-{$time}.xlsx"));
+
+            header("Content-Type: application/vnd.ms-excel");
+            return redirect(url('/') . "/storage/files/" . "Excel_format-{$date}-{$time}.xlsx");
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
@@ -216,7 +226,7 @@ class AgreementListController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showMonitoring($unit_id, $supplier_name, $part_number)
+    public function showMonitoring($part_number)
     {
         $result = $this->successResponse('Load Successfully');
         $with = [
@@ -224,8 +234,8 @@ class AgreementListController extends Controller
         ];
         $id = [];
         $where = [
-            ['unit_id', '=', $unit_id,],
-            ['supplier_name', '=', $supplier_name],
+            // ['unit_id', '=', $unit_id,],
+            // ['supplier_name', '=', $supplier_name],
             ['part_number', '=', $part_number],
         ];
         $whereHas = 'designer_section_answer';

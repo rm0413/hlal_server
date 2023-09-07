@@ -474,7 +474,7 @@ class AgreementListService implements AgreementListServiceContract
                 'file_path_attachment' => $data_monitoring_list->attachment['file_path_attachment'],
             ];
         }
-        rsort($datastorage);
+        // rsort($datastorage);
         return $datastorage;
     }
     public function loadCountResult($data)

@@ -45,4 +45,8 @@ class UnitService implements UnitServiceContract
     {
         return $this->unit_repository_contract->update($id, $data);
     }
+    public function show($id, $where, $with)
+    {
+        return $this->unit_repository_contract->show($id, $where, $with);
+    }
 }

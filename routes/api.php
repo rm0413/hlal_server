@@ -58,7 +58,7 @@ Route::delete('/delete-agreement-list/{id}/{emp_id}', [AgreementListController::
 Route::delete('/delete-monitoring/{id}/{emp_id}', [AgreementListController::class, 'deleteMonitoring']);
 Route::delete('/delete-user/{id}/{emp_id}', [UserController::class, 'deleteUser']);
 Route::post('/insert-designer-answer', [DesignerSectionController::class, 'storeSingleDesignerAnswer']);
-Route::get('/show-monitoring-list/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoring']);
+Route::get('/show-monitoring-list/{part_number}', [AgreementListController::class, 'showMonitoring']);
 Route::get('/show-monitoring-list-edit/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoringList']);
 Route::get('/show-monitoring-list-attachment/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showAttachment']);
 Route::get('/load-count-result', [AgreementListController::class, 'loadCountResult']);

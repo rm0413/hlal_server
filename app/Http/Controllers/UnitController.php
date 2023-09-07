@@ -67,7 +67,17 @@ class UnitController extends Controller
      */
     public function show($id)
     {
-        //
+        $result = $this->successResponse("Load Successfully");
+        $where = [
+            ['id', '=', $id],
+        ];
+        $with = [];
+        try {
+            $result['data'] = $this->unit_service->show($id, $where, $with);
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
     }
 
     /**
