@@ -198,12 +198,22 @@ class AgreementListController extends Controller
         // LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
-    public function downloadFormat()
+    public function downloadFormat(Request $request)
     {
         $result = $this->successResponse("Download Successfully");
         try {
-            $format = storage_path("formatStorage\Excel_format.xlsx");
-            $result = response()->download($format);
+            $format = public_path("storage\Excel_format.xlsx");
+            $spreadsheet = IOFactory::load($format);
+            $sheet = $spreadsheet->getSheet(0);
+            $sheet->getCell("B4")->setValue("{$request->unit_name} LSA/Hinsei Agreement List");
+
+            $date = date('Y-m-d');
+            $time = time();
+            $writer = new Xlsx($spreadsheet);
+            $writer->save(public_path("storage/files/" . "Excel_format-{$date}-{$time}.xlsx"));
+
+            header("Content-Type: application/vnd.ms-excel");
+            return redirect(url('/') . "/storage/files/" . "Excel_format-{$date}-{$time}.xlsx");
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
@@ -288,7 +298,7 @@ class AgreementListController extends Controller
         $where = [
             ['unit_id', '=', $unit_id,],
             ['supplier_name', '=', $supplier_name],
-            ['part_number', '=', $part_number],
+            ['part_number', '=', str_replace(" ", "/", $part_number)],
         ];
         $whereHas = 'designer_section_answer';
         try {
@@ -564,7 +574,7 @@ class AgreementListController extends Controller
     public function loadWithoutDesignerAnswer()
     {
         $result = $this->successResponse('Load Successfully');
-        try{
+        try {
             $this->agreement_list_service->loadWithoutDesignerAnswer();
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);

@@ -120,7 +120,7 @@ class UserService implements UserServiceContract
         $result = $this->user_repository_contract->loadUserProfile();
         $datastorage = [];
         foreach ($result as $users) { //PE (Parts)
-            if ($users->employee_notification['recieve_notification'] === true && $users->hris_masterlist['section_code'] === 'MIS')
+            if ($users->employee_notification['recieve_notification'] === true && $users->hris_masterlist['section_code'] === 'PE (Parts)')
                 $datastorage[] = [
                     'user_id' => $users['id'],
                     'emp_id' => $users['employee_id'],

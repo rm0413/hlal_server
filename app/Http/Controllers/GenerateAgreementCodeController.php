@@ -84,7 +84,7 @@ class GenerateAgreementCodeController extends Controller
                 $where = [['agreement_request_id', '=', $agreement_id]];
                 $datastorage[] = $this->agreement_list_code_service->show($agreement_id, $where, $with,);
             }
-            $file_name = storage_path("formatStorage\Excel_format.xlsx");
+            $file_name = storage_path("formatStorage\Excel_format1.xlsx");
             // $file_path = public_path("storage/files/test.xlsx");
             $spreadsheet = IOFactory::load($file_name);
             $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');

@@ -62,6 +62,7 @@ Route::get('/show-monitoring-list/{part_number}', [AgreementListController::clas
 Route::get('/show-monitoring-list-edit/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showMonitoringList']);
 Route::get('/show-monitoring-list-attachment/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'showAttachment']);
 Route::get('/load-count-result', [AgreementListController::class, 'loadCountResult']);
+Route::get('/load-monitoring-list', [AgreementListController::class, 'loadMonitoringList']);
 Route::get('/export-monitoring-list/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'exportMonitoringList']);
 
 Route::post('download-attachment', [AttachmentController::class, 'downloadAttachment']);

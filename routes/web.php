@@ -19,6 +19,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('download-format/{unit_name}', [AgreementListController::class, 'downloadFormat']);
+Route::get('download/{unit_name}', [AgreementListController::class, 'downloadFormat']);
 Route::get('view-attachment', [AttachmentController::class, 'viewAttachement']);
 Route::get('/export/{unit_id}/{supplier}/{part_number}', [AgreementListController::class, 'exportMonitoringList']);

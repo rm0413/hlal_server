@@ -399,13 +399,15 @@ class AgreementListService implements AgreementListServiceContract
         $result_data = [];
         foreach ($result as $data_monitoring) {
             $datastorage[] = [
-                'agreement_list_id' => $data_monitoring['id'],
                 'supplier_name' => $data_monitoring['supplier_name'],
                 'part_number' => $data_monitoring['part_number'],
                 'unit_name' => $data_monitoring->units['unit_name'],
+                'unit_id' => $data_monitoring->units['id'],
             ];
+
         }
-        $result_data = array_unique($datastorage, SORT_REGULAR);
+        $result_data = array_values(array_unique($datastorage, SORT_REGULAR));
+        
         return $result_data;
     }
     public function showWhereHas($id, $where, $with, $whereHas)
