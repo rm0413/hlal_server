@@ -127,40 +127,41 @@ class AgreementListController extends Controller
         $highest_row = $worksheet->getHighestRow();
         $sheet = $spreadsheet->getSheet(0);
         $result = $this->successResponse("Multiple Request Added Successfully");
+        $remove = "\n";
 
         $QCI_email_list = $this->user_service->loadQCIEmailList();
         $PE_email_list = $this->user_service->loadPEEmailList();
         try {
             DB::beginTransaction();
             for ($i = 10; $i < $highest_row + 1; $i++) {
-                if ($sheet->getCell("B{$i}")->getValue() != null) {
+                if (trim($sheet->getCell("B{$i}")->getValue()) != null) {
 
                     $datastorage = [
                         // 'NO' =>  $sheet->getCell("B{$i}")->getValue(),
-                        'trial_number' => $sheet->getCell("C{$i}")->getValue(),
-                        'request_date' => $sheet->getCell("D{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
-                        'additional_request_qty_date' =>  $sheet->getCell("E{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
-                        'tri_number' => $sheet->getCell("F{$i}")->getValue(),
-                        'tri_quantity' => $sheet->getCell("G{$i}")->getValue(),
-                        'request_person' => $sheet->getCell("H{$i}")->getValue(),
-                        'superior_approval' => $sheet->getCell("I{$i}")->getValue(),
-                        'supplier_name' => $sheet->getCell("J{$i}")->getValue(),
-                        'part_number' => $sheet->getCell("K{$i}")->getValue(),
-                        'sub_part_number' => $sheet->getCell("L{$i}")->getValue(),
-                        'revision' => $sheet->getCell("M{$i}")->getValue(),
-                        'coordinates' => $sheet->getCell("N{$i}")->getValue(),
-                        'dimension' => $sheet->getCell("O{$i}")->getValue(),
-                        'actual_value' => $sheet->getCell("P{$i}")->getValue(),
-                        'critical_parts' => $sheet->getCell("Q{$i}")->getValue(),
-                        'critical_dimension' => $sheet->getCell("R{$i}")->getValue(),
-                        // 'CPK_DATA/INS_DATA' => $sheet->getCell($data_cell['CPK_DATA/INS_DATA'])->getValue(),
-                        'request_type' => $sheet->getCell("T{$i}")->getValue(),
-                        'request_value' => $sheet->getCell("U{$i}")->getValue(),
-                        'request_quantity' => $sheet->getCell("V{$i}")->getValue(),
+                        'trial_number' => trim($sheet->getCell("C{$i}")->getValue()),
+                        'request_date' => trim($sheet->getCell("D{$i}")->getValue()) === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
+                        'additional_request_qty_date' =>  trim($sheet->getCell("E{$i}")->getValue()) === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
+                        'tri_number' => trim($sheet->getCell("F{$i}")->getValue()),
+                        'tri_quantity' => trim($sheet->getCell("G{$i}")->getValue()),
+                        'request_person' => trim($sheet->getCell("H{$i}")->getValue()),
+                        'superior_approval' => trim($sheet->getCell("I{$i}")->getValue()),
+                        'supplier_name' => trim($sheet->getCell("J{$i}")->getValue()),
+                        'part_number' => trim($sheet->getCell("K{$i}")->getValue()),
+                        'sub_part_number' => trim($sheet->getCell("L{$i}")->getValue()),
+                        'revision' => trim($sheet->getCell("M{$i}")->getValue()),
+                        'coordinates' => trim(str_replace($remove, " ", $sheet->getCell("N{$i}")->getValue())),
+                        'dimension' => trim(str_replace($remove, " ", $sheet->getCell("O{$i}")->getValue())),
+                        'actual_value' => trim(str_replace($remove, " ", $sheet->getCell("P{$i}")->getValue())),
+                        'critical_parts' => trim($sheet->getCell("Q{$i}")->getValue()),
+                        'critical_dimension' => trim($sheet->getCell("R{$i}")->getValue()),
+                        // 'CPK_DATA/INS_DATA' => trim($sheet->getCell($data_cell['CPK_DATA/INS_DATA'])->getValue()),
+                        'request_type' => trim($sheet->getCell("T{$i}")->getValue()),
+                        'request_value' => trim(str_replace($remove, " ", $sheet->getCell("U{$i}")->getValue())),
+                        'request_quantity' => trim($sheet->getCell("V{$i}")->getValue()),
                         'unit_id' => $request['unit_id'],
                         'requestor_employee_id' => $request['requestor_employee_id']
                     ];
-                    if ($sheet->getCell("Q{$i}")->getValue() === 'Yes') {
+                    if (trim($sheet->getCell("Q{$i}")->getValue()) === 'Yes') {
                         $yes_datastorage[] = $datastorage;
                         $mail = new PHPMailer;
                         $mail->isSMTP();
@@ -194,25 +195,15 @@ class AgreementListController extends Controller
             $result = $this->errorResponse($e);
         }
 
-        LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        // LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
-    public function downloadFormat(Request $request)
+    public function downloadFormat()
     {
         $result = $this->successResponse("Download Successfully");
         try {
             $format = storage_path("formatStorage\Excel_format.xlsx");
-            $spreadsheet = IOFactory::load($format);
-            $sheet = $spreadsheet->getSheet(0);
-            $sheet->getCell("B4")->setValue("{$request->unit_name} LSA/Hinsei Agreement List");
-
-            $date = date('Y-m-d');
-            $time = time();
-            $writer = new Xlsx($spreadsheet);
-            $writer->save(public_path("storage/files/" . "Excel_format-{$date}-{$time}.xlsx"));
-
-            header("Content-Type: application/vnd.ms-excel");
-            return redirect(url('/') . "/storage/files/" . "Excel_format-{$date}-{$time}.xlsx");
+            $result = response()->download($format);
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
@@ -306,12 +297,24 @@ class AgreementListController extends Controller
             $file_path = public_path("storage/files/test.xlsx");
             $spreadsheet = IOFactory::load($file_name);
             $worksheet = $spreadsheet->getSheetByName('PPEF 09_01');
-            // $highest_row = $worksheet->getHighestRow();
             $sheet = $spreadsheet->getSheet(0);
+            $styleArray = [
+                'borders' => [
+                    'outline' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => '000000'],
+                    ],
+                    'inside' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => ['argb' => '000000'],
+                    ],
+                ],
+            ];
             $i = 10;
             $x = 1;
             $sheet->getCell("B4")->setValue("{$datastorage[0]['unit_name']} LSA/Hinsei Agreement List");
             foreach ($datastorage as $export_data) {
+                $worksheet->getStyle("B{$i}:AB{$i}")->applyFromArray($styleArray);
                 $sheet->getStyle("B{$i}:AB{$i}")->getAlignment()->setWrapText(true);
                 $sheet->getCell("B{$i}")->setValue($x);
                 $sheet->getCell("C{$i}")->setValue($export_data['trial_number']);
@@ -340,11 +343,10 @@ class AgreementListController extends Controller
                 $sheet->getCell("Z{$i}")->setValue($export_data['inspection_after_rework']);
                 $sheet->getCell("AA{$i}")->setValue($export_data['revised_date_igm']);
                 $sheet->getCell("AB{$i}")->setValue($export_data['sent_date_igm']);
-                
-                
                 $i++;
                 $x++;
             }
+
             $date = date('Y-m-d');
             $time = time();
             $writer = new Xlsx($spreadsheet);

@@ -46,6 +46,7 @@ class DesignerSectionController extends Controller
         $sheet = $spreadsheet->getSheet(0);
         $request_storage = [];
         $datastorage2 = [];
+        $remove = "\n";
         try {
             foreach ($request->data as $data) {
                 $request_storage[] = [
@@ -74,32 +75,32 @@ class DesignerSectionController extends Controller
                 ];
             }
             for ($i = 10; $i < $highest_row + 1; $i++) {
-                if ($sheet->getCell("B{$i}")->getValue() != null) {
+                if (trim($sheet->getCell("B{$i}")->getValue()) != null) {
                     $datastorage[] = [
                         // 'NO' =>  $sheet->getCell("B{$i}")->getValue(),
-                        'trial_number' => "{$sheet->getCell("C{$i}")->getValue()}",
-                        'request_date' => $sheet->getCell("D{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
-                        'additional_request_qty_date' =>  $sheet->getCell("E{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
-                        'tri_number' => "{$sheet->getCell("F{$i}")->getValue()}",
-                        'tri_quantity' => "{$sheet->getCell("G{$i}")->getValue()}",
-                        'request_person' => $sheet->getCell("H{$i}")->getValue(),
-                        'superior_approval' => $sheet->getCell("I{$i}")->getValue(),
-                        'supplier_name' => $sheet->getCell("J{$i}")->getValue(),
-                        'part_number' => $sheet->getCell("K{$i}")->getValue(),
-                        'sub_part_number' => $sheet->getCell("L{$i}")->getValue(),
-                        'revision' => "{$sheet->getCell("M{$i}")->getValue()}",
-                        'coordinates' => "{$sheet->getCell("N{$i}")->getValue()}",
-                        'dimension' => "{$sheet->getCell("O{$i}")->getValue()}",
-                        'actual_value' => "{$sheet->getCell("P{$i}")->getValue()}",
-                        'critical_parts' => $sheet->getCell("Q{$i}")->getValue(),
-                        'critical_dimension' => $sheet->getCell("R{$i}")->getValue(),
-                        // 'CPK_DATA/INS_DATA' => $sheet->getCell($data_cell['CPK_DATA/INS_DATA'])->getValue(),
-                        'request_type' => $sheet->getCell("T{$i}")->getValue(),
-                        'request_value' => "{$sheet->getCell("U{$i}")->getValue()}",
-                        'request_quantity' => "{$sheet->getCell("V{$i}")->getValue()}",
-                        'designer_ans' => $sheet->getCell("W{$i}")->getValue(),
-                        'designer_incharge' => $sheet->getCell("X{$i}")->getValue(),
-                        'answer_date' => $sheet->getCell("Y{$i}")->getValue(),
+                        'trial_number' => trim("{$sheet->getCell("C{$i}")->getValue()}"),
+                        // 'request_date' => trim($sheet->getCell("D{$i}")->getValue()) === '-' ? null : Date::excelToDateTimeObject(trim($sheet->getCell("D{$i}")->getValue()))->format('Y-m-d'),
+                        // 'additional_request_qty_date' => trim($sheet->getCell("E{$i}")->getValue()) === '-' ? null : Date::excelToDateTimeObject(trim($sheet->getCell("E{$i}")->getValue()))->format('Y-m-d'),
+                        'tri_number' => trim("{$sheet->getCell("F{$i}")->getValue()}"),
+                        'tri_quantity' => trim("{$sheet->getCell("G{$i}")->getValue()}"),
+                        'request_person' => trim($sheet->getCell("H{$i}")->getValue()),
+                        'superior_approval' => trim($sheet->getCell("I{$i}")->getValue()),
+                        'supplier_name' => trim($sheet->getCell("J{$i}")->getValue()),
+                        'part_number' => trim($sheet->getCell("K{$i}")->getValue()),
+                        'sub_part_number' => trim($sheet->getCell("L{$i}")->getValue()),
+                        'revision' => trim("{$sheet->getCell("M{$i}")->getValue()}"),
+                        'coordinates' => trim(str_replace($remove, " ", $sheet->getCell("N{$i}")->getValue())),
+                        'dimension' => trim(str_replace($remove, " ", $sheet->getCell("O{$i}")->getValue())),
+                        'actual_value' => trim(str_replace($remove, " ", $sheet->getCell("P{$i}")->getValue())),
+                        'critical_parts' => trim($sheet->getCell("Q{$i}")->getValue()),
+                        'critical_dimension' => trim($sheet->getCell("R{$i}")->getValue()),
+                        // 'CPK_DATA/INS_DATA' => $sheet->getCell($data_cell['CPK_DATA/INS_DATA'])->getValue()),
+                        'request_type' => trim($sheet->getCell("T{$i}")->getValue()),
+                        'request_value' => trim(str_replace($remove, " ", $sheet->getCell("U{$i}")->getValue())),
+                        'request_quantity' => trim("{$sheet->getCell("V{$i}")->getValue()}"),
+                        'designer_ans' => trim($sheet->getCell("W{$i}")->getValue()),
+                        'designer_incharge' => trim($sheet->getCell("X{$i}")->getValue()),
+                        'answer_date' => trim($sheet->getCell("Y{$i}")->getValue()),
                         // 'unit_id' => $request['unit_id'],
                         // 'requestor_employee_id' => $request['requestor_employee_id']
                     ];
@@ -109,8 +110,8 @@ class DesignerSectionController extends Controller
                 for ($i = 0; $i < count($datastorage); $i++) {
                     if (
                         $data_request['trial_number'] === $datastorage[$i]['trial_number'] &&
-                        $data_request['request_date'] === $datastorage[$i]['request_date'] &&
-                        $data_request['additional_request_qty_date'] === $datastorage[$i]['additional_request_qty_date'] &&
+                        // $data_request['request_date'] === $datastorage[$i]['request_date'] &&
+                        // $data_request['additional_request_qty_date'] === $datastorage[$i]['additional_request_qty_date'] &&
                         $data_request['tri_number'] === $datastorage[$i]['tri_number'] &&
                         $data_request['tri_quantity'] === $datastorage[$i]['tri_quantity'] &&
                         $data_request['request_person'] === $datastorage[$i]['request_person'] &&
