@@ -131,14 +131,14 @@ class GenerateAgreementCodeController extends Controller
             $mail->isHTML(true);                                  //Set email format to HTML
             $mail->From = "fdtp.system@ph.fujitsu.com";
             $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
+            $mail->addBCC('reinamae.sorisantos@fujitsu.com', 'Generate Code');
+            $mail->addBCC('jonathandave.detorres@fujitsu.com', 'Generate Code');
+            $mail->addBCC('gerly.hernandez@fujitsu.com', 'Generate Code');
             $mail->addAttachment(public_path("storage/files/" . "{$datastorage[0][0]['unit_name']}-{$datastorage[0][0]['code']}.xlsx"));
             
             foreach ($PE_email_list as $pe_email_list) {
                 $mail->addCC($pe_email_list['emp_email']);
             }
-            // $mail->addAddress('jonathandave.detorres@fujitsu.com');
-            // $mail->addAddress('reinamae.sorisantos@fujitsu.com');
-            // $mail->addAddress('gerly.hernandez@fujitsu.com');
             $mail->Subject = 'HINSEI & LSA Agreement List | Generated Code';
             $mail->Body    = view('generate_code_email', compact('datastorage'))->render();
             $mail->send();
