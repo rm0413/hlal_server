@@ -65,7 +65,7 @@ abstract class BaseRepository implements BaseContract
         return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'attachment')
             ->whereHas('agreement_list_code', function ($q) {
             })
-            ->whereDoesntHave('designer_section_answer')
+            // ->whereDoesntHave('designer_section_answer')
             ->get();
     }
     public function loadWithCodeAttachment()
@@ -78,9 +78,11 @@ abstract class BaseRepository implements BaseContract
     }
     public function loadWithoutDesignerAnswer()
     {
-        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist')
-        ->doesntHave('designer_section_answer')
-        ->get();
+        return $this->model->with('agreement_list_code.generate_code', 'hris_masterlist', 'attachment')
+            ->whereHas('agreement_list_code', function ($q) {
+            })
+            ->whereDoesntHave('designer_section_answer')
+            ->get();
     }
     public function loadWithNoCodeRequest()
     {

@@ -201,7 +201,7 @@ class AgreementListService implements AgreementListServiceContract
     }
     public function loadCodeWithDesignerSection()
     {
-        $result = $this->agreement_list_contract->loadWithCodeRequest();
+        $result = $this->agreement_list_contract->loadWithoutDesignerAnswer();
         $datastorage = [];
         foreach ($result as $data_code_designer) {
             $datastorage[] = [
@@ -292,6 +292,25 @@ class AgreementListService implements AgreementListServiceContract
     public function loadPartNumberWithCritical()
     {
         $result = $this->agreement_list_contract->loadCodeWithInspectionData();
+        $datastorage = [];
+        $code = [];
+        $part_no = [];
+        foreach ($result as $data) {
+            $code[] = $data['agreement_list_code']['generate_code']['code'];
+            $part_no[] =  $data['part_number'];
+        }
+        $datastorage = [
+            'part_number' => array_unique($part_no),
+            'code' => array_unique($code),
+        ];
+
+        rsort($datastorage['part_number']);
+        rsort($datastorage['code']);
+        return $datastorage;
+    }
+    public function loadPartNumberWithDesigner()
+    {
+        $result = $this->agreement_list_contract->loadWithoutDesignerAnswer();
         $datastorage = [];
         $code = [];
         $part_no = [];

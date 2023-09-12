@@ -462,6 +462,16 @@ class AgreementListController extends Controller
         }
         return $result;
     }
+    public function loadPartNumberWithDesigner()
+    {
+        $result = $this->successResponse("Load Part Number Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->loadPartNumberWithDesigner();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
     public function loadWithCodeAttachment()
     {
         $result = $this->successResponse("Load Part Number Successfully");
