@@ -196,7 +196,7 @@ class AgreementListController extends Controller
             $result = $this->errorResponse($e);
         }
 
-        // LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
     public function downloadFormat(Request $request)
