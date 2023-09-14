@@ -36,7 +36,7 @@ class InspectionDataRequest extends FormRequest
     }
     public function messages(){
         return [
-            "agreement_request_id.required" => "Agreement List ID is required.",
+            "agreement_request_id.required" => "Please check request in table.",
             "cpk_data.required" => "Cpk data is required.",
             "inspection_after_rework.required" => "Inspection after rework is required.",
             "revised_date_igm.required" => "Revised Date IGM is required.",

@@ -171,4 +171,14 @@ class UserController extends Controller
         }
         return $result;
     }
+    public function loadMISEmailList()
+    {
+        $result = $this->successResponse("Load QCI Successfully");
+        try{
+            $result['data'] = $this->user_service->loadMISEmailList();
+        }catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
 }

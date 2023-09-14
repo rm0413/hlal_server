@@ -139,6 +139,30 @@ class UserService implements UserServiceContract
         rsort($datastorage);
         return $datastorage;
     }
+    public function loadMISEmailList()
+    {
+        $result = $this->user_repository_contract->loadUserProfile();
+        $datastorage = [];
+        foreach ($result as $users) { //PE (Parts)
+            if ($users->employee_notification['recieve_notification'] === true && $users->hris_masterlist['section_code'] === 'MIS')
+                $datastorage[] = [
+                    'user_id' => $users['id'],
+                    'emp_id' => $users['employee_id'],
+                    'role_access' => $users['role_access'],
+                    'emp_first_name' => $users->hris_masterlist['emp_first_name'],
+                    'emp_last_name' => $users->hris_masterlist['emp_last_name'],
+                    'emp_middle_name' => $users->hris_masterlist['emp_middle_name'],
+                    'emp_photo' => $users->hris_masterlist['emp_photo'],
+                    'emp_system_status' => $users->hris_masterlist['emp_system_status'],
+                    'position' => $users->hris_masterlist['position'],
+                    'section_code' => $users->hris_masterlist['section_code'],
+                    'emp_email' => $users->fdtp_portal_user['email'],
+                    'email_notification' => $users->employee_notification['recieve_notification']
+                ];
+        }
+        rsort($datastorage);
+        return $datastorage;
+    }
     public function store($data)
     {
         return $this->user_repository_contract->store($data);

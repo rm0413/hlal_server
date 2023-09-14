@@ -59,6 +59,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Request Added Successfully.");
         $QCI_email_list = $this->user_service->loadQCIEmailList();
         $PE_email_list = $this->user_service->loadPEEmailList();
+        $MIS_email_list = $this->user_service->loadMISEmailList();
         try {
             $data = [
                 "trial_number" => $request["trial_number"],
@@ -94,9 +95,8 @@ class AgreementListController extends Controller
                 $mail->isHTML(true);                                  //Set email format to HTML
                 $mail->From = "fdtp.system@ph.fujitsu.com";
                 $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
-                $mail->addBCC('reinamae.sorisantos@fujitsu.com', 'Inspection Data');
-                $mail->addBCC('jonathandave.detorres@fujitsu.com', 'Inspection Data');
-                $mail->addBCC('gerly.hernandez@fujitsu.com', 'Inspection Data');
+                // $mail->addBCC('reinamae.sorisantos@fujitsu.com', 'Inspection Data'); for prod
+                // $mail->addBCC('gerly.hernandez@fujitsu.com', 'Inspection Data'); for prod
 
                 foreach ($QCI_email_list as $email_list) {
                     $mail->addAddress($email_list['emp_email']);
@@ -104,6 +104,9 @@ class AgreementListController extends Controller
                 foreach ($PE_email_list as $pe_email_list) {
                     $mail->addCC($pe_email_list['emp_email']);
                 }
+                foreach ($MIS_email_list as $email_list) {
+                    $mail->addAddress($email_list['emp_email']);
+                } // for testing
 
                 $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
                 $mail->Body    = view('inspection_email', compact('data'))->render();
@@ -113,7 +116,7 @@ class AgreementListController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        LogActivity::addToLog('Added Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        // LogActivity::addToLog('Added Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
 
         return $result;
     }
@@ -132,6 +135,7 @@ class AgreementListController extends Controller
 
         $QCI_email_list = $this->user_service->loadQCIEmailList();
         $PE_email_list = $this->user_service->loadPEEmailList();
+        $MIS_email_list = $this->user_service->loadMISEmailList();
         try {
             DB::beginTransaction();
             for ($i = 10; $i < $highest_row + 1; $i++) {
@@ -140,8 +144,8 @@ class AgreementListController extends Controller
                     $datastorage = [
                         // 'NO' =>  $sheet->getCell("B{$i}")->getValue(),
                         'trial_number' => trim($sheet->getCell("C{$i}")->getValue()),
-                        'request_date' => trim($sheet->getCell("D{$i}")->getValue()) === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
-                        'additional_request_qty_date' =>  trim($sheet->getCell("E{$i}")->getValue()) === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
+                        'request_date' => $sheet->getCell("D{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("D{$i}")->getValue())->format('Y-m-d'),
+                        'additional_request_qty_date' =>  $sheet->getCell("E{$i}")->getValue() === '-' ? null : Date::excelToDateTimeObject($sheet->getCell("E{$i}")->getValue())->format('Y-m-d'),
                         'tri_number' => trim($sheet->getCell("F{$i}")->getValue()),
                         'tri_quantity' => trim($sheet->getCell("G{$i}")->getValue()),
                         'request_person' => trim($sheet->getCell("H{$i}")->getValue()),
@@ -174,14 +178,16 @@ class AgreementListController extends Controller
                         $mail->isHTML(true);                                  //Set email format to HTML
                         $mail->From = "fdtp.system@ph.fujitsu.com";
                         $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
-                        $mail->addBCC('reinamae.sorisantos@fujitsu.com', 'Inspection Data');
-                        $mail->addBCC('jonathandave.detorres@fujitsu.com', 'Inspection Data');
-                        $mail->addBCC('gerly.hernandez@fujitsu.com', 'Inspection Data');
+                        // $mail->addBCC('reinamae.sorisantos@fujitsu.com', 'Inspection Data');
+                        // $mail->addBCC('gerly.hernandez@fujitsu.com', 'Inspection Data');
                         foreach ($QCI_email_list as $email_list) {
                             $mail->addAddress($email_list['emp_email']);
                         }
                         foreach ($PE_email_list as $pe_email_list) {
                             $mail->addCC($pe_email_list['emp_email']);
+                        }
+                        foreach ($MIS_email_list as $email_list) {
+                            $mail->addAddress($email_list['emp_email']);
                         }
                         $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';
                         $mail->Body    = view('critical_parts_email', compact('yes_datastorage'))->render();
@@ -196,7 +202,7 @@ class AgreementListController extends Controller
             $result = $this->errorResponse($e);
         }
 
-        // LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        LogActivity::addToLog('Added Multiple Agreement Request', $request->requestor_employee_id,  $result["status"]);
         return $result;
     }
     public function downloadFormat(Request $request)

@@ -100,7 +100,7 @@ class DesignerSectionController extends Controller
                         'request_quantity' => trim("{$sheet->getCell("V{$i}")->getValue()}"),
                         'designer_ans' => trim($sheet->getCell("W{$i}")->getValue()),
                         'designer_incharge' => trim($sheet->getCell("X{$i}")->getValue()),
-                        'answer_date' => trim($sheet->getCell("Y{$i}")->getValue()),
+                        'answer_date' => $sheet->getCell("Y{$i}")->getValue() === '-' ? null : $sheet->getCell("Y{$i}")->getValue(),
                         // 'unit_id' => $request['unit_id'],
                         // 'requestor_employee_id' => $request['requestor_employee_id']
                     ];
