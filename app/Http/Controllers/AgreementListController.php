@@ -116,7 +116,7 @@ class AgreementListController extends Controller
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
-        // LogActivity::addToLog('Added Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
+        LogActivity::addToLog('Added Single Agreement Request', $request->requestor_employee_id,  $result["status"]);
 
         return $result;
     }
