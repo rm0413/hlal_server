@@ -63,15 +63,15 @@ class GenerateAgreementCodeController extends Controller
         $PE_email_list = $this->user_service->loadPEEmailList();
         // $MIS_email_list = $this->user_service->loadMISEmailList();
         try {
-            while (strlen($code) < 4) {
+            while (strlen($code) < 6) {
 
                 $position = rand(0, $characterNumbers - 1);
                 $character = $characters[$position];
                 $code = $code . $character;
             }
-            $generated_code = "FDTP_{$code}";
+            // $generated_code = "FDTP_{$code}";
             $data = [
-                'code' => $generated_code
+                'code' => $code
             ];
             $code_id = $this->generate_agreement_code_service->store($data);
             foreach ($request->agreement_request_id as $agreement_id) {
