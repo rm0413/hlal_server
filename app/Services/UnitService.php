@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Services\Contracts\UnitServiceContract;
 use App\Repositories\Contracts\UnitRepositoryContract;
-
+use Carbon\Carbon;
 class UnitService implements UnitServiceContract
 {
 
@@ -23,7 +23,7 @@ class UnitService implements UnitServiceContract
             $datastorage[] = [
                 'unit_id' => $unit_data['id'],
                 'unit_name' => $unit_data['unit_name'],
-                'unit_created_date' => $unit_data['created_at'],
+                'unit_created_date' => Carbon::parse($unit_data['created_at'])->format('m-d-Y H:i:s'),
                 'emp_full_name' => "{$unit_data->hris_masterlist['emp_first_name']} {$unit_data->hris_masterlist['emp_last_name']}",
                 'position' => $unit_data->hris_masterlist['position'],
                 'section_code' => $unit_data->hris_masterlist['section_code'],
