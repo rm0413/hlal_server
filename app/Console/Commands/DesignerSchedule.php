@@ -45,7 +45,7 @@ class DesignerSchedule extends Command
     public function handle()
     {
         $result = $this->agreement_list_service->loadCodeWithDesignerSection();
-        $PE_email_list = $this->user_service->loadPEEmailList();
+        $user_email_list = $this->user_service->loadEmailList();
         $mail = new PHPMailer;
         $mail->isSMTP();
         $mail->SMTPDebug  = 0;
@@ -58,14 +58,15 @@ class DesignerSchedule extends Command
         $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
         $mail->addBCC('reinamae.sorisantos@fujitsu.com'); //for prod
         $mail->addBCC('gerly.hernandez@fujitsu.com');
-        // $mail->MsgHTML(($this->disposalEmail($result, $result_hr)));
-        // if (count($result) > 0) {
-            foreach ($PE_email_list as $pe_email_list) {
-                $mail->addAddress($pe_email_list['emp_email']);
+        if (count($result) >= 1) {
+            foreach ($user_email_list as $email_list) {
+                $mail->addAddress($email_list['emp_email']);
             }
             $mail->Subject = 'HINSEI & LSA Agreement List | Designer Section Answer';
             $mail->Body    = view('designer_email', compact('result'))->render();
             $mail->send();
-        // }
+        }else{
+            return "no data";
+        }
     }
 }

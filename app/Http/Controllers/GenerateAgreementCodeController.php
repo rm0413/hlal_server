@@ -61,7 +61,7 @@ class GenerateAgreementCodeController extends Controller
         $where = [];
 
         $PE_email_list = $this->user_service->loadPEEmailList();
-        // $MIS_email_list = $this->user_service->loadMISEmailList();
+        // $user_email_list = $this->user_service->loadEmailList();
         try {
             while (strlen($code) < 6) {
 
@@ -139,7 +139,7 @@ class GenerateAgreementCodeController extends Controller
             foreach ($PE_email_list as $pe_email_list) {
                 $mail->addCC($pe_email_list['emp_email']);
             }
-            // foreach ($MIS_email_list as $email_list) {
+            // foreach ($user_email_list as $email_list) {
             //     $mail->addAddress($email_list['emp_email']);
             // }
 

@@ -61,7 +61,7 @@
 
     <p>Thank you,<br>Parts PE</p>
     <br>
-    <h5>Click <a href="http://10.164.58.62/FDTP-Portal/public/login">here</a> to visit FDTP-Portal.</h5>
+    <h5>Click <a href="http://10.164.30.174/FDTP-Portal/public/login">here</a> to visit FDTP-Portal.</h5>
     <br>
     <div style="font-size: 10px;">
         <p>DISCLAIMER<br>This email including the information and attachments may contain confidential, copyright and/or

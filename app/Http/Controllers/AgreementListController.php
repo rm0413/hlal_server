@@ -59,7 +59,7 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Request Added Successfully.");
         $QCI_email_list = $this->user_service->loadQCIEmailList();
         $PE_email_list = $this->user_service->loadPEEmailList();
-        // $MIS_email_list = $this->user_service->loadMISEmailList();
+        // $user_email_list = $this->user_service->loadEmailList();
         try {
             $data = [
                 "trial_number" => $request["trial_number"],
@@ -104,7 +104,7 @@ class AgreementListController extends Controller
                 foreach ($PE_email_list as $pe_email_list) {
                     $mail->addCC($pe_email_list['emp_email']);
                 }
-                // foreach ($MIS_email_list as $email_list) {
+                // foreach ($user_email_list as $email_list) {
                 //     $mail->addAddress($email_list['emp_email']);
                 // } // for testing
 
@@ -135,7 +135,7 @@ class AgreementListController extends Controller
 
         $QCI_email_list = $this->user_service->loadQCIEmailList();
         $PE_email_list = $this->user_service->loadPEEmailList();
-        // $MIS_email_list = $this->user_service->loadMISEmailList();
+        // $user_email_list = $this->user_service->loadEmailList();
         try {
             DB::beginTransaction();
             for ($i = 10; $i < $highest_row + 1; $i++) {
@@ -186,7 +186,7 @@ class AgreementListController extends Controller
                         foreach ($PE_email_list as $pe_email_list) {
                             $mail->addCC($pe_email_list['emp_email']);
                         }
-                        // foreach ($MIS_email_list as $email_list) {
+                        // foreach ($user_email_list as $email_list) {
                         //     $mail->addAddress($email_list['emp_email']);
                         // }
                         $mail->Subject = 'HINSEI & LSA Agreement List | Inspection Data';

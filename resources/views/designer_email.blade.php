@@ -30,33 +30,36 @@
         font-size: 15px;
     }
 </style>
+
 <body>
     <h4>Notice:</h4>
     <p style="color: #a30b1a;">Please be informed that this is a system generated email and all replies to this email
         will go through an unmonitored mailbox.</p>
     <hr>
-    <p style="font-size: 15px">Hello!</p>
-    <p style="font-size: 15px">Please be informed that there is/are <strong style="font-size: 17px">{{ count($result) }}</strong> request that needs to have Designer Answer.</p>
-    <p style="font-size: 15px">Please update Designer Section Answer</p>
+    <p>Hello!</p>
+    <p>Below <strong style="font-size: 17px">{{ count($result) }}</strong> request/s need to have Designer Answer.</p>
+    <p>Please update</p>
     {{-- <ul><b>{{ $data["part_number"]}}</b>
         <li><code>{{$data["tri_number"]}}</code></li>
         <li><code>{{$data["dimension"]}}</code></li>
     </ul> --}}
-    {{-- <table style="width: 100%; text-align: center;">
+    <table style="width: 100%; text-align: center;">
 
         <tr>
-            <th style="width: 8%;">TRI NUMBER</th>
+            <th style="width: 8%;">SUPPLIER</th>
             <th style="width: 8%;">PART NUMBER</th>
-            <th style="width: 8%;">DIMENSION</th>
+            <th style="width: 8%;">KIND OF REQUEST</th>
         </tr>
+        @foreach ($result as $data)
             <tr>
-                <td>{{ $data['tri_number'] }}</td>
+                <td>{{ $data['supplier_name'] }}</td>
                 <td>{{ $data['part_number'] }}</td>
-                <td>{{ $data['dimension'] }}</td>
+                <td>{{ $data['request_type'] }}</td>
             </tr>
-    </table> --}}
+        @endforeach
+    </table>
 
-    <p>Thank you,<br>Parts PE</p>
+    <p>Thank you,<br>ADMIN</p>
     <br>
     <br>
     <br>
