@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Helpers\LogActivity;
 use App\Http\Requests\DesignerSectionRequest;
 use App\Services\DesignerSectionService;
+use App\Services\UserService;
 use App\Traits\ResponseTrait;
+use PHPMailer\PHPMailer\PHPMailer;
 use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -15,9 +17,11 @@ class DesignerSectionController extends Controller
 {
     use ResponseTrait;
     protected $designer_answer_service;
-    public function __construct(DesignerSectionService $designer_answer_service)
+    public $user_service;
+    public function __construct(DesignerSectionService $designer_answer_service, UserService $user_service)
     {
         $this->designer_answer_service = $designer_answer_service;
+        $this->user_service = $user_service;
     }
     /**
      * Display a listing of the resource.
@@ -38,6 +42,7 @@ class DesignerSectionController extends Controller
     public function store(DesignerSectionRequest $request)
     {
         $result = $this->successResponse("Designer Section Answer Added Successfully.");
+        $user_email_list = $this->user_service->loadEmailList();
         $file_name = $request->file('uploaded_file');
         $spreadsheet = IOFactory::load($file_name->getRealPath());
         $datastorage = [];
@@ -150,6 +155,24 @@ class DesignerSectionController extends Controller
                 ];
                 $this->designer_answer_service->store($data);
             }
+            $mail = new PHPMailer;
+            $mail->isSMTP();
+            $mail->SMTPDebug  = 0;
+            $mail->SMTPAuth = false;
+            $mail->SMTPAutoTLS = false;
+            $mail->Port = 25;
+            $mail->Host = "203.127.104.86";
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->From = "fdtp.system@ph.fujitsu.com";
+            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
+            $mail->addBCC('reinamae.sorisantos@fujitsu.com'); //for prod
+            $mail->addBCC('gerly.hernandez@fujitsu.com');
+            foreach ($user_email_list as $email_list) {
+                $mail->addAddress($email_list['emp_email']);
+            }
+            $mail->Subject = 'HINSEI & LSA Agreement List | Designer Section Answer';
+            $mail->Body    = view('update_designer_email', compact('request_storage'))->render();
+            $mail->send();
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
