@@ -184,6 +184,8 @@ class DesignerSectionController extends Controller
     public function storeSingleDesignerAnswer(DesignerSectionRequest $request)
     {
         $result = $this->successResponse("Designer Section Answer Added Successfully");
+        $user_email_list = $this->user_service->loadEmailList();
+        $data_storage = $request->selected_datastorage;
         try {
             foreach ($request->agreement_request_id as $agreement_req_id) {
                 $data = [
@@ -195,6 +197,24 @@ class DesignerSectionController extends Controller
                 ];
                 $this->designer_answer_service->store($data);
             }
+            $mail = new PHPMailer;
+            $mail->isSMTP();
+            $mail->SMTPDebug  = 0;
+            $mail->SMTPAuth = false;
+            $mail->SMTPAutoTLS = false;
+            $mail->Port = 25;
+            $mail->Host = "203.127.104.86";
+            $mail->isHTML(true);                                  //Set email format to HTML
+            $mail->From = "fdtp.system@ph.fujitsu.com";
+            $mail->SetFrom("fdtp.system@ph.fujitsu.com", 'HINSEI & LSA Agreement List | HLAL');
+            $mail->addBCC('reinamae.sorisantos@fujitsu.com'); //for prod
+            $mail->addBCC('gerly.hernandez@fujitsu.com');
+            foreach ($user_email_list as $email_list) {
+                $mail->addAddress($email_list['emp_email']);
+            }
+            $mail->Subject = 'HINSEI & LSA Agreement List | Designer Section Answer';
+            $mail->Body    = view('update_single_designer', compact('data_storage'))->render();
+            $mail->send();
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }
