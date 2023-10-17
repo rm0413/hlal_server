@@ -166,7 +166,7 @@ class AgreementListController extends Controller
                         'unit_id' => $request['unit_id'],
                         'requestor_employee_id' => $request['requestor_employee_id']
                     ];
-                    if (trim($sheet->getCell("Q{$i}")->getValue()) === 'Yes') {
+                    if (trim($sheet->getCell("Q{$i}")->getValue()) === 'Yes' || trim($sheet->getCell("Q{$i}")->getValue()) === 'YES') {
                         $yes_datastorage[] = $datastorage;
                         $mail = new PHPMailer;
                         $mail->isSMTP();
@@ -423,6 +423,16 @@ class AgreementListController extends Controller
         $result = $this->successResponse("Load Successfully");
         try {
             $result['data'] = $this->agreement_list_service->loadCodeWithInspectionData();
+        } catch (\Exception $e) {
+            $result = $this->errorResponse($e);
+        }
+        return $result;
+    }
+    public function countInspectionData()
+    {
+        $result = $this->successResponse("Load Successfully");
+        try {
+            $result['data'] = $this->agreement_list_service->countInspectionData();
         } catch (\Exception $e) {
             $result = $this->errorResponse($e);
         }

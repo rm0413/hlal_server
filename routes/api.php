@@ -46,6 +46,7 @@ Route::get('/load-mis-email-list', [UserController::class, 'loadMISEmailList']);
 Route::get('/load-task-to-do', [AgreementListController::class, 'loadTaskToDo']);
 Route::get('/load-activity-logs', [UserController::class, 'loadActivityLogs']);
 Route::get('/load-with-code-inspection', [AgreementListController::class, 'loadCodeWithInspectionData']);
+// Route::get('/load-no-answer-inspection', [AgreementListController::class, 'countInspectionData']);
 Route::get('/load-with-code-designer-section', [AgreementListController::class, 'loadCodeWithDesignerSection']);
 Route::get('/load-with-no-code-request', [AgreementListController::class, 'loadWithNoCodeRequest']);
 Route::get('/load-part-number-with-code', [AgreementListController::class, 'loadPartNumberWithCode']);

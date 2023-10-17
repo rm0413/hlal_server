@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('designer:schedule')->everyMinute();
+        $schedule->command('inspection:schedule')->everyMinute();
     }
 
     /**

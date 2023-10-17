@@ -551,4 +551,8 @@ class AgreementListService implements AgreementListServiceContract
     {
         return $this->agreement_list_contract->loadWithoutDesignerAnswer();
     }
+    public function countInspectionData()
+    {
+        return $this->agreement_list_contract->countInspectionData();
+    }
 }
